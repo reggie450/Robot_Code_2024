@@ -18,7 +18,8 @@ import frc.lib.PIDGains;
 import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
-  private CANSparkMax m_motor;
+  private CANSparkMax m_leadmotor;
+  private CANSparkMax m_followmotor;
   private RelativeEncoder m_encoder;
   private SparkPIDController m_controller;
   private double m_setpoint;
@@ -35,25 +36,33 @@ public class ArmSubsystem extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     // create a new SPARK MAX and configure it
-    m_motor = new CANSparkMax(Constants.Arm.kArmCanId, MotorType.kBrushless);
-    m_motor.setInverted(false);
-    m_motor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
-    m_motor.setIdleMode(IdleMode.kBrake);
-    m_motor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    m_motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    m_motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Arm.kSoftLimitForward);
-    m_motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Arm.kSoftLimitReverse);
+    m_leadmotor = new CANSparkMax(Constants.Arm.kArmCanId, MotorType.kBrushless);
+    m_leadmotor.setInverted(false);
+    m_leadmotor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
+    m_leadmotor.setIdleMode(IdleMode.kBrake);
+    m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_leadmotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    m_leadmotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Arm.kSoftLimitForward);
+    m_leadmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Arm.kSoftLimitReverse);
+
+    m_followmotor = new CANSparkMax(Constants.Arm.kArmFollowerCanId, MotorType.kBrushless);
+    m_followmotor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
+    m_followmotor.setIdleMode(IdleMode.kBrake);
+
 
     // set up the motor encoder including conversion factors to convert to radians and radians per second for position and velocity
-    m_encoder = m_motor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    m_encoder = m_leadmotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
     m_encoder.setPositionConversionFactor(Constants.Arm.kPositionFactor);
     m_encoder.setVelocityConversionFactor(Constants.Arm.kVelocityFactor);
     m_encoder.setPosition(0.0);
 
-    m_controller = m_motor.getPIDController();
+    m_controller = m_leadmotor.getPIDController();
     PIDGains.setSparkMaxGains(m_controller, Constants.Arm.kArmPositionGains);
 
-    m_motor.burnFlash();
+    m_leadmotor.burnFlash();
+    m_followmotor.burnFlash();
+
+    m_followmotor.follow(m_leadmotor,true);
 
     m_setpoint = Constants.Arm.kHomePosition;
 
@@ -119,7 +128,7 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.Arm.kArmFeedforward.calculate(
             m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
     // set the power of the motor
-    m_motor.set(_power + (m_feedforward / 12.0));
+    m_leadmotor.set(_power + (m_feedforward / 12.0));
     m_manualValue = _power; // this variable is only used for logging or debugging if needed
   }
 

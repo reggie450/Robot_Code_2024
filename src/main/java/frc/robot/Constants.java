@@ -28,14 +28,17 @@ public final class Constants {
   }
 
   public static final class Arm {
-    public static final int kArmCanId = 9;
+    public static final int kArmCanId = 2;
+
+    public static final int kArmFollowerCanId = 6;
+
     public static final boolean kArmInverted = true;
     public static final int kCurrentLimit = 40;
 
     public static final double kSoftLimitReverse = -1.15;
     public static final double kSoftLimitForward = 0.0;
 
-    public static final double kArmGearRatio = (1.0 / 25.0) * (14.0 / 64.0);
+    public static final double kArmGearRatio = (1.0 / 100.0) * (28.0 / 50.0) * (16.0 / 64.0);
     public static final double kPositionFactor =
         kArmGearRatio
             * 2.0
@@ -71,7 +74,10 @@ public final class Constants {
     public static final double kShotFeedTime = 1.0;
   }
 
-  public static final class Launcher {
+   public static final class Launcher {
+
+    public static String CANBUS_NAME = "rio";
+    
     public static final int kTopCanId = 3;
     public static final int kBottomCanId = 4;
 
@@ -115,7 +121,7 @@ public final class Constants {
     public static final int kFrontRightDrivingCanId = 15;
     public static final int kRearRightDrivingCanId = 17;
 
-    public static final int kFrontLeftTurningCanId = 10;
+    public static final int kFrontLeftTurningCanId = 20;
     public static final int kRearLeftTurningCanId = 12;
     public static final int kFrontRightTurningCanId = 14;
     public static final int kRearRightTurningCanId = 16;
