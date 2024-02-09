@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.PIDGains;
 import frc.robot.Constants;
 
-public class ArmSubsystem extends SubsystemBase {
+public class ClimberSubsystem extends SubsystemBase {
   private CANSparkMax m_leadmotor;
   private CANSparkMax m_followmotor;
   private RelativeEncoder m_encoder;
@@ -33,39 +33,39 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_feedforward;
   private double m_manualValue;
 
-  /** Creates a new ArmSubsystem and sets default behaviors */
-  public ArmSubsystem() {
+  /** Creates a new ClimberSubsystem. */
+  public ClimberSubsystem() {
     // create a new SPARK MAX and configure it
-    m_leadmotor = new CANSparkMax(Constants.Arm.kArmCanId, MotorType.kBrushless);
+    m_leadmotor = new CANSparkMax(Constants.Climber.kClimberCanId, MotorType.kBrushless);
     m_leadmotor.setInverted(false);
-    m_leadmotor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
+    //todo m_leadmotor.setSmartCurrentLimit(Constants.Climber.kCurrentLimit);
     m_leadmotor.setIdleMode(IdleMode.kBrake);
     m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     m_leadmotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    m_leadmotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Arm.kSoftLimitForward);
-    m_leadmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Arm.kSoftLimitReverse);
+    //todo m_leadmotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Climber.kSoftLimitForward);
+    //todo m_leadmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Climber.kSoftLimitReverse);
 
-    m_followmotor = new CANSparkMax(Constants.Arm.kArmFollowerCanId, MotorType.kBrushless);
-    m_followmotor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
+    //todo m_followmotor = new CANSparkMax(Constants.Climber.kClimberFollowerCanId, MotorType.kBrushless);
+    //todo m_followmotor.setSmartCurrentLimit(Constants.Climber.kCurrentLimit);
     m_followmotor.setInverted(true);
     m_followmotor.setIdleMode(IdleMode.kBrake);
 
 
     // set up the motor encoder including conversion factors to convert to radians and radians per second for position and velocity
     m_encoder = m_leadmotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
-    m_encoder.setPositionConversionFactor(Constants.Arm.kPositionFactor);
-    m_encoder.setVelocityConversionFactor(Constants.Arm.kVelocityFactor);
+    //todo m_encoder.setPositionConversionFactor(Constants.Climber.kPositionFactor);
+    //todo m_encoder.setVelocityConversionFactor(Constants.Climber.kVelocityFactor);
     m_encoder.setPosition(0.0);
 
     m_controller = m_leadmotor.getPIDController();
-    PIDGains.setSparkMaxGains(m_controller, Constants.Arm.kArmPositionGains);
+    //todo PIDGains.setSparkMaxGains(m_controller, Constants.Climber.kClimberPositionGains);
     m_followmotor.follow(m_leadmotor,true);
 
     m_leadmotor.burnFlash();
     m_followmotor.burnFlash();
 
 
-    m_setpoint = Constants.Arm.kHomePosition;
+    //todo m_setpoint = Constants.Climber.kHomePosition;
 
     m_timer = new Timer();
     m_timer.start();
@@ -88,12 +88,12 @@ public class ArmSubsystem extends SubsystemBase {
   private void updateMotionProfile() {
     m_startState = new TrapezoidProfile.State(m_encoder.getPosition(), m_encoder.getVelocity());
     m_endState = new TrapezoidProfile.State(m_setpoint, 0.0);
-    m_profile = new TrapezoidProfile(Constants.Arm.kArmMotionConstraint);
+    //todo m_profile = new TrapezoidProfile(Constants.Climber.kClimberMotionConstraint);
     m_timer.reset();
   }
 
   /**
-   * Drives the arm to a position using a trapezoidal motion profile.
+   * Drives the Climber to a position using a trapezoidal motion profile.
    * This function is usually wrapped in a {@code RunCommand} which runs it repeatedly while the command is active.
    * <p>
    * This function updates the motor position control loop using a setpoint from the trapezoidal motion profile.
@@ -107,15 +107,15 @@ public class ArmSubsystem extends SubsystemBase {
       m_targetState = m_profile.calculate(elapsedTime, m_startState, m_endState);
     }
 
-    m_feedforward =
-        Constants.Arm.kArmFeedforward.calculate(
-            m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
-    m_controller.setReference(
-        m_targetState.position, CANSparkMax.ControlType.kPosition, 0, m_feedforward);
+    //todo m_feedforward =
+        //todo Constants.Climber.kClimberFeedforward.calculate(
+            //todo m_encoder.getPosition() + Constants.Climber.kClimberZeroCosineOffset, m_targetState.velocity);
+    //todo m_controller.setReference(
+        //todo m_targetState.position, CANSparkMax.ControlType.kPosition, 0, m_feedforward);
   }
 
   /**
-   * Drives the arm using the provided power value (usually from a joystick).
+   * Drives the Climber using the provided power value (usually from a joystick).
    * This also adds in the feedforward value which can help counteract gravity.
    * @param _power The motor power to apply.
    */
@@ -126,10 +126,10 @@ public class ArmSubsystem extends SubsystemBase {
     updateMotionProfile();
     // update the feedforward variable with the newly zero target velocity
     m_feedforward =
-        Constants.Arm.kArmFeedforward.calculate(
-            m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
+        //todo Constants.Climber.kClimberFeedforward.calculate(
+            //todo m_encoder.getPosition() + Constants.Climber.kClimberZeroCosineOffset, m_targetState.velocity);
     // set the power of the motor
-    m_leadmotor.set(_power + (m_feedforward / 12.0));
+    //todo m_leadmotor.set(_power + (m_feedforward / 12.0));
     m_manualValue = _power; // this variable is only used for logging or debugging if needed
   }
 

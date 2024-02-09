@@ -35,16 +35,16 @@ import java.util.List;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
-  private final ArmSubsystem m_arm = new ArmSubsystem();
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  private final LauncherSubsystem m_launcher = new LauncherSubsystem();
+    // The robot's subsystems
+    private final ArmSubsystem m_arm = new ArmSubsystem();
+    private final IntakeSubsystem m_intake = new IntakeSubsystem();
+    private final LauncherSubsystem m_launcher = new LauncherSubsystem();
 
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+    // The driver's controller
+    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    XboxController m_weaponController = new XboxController(OIConstants.kWeaponControllerPort);
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
@@ -91,25 +91,25 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> m_arm.setTargetPosition(Constants.Arm.kScoringPosition)));
     new Trigger(
             () ->
-                m_driverController.getLeftTriggerAxis()
+                m_weaponController.getLeftTriggerAxis()
                     > Constants.OIConstants.kTriggerButtonThreshold)
         .onTrue(new InstantCommand(() -> m_arm.setTargetPosition(Constants.Arm.kIntakePosition)));
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+    new JoystickButton(m_weaponController, XboxController.Button.kStart.value)
         .onTrue(new InstantCommand(() -> m_arm.setTargetPosition(Constants.Arm.kHomePosition)));
 
     // intake controls (run while button is held down, run retract command once when the button is released)
     new Trigger(
             () ->
-                m_driverController.getRightTriggerAxis()
+                m_weaponController.getRightTriggerAxis()
                     > Constants.OIConstants.kTriggerButtonThreshold)
         .whileTrue(new RunCommand(() -> m_intake.setPower(Constants.Intake.kIntakePower), m_intake))
         .onFalse(m_intake.retract());
 
-    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+    new JoystickButton(m_weaponController, XboxController.Button.kY.value)
         .whileTrue(new RunCommand(() -> m_intake.setPower(-1.0)));
 
     // launcher controls (button to pre-spin the launcher and button to launch)
-    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
+    new JoystickButton(m_weaponController, XboxController.Button.kRightBumper.value)
         .whileTrue(new RunCommand(() -> m_launcher.runLauncher(), m_launcher));
 
     new JoystickButton(m_driverController, XboxController.Button.kA.value)
