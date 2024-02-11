@@ -48,7 +48,7 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the button bindings
         configureDriverButtons();
-        configureWeaponButtons_Evan();
+        configureWeaponButtons();
 
         /*     // Configure default commands
         m_robotDrive.setDefaultCommand(
