@@ -33,7 +33,7 @@ import java.util.List;
 */
 public class RobotContainer {
     // The Weapon subsystems
-    private final ArmSubsystem m_arm = new ArmSubsystem();
+    private final ArmSubsystem m_arm;
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final LauncherSubsystem m_launcher = new LauncherSubsystem();
 
@@ -46,12 +46,13 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        m_arm = new ArmSubsystem(m_weaponController);
         // Configure the button bindings
         configureDriverButtons();
         configureWeaponButtons();
 
-        /*     // Configure default commands
-        m_robotDrive.setDefaultCommand(
+        // Configure default commands
+        /*m_robotDrive.setDefaultCommand(
             // The left stick controls translation of the robot.
             // Turning is controlled by the X axis of the right stick.
             new RunCommand(

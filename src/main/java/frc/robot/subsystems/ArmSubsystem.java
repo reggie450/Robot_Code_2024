@@ -13,6 +13,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkRelativeEncoder;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.PIDGains;
 import frc.robot.Constants;
@@ -23,6 +24,7 @@ public class ArmSubsystem extends SubsystemBase {
   private RelativeEncoder m_encoder;
   private SparkPIDController m_controller;
   private double m_setpoint;
+  private XboxController m_joystickXboxController;
 
   private TrapezoidProfile m_profile;
   private Timer m_timer;
@@ -34,7 +36,9 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_manualValue;
 
   /** Creates a new ArmSubsystem and sets default behaviors */
-  public ArmSubsystem() {
+  public ArmSubsystem(XboxController joystick) {
+    m_joystickXboxController=joystick;
+
     // create a new SPARK MAX and configure it
     m_leadmotor = new CANSparkMax(Constants.Arm.kArmCanId, MotorType.kBrushless);
     m_leadmotor.setInverted(false);
@@ -86,6 +90,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   /**Update the motion profile variables based on the current setpoint and the pre-configured motion constraints.*/
   private void updateMotionProfile() {
+    System.out.print("This Ran");
     m_startState = new TrapezoidProfile.State(m_encoder.getPosition(), m_encoder.getVelocity());
     m_endState = new TrapezoidProfile.State(m_setpoint, 0.0);
     m_profile = new TrapezoidProfile(Constants.Arm.kArmMotionConstraint);
@@ -100,7 +105,7 @@ public class ArmSubsystem extends SubsystemBase {
    * The target position is the last set position with {@code setTargetPosition}.
    */
   public void runAutomatic() {
-    double elapsedTime = m_timer.get();
+/*    double elapsedTime = m_timer.get();
     if (m_profile.isFinished(elapsedTime)) {
       m_targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
     } else {
@@ -111,7 +116,11 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.Arm.kArmFeedforward.calculate(
             m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
     m_controller.setReference(
-        m_targetState.position, CANSparkMax.ControlType.kPosition, 0, m_feedforward);
+        m_targetState.position, CANSparkMax.ControlType.kPosition, 0, m_feedforward); */
+    double yval=m_joystickXboxController.getRawAxis(1);
+    if (m_encoder.getPosition() > Constants.Arm.kHomePosition || m_encoder.getPosition() < Constants.Arm.kScoringPosition);
+      m_leadmotor.set(yval);
+
   }
 
   /**
@@ -122,18 +131,26 @@ public class ArmSubsystem extends SubsystemBase {
   public void runManual(double _power) {
     // reset and zero out a bunch of automatic mode stuff so exiting manual mode happens cleanly and
     // passively
-    m_setpoint = m_encoder.getPosition();
-    updateMotionProfile();
-    // update the feedforward variable with the newly zero target velocity
-    m_feedforward =
-        Constants.Arm.kArmFeedforward.calculate(
-            m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
-    // set the power of the motor
-    m_leadmotor.set(_power + (m_feedforward / 12.0));
-    m_manualValue = _power; // this variable is only used for logging or debugging if needed
+    // m_setpoint = m_encoder.getPosition();
+    // updateMotionProfile();
+    // // update the feedforward variable with the newly zero target velocity
+    // m_feedforward =
+    //     Constants.Arm.kArmFeedforward.calculate(
+    //         m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
+    // // set the power of the motor
+    // m_leadmotor.set(_power + (m_feedforward / 12.0));
+    // m_manualValue = _power; // this variable is only used for logging or debugging if needed
+    double yval=m_joystickXboxController.getRawAxis(1);
+    //runManual(yval);
+    //System.out.print (yval);
+    if (m_encoder.getPosition() > Constants.Arm.kHomePosition || m_encoder.getPosition() < Constants.Arm.kScoringPosition);
+      m_leadmotor.set(yval);
+
+ 
   }
 
   @Override
   public void periodic() { // This method will be called once per scheduler run
+ 
   }
 }
