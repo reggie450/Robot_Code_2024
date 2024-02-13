@@ -105,7 +105,7 @@ public class ArmSubsystem extends SubsystemBase {
    * The target position is the last set position with {@code setTargetPosition}.
    */
   public void runAutomatic() {
-/*    double elapsedTime = m_timer.get();
+    double elapsedTime = m_timer.get();
     if (m_profile.isFinished(elapsedTime)) {
       m_targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
     } else {
@@ -116,10 +116,7 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.Arm.kArmFeedforward.calculate(
             m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
     m_controller.setReference(
-        m_targetState.position, CANSparkMax.ControlType.kPosition, 0, m_feedforward); */
-    double yval=m_joystickXboxController.getRawAxis(1);
-    if (m_encoder.getPosition() > Constants.Arm.kHomePosition || m_encoder.getPosition() < Constants.Arm.kScoringPosition);
-      m_leadmotor.set(yval);
+        m_targetState.position, CANSparkMax.ControlType.kPosition, 0, m_feedforward); 
 
   }
 
