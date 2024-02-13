@@ -188,7 +188,7 @@ public final class Constants {
   }
 
   public static final class Intake {
-    public static final int kCanId = 20;
+    public static final int kCanId = 1;
     public static final boolean kMotorInverted = true;
     public static final int kCurrentLimit = 80;
 
