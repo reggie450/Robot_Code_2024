@@ -22,7 +22,7 @@ public class RobotContainer {
     // The Weapon subsystems
     private final ArmSubsystem m_arm;
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
-    private final LauncherSubsystem m_launcher = new LauncherSubsystem();    
+    private final LauncherSubsystem m_launcher = new LauncherSubsystem();
 
     // The Driver subsystem
     // private final DriverSubsystem m_robotDrive = new LauncherSubsystem();
