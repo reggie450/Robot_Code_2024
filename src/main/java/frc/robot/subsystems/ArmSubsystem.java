@@ -136,13 +136,12 @@ public class ArmSubsystem extends SubsystemBase {
     m_setpoint = m_encoder.getPosition();
     updateMotionProfile();
     // set the power of the motor
-    SmartDashboard.putNumber("Arm Encoder", m_encoder.getPosition());
     m_leadmotor.set(_power);
     m_manualValue = _power; // this variable is only used for logging or debugging if needed
   }
 
   @Override
   public void periodic() { // This method will be called once per scheduler run
- 
+    SmartDashboard.putNumber("Arm Encoder", m_encoder.getPosition());
   }
 }
