@@ -121,6 +121,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   }
 
+
+  public double getEncoderPosition (){
+    return m_encoder.getPosition();
+  }
   /**
    * Drives the arm using the provided power value (usually from a joystick).
    * This also adds in the feedforward value which can help counteract gravity.

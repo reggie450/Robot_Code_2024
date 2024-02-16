@@ -66,7 +66,13 @@ public class IntakeSubsystem extends SubsystemBase {
     m_power = _power;
   }
 
-  public void collectPayload() {
+  /*
+   * When the arm is in collection position, run it until payload is collected.
+   * todo check arm position
+   * todo get retract working
+   */
+  public void collectPayload(double armEncode) {
+    boolean armInPosition = armEncode <= Constants.Arm.kIntakePosition;
     /**
      * GetColor() returns a normalized color value from the sensor and can be
      * useful if outputting the color to an RGB LED or similar. To
