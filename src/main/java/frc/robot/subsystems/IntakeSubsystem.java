@@ -69,7 +69,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
   /*
    * When the arm is in collection position, run it until payload is collected.
-   * todo check arm position
    * todo get retract working
    */
   public void collectPayload(double armEncode) {
