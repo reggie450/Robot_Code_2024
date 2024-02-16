@@ -7,6 +7,9 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -14,6 +17,7 @@ import com.revrobotics.SparkRelativeEncoder;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.PIDGains;
 import frc.robot.Constants;
@@ -24,7 +28,6 @@ public class ArmSubsystem extends SubsystemBase {
   private RelativeEncoder m_encoder;
   private SparkPIDController m_controller;
   private double m_setpoint;
-  private XboxController m_joystickXboxController;
 
   private TrapezoidProfile m_profile;
   private Timer m_timer;
@@ -36,9 +39,7 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_manualValue;
 
   /** Creates a new ArmSubsystem and sets default behaviors */
-  public ArmSubsystem(XboxController joystick) {
-    m_joystickXboxController=joystick;
-
+  public ArmSubsystem() {
     // create a new SPARK MAX and configure it
     m_leadmotor = new CANSparkMax(Constants.Arm.kArmCanId, MotorType.kBrushless);
     m_leadmotor.setInverted(false);
@@ -128,22 +129,17 @@ public class ArmSubsystem extends SubsystemBase {
   public void runManual(double _power) {
     // reset and zero out a bunch of automatic mode stuff so exiting manual mode happens cleanly and
     // passively
-    // m_setpoint = m_encoder.getPosition();
-    // updateMotionProfile();
-    // // update the feedforward variable with the newly zero target velocity
-    // m_feedforward =
-    //     Constants.Arm.kArmFeedforward.calculate(
-    //         m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
-    // // set the power of the motor
-    // m_leadmotor.set(_power + (m_feedforward / 12.0));
-    // m_manualValue = _power; // this variable is only used for logging or debugging if needed
-    double yval=m_joystickXboxController.getRawAxis(1);
-    //runManual(yval);
-    //System.out.print (yval);
+    m_setpoint = m_encoder.getPosition();
+    updateMotionProfile();
+    // update the feedforward variable with the newly zero target velocity
+    m_feedforward =
+        Constants.Arm.kArmFeedforward.calculate(
+            m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
+    // set the power of the motor
+    SmartDashboard.putNumber("Arm Encoder", m_encoder.getPosition());
     if (m_encoder.getPosition() > Constants.Arm.kHomePosition || m_encoder.getPosition() < Constants.Arm.kScoringPosition);
-      m_leadmotor.set(yval);
-
- 
+      m_leadmotor.set(_power + (m_feedforward / 12.0));
+    m_manualValue = _power; // this variable is only used for logging or debugging if needed
   }
 
   @Override

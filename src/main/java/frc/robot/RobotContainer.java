@@ -46,7 +46,7 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        m_arm = new ArmSubsystem(m_weaponController);
+        m_arm = new ArmSubsystem();
         // Configure the button bindings
         configureDriverButtons();
         configureWeaponButtons();
@@ -63,7 +63,7 @@ public class RobotContainer {
         );
 
         // set the arm subsystem to run the "runAutomatic" function continuously when no other command is running
-        m_arm.setDefaultCommand(new RunCommand(() -> m_arm.runAutomatic(), m_arm));
+        m_arm.setDefaultCommand(new RunCommand(() -> m_arm.runManual(m_weaponController.getRawAxis(1))));
 
         // set the intake to stop (0 power) when no other command is running
         m_intake.setDefaultCommand(new RunCommand(() -> m_intake.setPower(0.0), m_intake));
