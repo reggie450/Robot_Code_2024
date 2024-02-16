@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -37,9 +38,8 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(m_driverController, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
-
+    private final JoystickButton robotCentricSwap = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+    private boolean robotCentric = false;
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
 
@@ -58,7 +58,7 @@ public class RobotContainer {
                 () -> -m_driverController.getRawAxis(translationAxis), 
                 () -> -m_driverController.getRawAxis(strafeAxis), 
                 () -> -m_driverController.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
+                () -> robotCentricSwap.getAsBoolean() ? robotCentric : !robotCentric
             )
         );
 
@@ -90,12 +90,19 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureDriverButtons() {
-        // button to put swerve modules in an "x" configuration to hold position
-        // new JoystickButton(m_driverController, XboxController.Button.kLeftStick.value)
-        // .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
-        
-    }
+        // completely swap robot centric field centric
+        new JoystickButton(m_driverController, XboxController.Button.kX.value)
+            .onTrue(new Command() {    
+              @Override
+              public void execute() {
+                robotCentric = !robotCentric;
+              }});
 
+        JoystickButton zeroGyro = new JoystickButton(m_driverController, XboxController.Button.kY.value);
+
+
+    }
+    
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
