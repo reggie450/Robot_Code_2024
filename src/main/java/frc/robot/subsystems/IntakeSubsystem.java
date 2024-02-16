@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.ColorSensorV3.ProximitySensorMeasurementRate;
 
 import javax.sound.sampled.Port;
 
@@ -31,7 +32,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private boolean m_positionMode;
   private double m_targetPosition;
   private double m_power;
-
+  private boolean collected = false;
   /**
    * Creates a new IntakeSubsystem.
    */
@@ -64,6 +65,47 @@ public class IntakeSubsystem extends SubsystemBase {
     m_targetPosition = m_encoder.getPosition();
     m_power = _power;
   }
+
+  public void collectPayload() {
+    /**
+     * GetColor() returns a normalized color value from the sensor and can be
+     * useful if outputting the color to an RGB LED or similar. To
+     * read the raw color, use GetRawColor().
+     */
+    Color detectedColor = m_ColorV3.getColor();
+
+    // The sensor returns a raw IR value of the infrared light detected.
+    double IR = m_ColorV3.getIR();
+
+    // Read Sensor
+    SmartDashboard.putNumber("Red", detectedColor.red);
+    SmartDashboard.putNumber("Green", detectedColor.green);
+    SmartDashboard.putNumber("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("IR", IR);
+
+    /**
+     * IR led will emit IR pulses and measure the intensity of the return.
+     * Close object has large value (max 2047 with default settings)
+     * will approach zero when the object is far away.
+     */
+     int proximity = m_ColorV3.getProximity();
+
+    SmartDashboard.putNumber("Proximity", proximity);
+
+    boolean ispayloadPresent = detectedColor.red >= .5 && detectedColor.red <= .7 &&
+                               detectedColor.green >= .3 && detectedColor.green <= .4 &&
+                               detectedColor.blue >= .04 && detectedColor.blue <= .1;
+    //boolean ispayloadPresent = proximity > 1000;
+    SmartDashboard.putBoolean("Stop",ispayloadPresent);
+
+    if (!collected && !ispayloadPresent)
+      setPower(1.0);
+    else {
+      setPower(0.0);
+      collected = true;
+      retract();
+    }
+}
 
   /**
    * Constructs a command that drives the rollers a specific distance (number of rotations)
@@ -131,49 +173,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() { // This method will be called once per scheduler run
-/**
-     * The method GetColor() returns a normalized color value from the sensor and can be
-     * useful if outputting the color to an RGB LED or similar. To
-     * read the raw color, use GetRawColor().
-     * 
-     * The color sensor works best when within a few inches from an object in
-     * well lit conditions (the built in LED is a big help here!). The farther
-     * an object is the more light from the surroundings will bleed into the 
-     * measurements and make it difficult to accurately determine its color.
-     */
-    Color detectedColor = m_ColorV3.getColor();
 
-    /**
-     * The sensor returns a raw IR value of the infrared light detected.
-     */
-    double IR = m_ColorV3.getIR();
-
-    /**
-     * Open Smart Dashboard or Shuffleboard to see the color detected by the 
-     * sensor.
-     */
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("IR", IR);
-    SmartDashboard.putBoolean("Stop",
-    detectedColor.red >= .5 && detectedColor.red <= .7 &&
-    detectedColor.green >= .3 && detectedColor.green <= .4 &&
-    detectedColor.blue >= .04 && detectedColor.blue <= .1);
-    /**
-     * In addition to RGB IR values, the color sensor can also return an 
-     * infrared proximity value. The chip contains an IR led which will emit
-     * IR pulses and measure the intensity of the return. When an object is 
-     * close the value of the proximity will be large (max 2047 with default
-     * settings) and will approach zero when the object is far away.
-     * 
-     * Proximity can be used to roughly approximate the distance of an object
-     * or provide a threshold for when an object is close enough to provide
-     * accurate color values.
-     */
-    int proximity = m_ColorV3.getProximity();
-
-    SmartDashboard.putNumber("Proximity", proximity);
 
     // if we've reached the position target, drop out of position mode
     if (m_positionMode && isNearTarget()) {

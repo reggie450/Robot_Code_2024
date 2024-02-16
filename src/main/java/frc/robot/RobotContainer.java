@@ -66,7 +66,7 @@ public class RobotContainer {
         m_arm.setDefaultCommand(new RunCommand(() -> m_arm.runManual(m_weaponController.getRawAxis(1))));
 
         // set the intake to stop (0 power) when no other command is running
-        m_intake.setDefaultCommand(new RunCommand(() -> m_intake.setPower(0.0), m_intake));
+        m_intake.setDefaultCommand(new RunCommand(() -> m_intake.collectPayload(), m_intake));
     
         // configure the launcher to stop when no other command is running
         m_launcher.setDefaultCommand(new RunCommand(() -> m_launcher.stopLauncher(), m_launcher));        
