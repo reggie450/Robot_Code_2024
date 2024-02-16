@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.ColorSensorV3.ProximitySensorMeasurementRate;
 
@@ -41,13 +42,13 @@ public class IntakeSubsystem extends SubsystemBase {
     m_motor = new CANSparkMax(Constants.Intake.kCanId, MotorType.kBrushless);
     m_motor.setInverted(false);
     m_motor.setSmartCurrentLimit(Constants.Intake.kCurrentLimit);
-    m_motor.setIdleMode(IdleMode.kBrake);
+    m_motor.setIdleMode(IdleMode.kCoast);
 
     m_encoder = m_motor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
     m_controller = m_motor.getPIDController();
     PIDGains.setSparkMaxGains(m_controller, Constants.Intake.kPositionGains);
-
+    m_motor.enableSoftLimit(SoftLimitDirection.kForward, false);
     m_motor.burnFlash();
 
     m_positionMode = false;
@@ -94,7 +95,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * Close object has large value (max 2047 with default settings)
      * will approach zero when the object is far away.
      */
-     int proximity = m_ColorV3.getProximity();
+    int proximity = m_ColorV3.getProximity();
 
     SmartDashboard.putNumber("Proximity", proximity);
 
@@ -103,9 +104,11 @@ public class IntakeSubsystem extends SubsystemBase {
                                detectedColor.blue >= .04 && detectedColor.blue <= .1;
     //boolean ispayloadPresent = proximity > 1000;
     SmartDashboard.putBoolean("Stop",ispayloadPresent);
-
-    if (!collected && !ispayloadPresent)
-      setPower(1.0);
+    SmartDashboard.putBoolean("collected", collected);
+    SmartDashboard.putBoolean("Arm in Position", armInPosition);
+    collected = false;
+    if (!collected && !ispayloadPresent && armInPosition)
+      setPower(.5);
     else {
       setPower(0.0);
       collected = true;
@@ -114,9 +117,10 @@ public class IntakeSubsystem extends SubsystemBase {
 }
 
   /**
-   * Constructs a command that drives the rollers a specific distance (number of rotations)
-   * from the current position and then ends the command.
-   * @return The retract command
+   * The retract command should run immediately after the payload is detected. 
+   * It will hold the payload back from the launcher.
+   * todo make work
+   * todo calibrate
    */
   public Command retract() {
     Command newCommand =
@@ -139,10 +143,10 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   /**
-   * Constructs a command that feeds a note into the launcher by running the intake for a set amount of time.
-   * This command takes control of the launcher subsystem to make sure the wheels keep spinning during the launch sequence.
-   * @param _launcher The instance of the launcher subsystem
-   * @return The launch command
+   * Will feed payload (orange ring) into launcher when command is given
+   * Also resets collected status to false.
+   * todo make work
+   * todo calibrate
    */
   public Command feedLauncher(LauncherSubsystem _launcher) {
     Command newCommand =
@@ -169,6 +173,7 @@ public class IntakeSubsystem extends SubsystemBase {
           @Override
           public void end(boolean interrupted) {
             setPower(0.0);
+            collected = false;
           }
         };
 
@@ -200,7 +205,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * @return Whether the position is within the tolerance.
    */
   public boolean isNearTarget() {
-    return Math.abs(m_encoder.getPosition() - m_targetPosition)
-        < Constants.Intake.kPositionTolerance;
+    return false;// Math.abs(m_encoder.getPosition() - m_targetPosition)
+    //    < Constants.Intake.kPositionTolerance;
   }
 }

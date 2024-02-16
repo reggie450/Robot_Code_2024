@@ -163,7 +163,7 @@ public final class Constants {
     public static final boolean kArmInverted = true;
     public static final int kCurrentLimit = 40;
 
-    public static final double kSoftLimitReverse = -1.15;
+    public static final double kSoftLimitReverse = -2;
     public static final double kSoftLimitForward = 0.0;
 
     public static final double kArmGearRatio = (1.0 / 100.0) * (28.0 / 50.0) * (16.0 / 64.0);
@@ -184,11 +184,11 @@ public final class Constants {
 
     public static final double kHomePosition = 0.0;
     public static final double kScoringPosition = 0.0;
-    public static final double kIntakePosition = -2;
+    public static final double kIntakePosition = -1.15;
   }
 
   public static final class Intake {
-    public static final int kCanId = 1;
+    public static final int kCanId = 20;
     public static final boolean kMotorInverted = true;
     public static final int kCurrentLimit = 80;
 

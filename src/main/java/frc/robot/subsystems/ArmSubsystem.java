@@ -135,14 +135,9 @@ public class ArmSubsystem extends SubsystemBase {
     // passively
     m_setpoint = m_encoder.getPosition();
     updateMotionProfile();
-    // update the feedforward variable with the newly zero target velocity
-    m_feedforward =
-        Constants.Arm.kArmFeedforward.calculate(
-            m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
     // set the power of the motor
     SmartDashboard.putNumber("Arm Encoder", m_encoder.getPosition());
-    if (m_encoder.getPosition() > Constants.Arm.kHomePosition || m_encoder.getPosition() < Constants.Arm.kScoringPosition);
-      m_leadmotor.set(_power + (m_feedforward / 12.0));
+    m_leadmotor.set(_power);
     m_manualValue = _power; // this variable is only used for logging or debugging if needed
   }
 
