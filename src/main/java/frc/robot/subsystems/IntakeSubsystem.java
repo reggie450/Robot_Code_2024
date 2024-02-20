@@ -40,7 +40,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem() {
     // create a new SPARK MAX and configure it
     m_motor = new CANSparkMax(Constants.Intake.kCanId, MotorType.kBrushless);
-    m_motor.setInverted(false);
+    m_motor.setInverted(true);
     m_motor.setSmartCurrentLimit(Constants.Intake.kCurrentLimit);
     m_motor.setIdleMode(IdleMode.kCoast);
 
@@ -62,6 +62,12 @@ public class IntakeSubsystem extends SubsystemBase {
    * @param _power The power to apply to the motor (from -1.0 to 1.0).
    */
   public void setPower(double _power) {
+    if (_power > .2){
+      _power = .2;
+    }
+    if (_power < -.2){
+      _power = -.2;
+    }
     m_positionMode = false;
     m_targetPosition = m_encoder.getPosition();
     m_power = _power;
@@ -72,7 +78,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * todo get retract working
    */
   public void collectPayload(double armEncode) {
-    boolean armInPosition = armEncode <= Constants.Arm.kIntakePosition;
+    boolean armInPosition = armEncode >= Constants.Arm.kIntakePosition;
     /**
      * GetColor() returns a normalized color value from the sensor and can be
      * useful if outputting the color to an RGB LED or similar. To
@@ -160,7 +166,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
           @Override
           public void execute() {
-            setPower(1.0);
+            setPower(.3);
             _launcher.runLauncher();
           }
 
