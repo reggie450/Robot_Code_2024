@@ -3,6 +3,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -43,14 +45,24 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
 
+    private static SendableChooser<Command> autoChooser;  
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         m_arm = new ArmSubsystem();
+        
+        autoChooser = new SendableChooser<Command>();
+        //autoChooser.setDefaultOption(name: "Default High Cone", new HighCone(s_Swerve, m_crane, m_extender, m_grabber));
+        //autoChooser.setDefaultOption(name: "High Cone / Back Out of Zone", new HighCone(s_Swerve, m_crane, m_extender, m_grabber));
+        //autoChooser.addOption(name: "Lower Cone / Back Out", new LowCone(s_Swerve, m_crane, m_extender, m_grabber)); 
+        //autoChooser.addOption(name: "Back Out", new exampleAuto(s_Swerve));
+        //SmartDashboard.putData(key: "Auto mode", autoChooser); 
+
         // Configure the button bindings
         configureDriverButtons();
         configureWeaponButtons();
 
+    
 
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
@@ -113,6 +125,8 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+
+
+        return autoChooser.getSelected();
     }
 }
