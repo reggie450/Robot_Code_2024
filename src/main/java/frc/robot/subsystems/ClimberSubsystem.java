@@ -18,8 +18,8 @@ import frc.lib.PIDGains;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
-  private CANSparkMax m_leadmotor;
-  private CANSparkMax m_followmotor;
+  private CANSparkMax m_leftmotor;
+  private CANSparkMax m_rightmotor;
   private RelativeEncoder m_encoder;
   private SparkPIDController m_controller;
   private double m_setpoint;
@@ -36,33 +36,32 @@ public class ClimberSubsystem extends SubsystemBase {
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
     // create a new SPARK MAX and configure it
-    m_leadmotor = new CANSparkMax(Constants.Climber.kClimberCanId, MotorType.kBrushless);
-    m_leadmotor.setInverted(false);
-    //todo m_leadmotor.setSmartCurrentLimit(Constants.Climber.kCurrentLimit);
-    m_leadmotor.setIdleMode(IdleMode.kBrake);
-    m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    m_leadmotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    //todo m_leadmotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Climber.kSoftLimitForward);
-    //todo m_leadmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Climber.kSoftLimitReverse);
+    m_leftmotor = new CANSparkMax(Constants.Climber.kClimberLeftCanId, MotorType.kBrushless);
+    m_leftmotor.setInverted(false);
+    //todo m_leftmotor.setSmartCurrentLimit(Constants.Climber.kCurrentLimit);
+    m_leftmotor.setIdleMode(IdleMode.kBrake);
+    m_leftmotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_leftmotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    //todo m_leftmotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Climber.kSoftLimitForward);
+    //todo m_leftmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Climber.kSoftLimitReverse);
 
-    //todo m_followmotor = new CANSparkMax(Constants.Climber.kClimberFollowerCanId, MotorType.kBrushless);
-    //todo m_followmotor.setSmartCurrentLimit(Constants.Climber.kCurrentLimit);
-    m_followmotor.setInverted(true);
-    m_followmotor.setIdleMode(IdleMode.kBrake);
+    m_rightmotor = new CANSparkMax(Constants.Climber.kClimberRightCanId, MotorType.kBrushless);
+    //todo m_rightmotor.setSmartCurrentLimit(Constants.Climber.kCurrentLimit);
+    m_rightmotor.setInverted(true);
+    m_rightmotor.setIdleMode(IdleMode.kBrake);
 
 
     // set up the motor encoder including conversion factors to convert to radians and radians per second for position and velocity
-    m_encoder = m_leadmotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    m_encoder = m_leftmotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
     //todo m_encoder.setPositionConversionFactor(Constants.Climber.kPositionFactor);
     //todo m_encoder.setVelocityConversionFactor(Constants.Climber.kVelocityFactor);
     m_encoder.setPosition(0.0);
 
-    m_controller = m_leadmotor.getPIDController();
+    m_controller = m_leftmotor.getPIDController();
     //todo PIDGains.setSparkMaxGains(m_controller, Constants.Climber.kClimberPositionGains);
-    m_followmotor.follow(m_leadmotor,true);
 
-    m_leadmotor.burnFlash();
-    m_followmotor.burnFlash();
+    m_leftmotor.burnFlash();
+    m_rightmotor.burnFlash();
 
 
     //todo m_setpoint = Constants.Climber.kHomePosition;
@@ -129,7 +128,7 @@ public class ClimberSubsystem extends SubsystemBase {
         //todo Constants.Climber.kClimberFeedforward.calculate(
             //todo m_encoder.getPosition() + Constants.Climber.kClimberZeroCosineOffset, m_targetState.velocity);
     // set the power of the motor
-    //todo m_leadmotor.set(_power + (m_feedforward / 12.0));
+    //todo m_leftmotor.set(_power + (m_feedforward / 12.0));
     m_manualValue = _power; // this variable is only used for logging or debugging if needed
   }
 
