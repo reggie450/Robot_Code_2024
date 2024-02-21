@@ -155,6 +155,8 @@ public final class Constants {
   public static final class Climber {
     public static final int kClimberLeftCanId = 21;
     public static final int kClimberRightCanId = 20;
+    public static final double kClimberSpeed = .5;
+  
   }
   public static final class Arm {
     public static final int kArmCanId = 3;
@@ -164,8 +166,8 @@ public final class Constants {
     public static final boolean kArmInverted = true;
     public static final int kCurrentLimit = 40;
 
-    public static final double kSoftLimitReverse = -0.81;
-    public static final double kSoftLimitForward = 0.0;
+    public static final double kSoftLimitReverse = 0.0;
+    public static final double kSoftLimitForward = 0.81;
 
     public static final double kArmGearRatio = (1.0 / 100.0) * (28.0 / 50.0) * (16.0 / 64.0);
     public static final double kPositionFactor =
@@ -183,9 +185,9 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kArmMotionConstraint =
         new TrapezoidProfile.Constraints(1.0, 2.0);
 
-    public static final double kHomePosition = -0.45;
-    public static final double kScoringPosition = -0.5;
-    public static final double kIntakePosition = -0.01;
+    public static final double kHomePosition = 0.36;
+    public static final double kScoringPosition = 0.31;
+    public static final double kIntakePosition = kSoftLimitForward - 0.01;
   }
 
   public static final class Intake {
