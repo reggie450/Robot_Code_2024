@@ -143,8 +143,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_setpoint = m_encoder.getPosition();
     updateMotionProfile();
     // set the power of the motor
-    m_leadmotor.set(_power);
-    m_manualValue = _power; // this variable is only used for logging or debugging if needed
+    m_manualValue = _power / 3.0;
+    m_leadmotor.set(m_manualValue);
   }
 
   @Override
