@@ -12,6 +12,7 @@ import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkRelativeEncoder;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -37,6 +38,9 @@ public class ArmSubsystem extends SubsystemBase {
   private TrapezoidProfile.State m_targetState;
   private double m_feedforward;
   private double m_manualValue;
+  private SparkLimitSwitch m_forwardLimit;
+  public static double m_IntakePosition;
+
 
   /** Creates a new ArmSubsystem and sets default behaviors */
   public ArmSubsystem() {
@@ -45,9 +49,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_leadmotor.setInverted(false);
     m_leadmotor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
     m_leadmotor.setIdleMode(IdleMode.kBrake);
-    m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, false);
     m_leadmotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    m_leadmotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Arm.kSoftLimitForward);
     m_leadmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Arm.kSoftLimitReverse);
 
     m_followmotor = new CANSparkMax(Constants.Arm.kArmFollowerCanId, MotorType.kBrushless);
@@ -66,8 +69,23 @@ public class ArmSubsystem extends SubsystemBase {
     PIDGains.setSparkMaxGains(m_controller, Constants.Arm.kArmPositionGains);
     m_followmotor.follow(m_leadmotor,true);
 
-    m_leadmotor.burnFlash();
+    // m_leadmotor.burnFlash();
     m_followmotor.burnFlash();
+    m_forwardLimit = m_leadmotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
+
+    // while (!m_forwardLimit.isPressed()) {
+    //   m_leadmotor.set(.1);
+    // }
+    // m_leadmotor.set(0);
+
+    m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    double zeroPosition = m_encoder.getPosition();
+    m_leadmotor.setSoftLimit(SoftLimitDirection.kForward, (float) zeroPosition);
+    m_leadmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) (zeroPosition + Constants.Arm.kSoftLimitReverse));
+    m_IntakePosition = zeroPosition + Constants.Arm.kIntakePosition;
+
+    m_leadmotor.burnFlash();
+
 
 
     m_setpoint = Constants.Arm.kHomePosition;
@@ -142,6 +160,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() { // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Forward Limit Switch", m_forwardLimit.isPressed());
     SmartDashboard.putNumber("Arm Encoder", m_encoder.getPosition());
   }
 }

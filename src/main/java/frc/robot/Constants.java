@@ -165,7 +165,7 @@ public final class Constants {
     public static final int kCurrentLimit = 40;
 
     public static final double kSoftLimitReverse = -0.81;
-    public static final double kSoftLimitForward = -0.0;
+    public static final double kSoftLimitForward = 0.0;
 
     public static final double kArmGearRatio = (1.0 / 100.0) * (28.0 / 50.0) * (16.0 / 64.0);
     public static final double kPositionFactor =
