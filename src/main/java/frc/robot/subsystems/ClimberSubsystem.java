@@ -4,24 +4,15 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkBase.SoftLimitDirection;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.SparkRelativeEncoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.PIDGains;
 import frc.robot.Constants;
 
 public class ClimberSubsystem extends SubsystemBase {
-  private CANSparkMax m_leftmotor;
-  private CANSparkMax m_rightmotor;
-  private RelativeEncoder m_encoder;
-  private SparkPIDController m_controller;
+  private TalonFX m_leftmotor;
+  private TalonFX m_rightmotor;
   private double m_setpoint;
 
   private TrapezoidProfile m_profile;
@@ -29,42 +20,14 @@ public class ClimberSubsystem extends SubsystemBase {
   private TrapezoidProfile.State m_startState;
   private TrapezoidProfile.State m_endState;
 
-  private TrapezoidProfile.State m_targetState;
-  private double m_feedforward;
-  private double m_manualValue;
-
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
     // create a new SPARK MAX and configure it
-    m_leftmotor = new CANSparkMax(Constants.Climber.kClimberLeftCanId, MotorType.kBrushless);
+    m_leftmotor = new TalonFX(Constants.Climber.kClimberLeftCanId);
     m_leftmotor.setInverted(false);
-    //todo m_leftmotor.setSmartCurrentLimit(Constants.Climber.kCurrentLimit);
-    m_leftmotor.setIdleMode(IdleMode.kBrake);
-    m_leftmotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    m_leftmotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    //todo m_leftmotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Climber.kSoftLimitForward);
-    //todo m_leftmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Climber.kSoftLimitReverse);
 
-    m_rightmotor = new CANSparkMax(Constants.Climber.kClimberRightCanId, MotorType.kBrushless);
-    //todo m_rightmotor.setSmartCurrentLimit(Constants.Climber.kCurrentLimit);
+    m_rightmotor = new TalonFX(Constants.Climber.kClimberRightCanId);
     m_rightmotor.setInverted(true);
-    m_rightmotor.setIdleMode(IdleMode.kBrake);
-
-
-    // set up the motor encoder including conversion factors to convert to radians and radians per second for position and velocity
-    m_encoder = m_leftmotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
-    //todo m_encoder.setPositionConversionFactor(Constants.Climber.kPositionFactor);
-    //todo m_encoder.setVelocityConversionFactor(Constants.Climber.kVelocityFactor);
-    m_encoder.setPosition(0.0);
-
-    m_controller = m_leftmotor.getPIDController();
-    //todo PIDGains.setSparkMaxGains(m_controller, Constants.Climber.kClimberPositionGains);
-
-    m_leftmotor.burnFlash();
-    m_rightmotor.burnFlash();
-
-
-    //todo m_setpoint = Constants.Climber.kHomePosition;
 
     m_timer = new Timer();
     m_timer.start();
@@ -85,7 +48,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
   /**Update the motion profile variables based on the current setpoint and the pre-configured motion constraints.*/
   private void updateMotionProfile() {
-    m_startState = new TrapezoidProfile.State(m_encoder.getPosition(), m_encoder.getVelocity());
     m_endState = new TrapezoidProfile.State(m_setpoint, 0.0);
     //todo m_profile = new TrapezoidProfile(Constants.Climber.kClimberMotionConstraint);
     m_timer.reset();
@@ -100,11 +62,11 @@ public class ClimberSubsystem extends SubsystemBase {
    */
   public void runAutomatic() {
     double elapsedTime = m_timer.get();
-    if (m_profile.isFinished(elapsedTime)) {
-      m_targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
-    } else {
-      m_targetState = m_profile.calculate(elapsedTime, m_startState, m_endState);
-    }
+    // if (m_profile.isFinished(elapsedTime)) {
+    //   m_targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
+    // } else {
+    //   m_targetState = m_profile.calculate(elapsedTime, m_startState, m_endState);
+    // }
 
     //todo m_feedforward =
         //todo Constants.Climber.kClimberFeedforward.calculate(
@@ -121,15 +83,9 @@ public class ClimberSubsystem extends SubsystemBase {
   public void runManual(double _power) {
     // reset and zero out a bunch of automatic mode stuff so exiting manual mode happens cleanly and
     // passively
-    m_setpoint = m_encoder.getPosition();
+    // m_setpoint = m_encoder.getPosition();
     updateMotionProfile();
     // update the feedforward variable with the newly zero target velocity
-    m_feedforward =
-        //todo Constants.Climber.kClimberFeedforward.calculate(
-            //todo m_encoder.getPosition() + Constants.Climber.kClimberZeroCosineOffset, m_targetState.velocity);
-    // set the power of the motor
-    //todo m_leftmotor.set(_power + (m_feedforward / 12.0));
-    m_manualValue = _power; // this variable is only used for logging or debugging if needed
   }
 
   @Override
