@@ -40,7 +40,8 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_manualValue;
   private SparkLimitSwitch m_forwardLimit;
   public static double m_IntakePosition;
-
+  private SparkLimitSwitch m_reverseLimit;
+  
 
   /** Creates a new ArmSubsystem and sets default behaviors */
   public ArmSubsystem() {
@@ -71,7 +72,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     // m_leadmotor.burnFlash();
     m_followmotor.burnFlash();
-    m_forwardLimit = m_leadmotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyClosed);
+    m_forwardLimit = m_leadmotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+    m_reverseLimit = m_leadmotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
     // while (!m_forwardLimit.isPressed()) {
     //   m_leadmotor.set(.1);
@@ -161,6 +163,7 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() { // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Forward Limit Switch", m_forwardLimit.isPressed());
+    SmartDashboard.putBoolean("Reverse Limit Switch", m_reverseLimit.isPressed());
     SmartDashboard.putNumber("Arm Encoder", m_encoder.getPosition());
   }
 }
