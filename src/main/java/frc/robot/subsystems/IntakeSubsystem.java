@@ -189,6 +189,24 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() { // This method will be called once per scheduler run
+    Color detectedColor = m_ColorV3.getColor();
+
+    double IR = m_ColorV3.getIR();
+
+    SmartDashboard.putNumber("Red", detectedColor.red);
+    SmartDashboard.putNumber("Green", detectedColor.green);
+    SmartDashboard.putNumber("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("IR", IR);
+    int proximity = m_ColorV3.getProximity();
+
+    SmartDashboard.putNumber("Proximity", proximity);
+
+    boolean ispayloadPresent = detectedColor.red >= .5 && detectedColor.red <= .7 &&
+                               detectedColor.green >= .3 && detectedColor.green <= .4 &&
+                               detectedColor.blue >= .04 && detectedColor.blue <= .1;
+    //boolean ispayloadPresent = proximity > 1000;
+    SmartDashboard.putBoolean("Stop",ispayloadPresent);
+    SmartDashboard.putBoolean("collected", collected);
 
 
     // if we've reached the position target, drop out of position mode
