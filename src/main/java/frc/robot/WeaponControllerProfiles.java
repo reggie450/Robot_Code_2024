@@ -49,47 +49,92 @@ public class WeaponControllerProfiles {
 
 
         new JoystickButton(weaponController, XboxController.Button.kB.value)
-            .whileTrue(new RunCommand(() -> climber.climb(), climber))
-            .onFalse(new RunCommand(() -> climber.stop(), climber));
+            .whileTrue(new RunCommand(() -> climber.climbUpLeft(), climber))
+            .onFalse(new RunCommand(() -> climber.climbStopLeft(), climber));
     }
 
-    public void GetEvansProfile(XboxController weaponController, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher) {
-        // set up arm preset positions
-        // Set to Scoring Position
-        new JoystickButton(weaponController, XboxController.Button.kLeftBumper.value) 
-            .onTrue(new InstantCommand(() -> arm.setTargetPosition(Constants.Arm.kScoringPosition)));
-        // Set to Intake Position
+    public void GetEvansProfile(XboxController weaponController, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher, ClimberSubsystem climber) {
+// Set to Intake Position
         new Trigger( 
                 () ->
                     weaponController.getLeftTriggerAxis()
                         > Constants.OIConstants.kTriggerButtonThreshold)
-            .onTrue(new InstantCommand(() -> arm.setTargetPosition(Constants.Arm.kIntakePosition)));
-        // Set to Home Positions
-        new JoystickButton(weaponController, XboxController.Button.kStart.value)
-            .onTrue(new InstantCommand(() -> arm.setTargetPosition(Constants.Arm.kHomePosition)));
-
-
-        // intake controls (run while button is held down, run retract command once when the button is released)
-        new Trigger(
+            .whileTrue(new InstantCommand(() -> climber.climbUpLeft()))
+            .onFalse(new RunCommand(() -> climber.climbStopLeft(), climber));
+         new Trigger( 
                 () ->
                     weaponController.getRightTriggerAxis()
                         > Constants.OIConstants.kTriggerButtonThreshold)
-            .whileTrue(new RunCommand(() -> intake.setPower(Constants.Intake.kIntakePower), intake))
-            .onFalse(intake.retract());
-        //
-        new JoystickButton(weaponController, XboxController.Button.kY.value)
-            .whileTrue(new RunCommand(() -> intake.setPower(-1.0)));
+            .whileTrue(new InstantCommand(() -> climber.climbUpRight()))
+            .onFalse(new RunCommand(() -> climber.climbStopRight(), climber));
+
+        
+        new JoystickButton(weaponController, XboxController.Button.kRightBumper.value)
+            .whileTrue(new RunCommand(() -> climber.climbDownRight(), climber))
+            .onFalse(new RunCommand(() -> climber.climbStopRight(), climber));
+
+        new JoystickButton(weaponController, XboxController.Button.kLeftBumper.value)
+            .whileTrue(new RunCommand(() -> climber.climbDownLeft(), climber))
+            .onFalse(new RunCommand(() -> climber.climbStopLeft(), climber));
+
         // Run Feed Launcher
         new JoystickButton(weaponController, XboxController.Button.kA.value)
             .onTrue(intake.feedLauncher(launcher));
 
 
-        // launcher controls (button to pre-spin the launcher and button to launch)
+
+        // Set to Home Positions
+        new JoystickButton(weaponController, XboxController.Button.kStart.value)
+            .onTrue(new InstantCommand(() -> arm.setTargetPosition(Constants.Arm.kHomePosition)));
+
+
+        //
+        new JoystickButton(weaponController, XboxController.Button.kY.value)
+            .whileTrue(new RunCommand(() -> intake.setPower(-1.0)));
+     
+
+
+    }
+
+    public void GetAliceProfile(XboxController weaponController, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher, ClimberSubsystem climber) {
+        // Set to Intake Position
+        new Trigger( 
+                () ->
+                    weaponController.getLeftTriggerAxis()
+                        > Constants.OIConstants.kTriggerButtonThreshold)
+            .whileTrue(new InstantCommand(() -> climber.climbUpLeft()))
+            .onFalse(new RunCommand(() -> climber.climbStopLeft(), climber));
+         new Trigger( 
+                () ->
+                    weaponController.getRightTriggerAxis()
+                        > Constants.OIConstants.kTriggerButtonThreshold)
+            .whileTrue(new InstantCommand(() -> climber.climbUpRight()))
+            .onFalse(new RunCommand(() -> climber.climbStopRight(), climber));
+
+        
         new JoystickButton(weaponController, XboxController.Button.kRightBumper.value)
-            .whileTrue(new RunCommand(() -> launcher.runLauncher(), launcher));
+            .whileTrue(new RunCommand(() -> climber.climbDownRight(), climber))
+            .onFalse(new RunCommand(() -> climber.climbStopRight(), climber));
+
+        new JoystickButton(weaponController, XboxController.Button.kLeftBumper.value)
+            .whileTrue(new RunCommand(() -> climber.climbDownLeft(), climber))
+            .onFalse(new RunCommand(() -> climber.climbStopLeft(), climber));
+
+        // Run Feed Launcher
+        new JoystickButton(weaponController, XboxController.Button.kX.value)
+            .onTrue(intake.feedLauncher(launcher));
 
 
 
+        // Set to Home Positions
+        new JoystickButton(weaponController, XboxController.Button.kStart.value)
+            .onTrue(new InstantCommand(() -> arm.setTargetPosition(Constants.Arm.kHomePosition)));
+
+
+        //
+        new JoystickButton(weaponController, XboxController.Button.kY.value)
+            .whileTrue(new RunCommand(() -> intake.setPower(-1.0)));
+        
     }
 
 }
