@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.Climber;
 import frc.robot.Constants.OIConstants;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -23,6 +24,7 @@ public class RobotContainer {
     private final ArmSubsystem m_arm;
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final LauncherSubsystem m_launcher = new LauncherSubsystem();
+    private final ClimberSubsystem m_climber = new ClimberSubsystem();
 
     // The Driver subsystem
     // private final DriverSubsystem m_robotDrive = new LauncherSubsystem();
@@ -91,7 +93,7 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureWeaponButtons() {
-        WeaponControllerProfiles.getDefaultProfile(m_weaponController, m_arm, m_intake, m_launcher);
+        WeaponControllerProfiles.getDefaultProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
         //WeaponControllerProfiles.GetEvansProfile(m_weaponController, m_arm, m_intake, m_launcher);
     }
 

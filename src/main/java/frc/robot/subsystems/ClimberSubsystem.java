@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -52,6 +53,18 @@ public class ClimberSubsystem extends SubsystemBase {
     //todo m_profile = new TrapezoidProfile(Constants.Climber.kClimberMotionConstraint);
     m_timer.reset();
   }
+
+
+  public void climb() {
+    m_leftmotor.set(.5);
+    m_rightmotor.set(.5);
+  }
+
+  public void stop() {
+    m_leftmotor.set(0);
+    m_rightmotor.set(0);
+  }
+
 
   /**
    * Drives the Climber to a position using a trapezoidal motion profile.
