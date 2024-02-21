@@ -39,7 +39,6 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_feedforward;
   private double m_manualValue;
   private SparkLimitSwitch m_forwardLimit;
-  public static double m_IntakePosition;
   private SparkLimitSwitch m_reverseLimit;
   
 
@@ -50,10 +49,11 @@ public class ArmSubsystem extends SubsystemBase {
     m_leadmotor.setInverted(false);
     m_leadmotor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
     m_leadmotor.setIdleMode(IdleMode.kBrake);
-    m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+    m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     m_leadmotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    m_leadmotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Arm.kSoftLimitForward);
     m_leadmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Arm.kSoftLimitReverse);
-
+    
     m_followmotor = new CANSparkMax(Constants.Arm.kArmFollowerCanId, MotorType.kBrushless);
     m_followmotor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
     m_followmotor.setInverted(true);
@@ -70,24 +70,11 @@ public class ArmSubsystem extends SubsystemBase {
     PIDGains.setSparkMaxGains(m_controller, Constants.Arm.kArmPositionGains);
     m_followmotor.follow(m_leadmotor,true);
 
-    // m_leadmotor.burnFlash();
+    m_leadmotor.burnFlash();
     m_followmotor.burnFlash();
+
     m_forwardLimit = m_leadmotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
     m_reverseLimit = m_leadmotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-
-    // while (!m_forwardLimit.isPressed()) {
-    //   m_leadmotor.set(.1);
-    // }
-    // m_leadmotor.set(0);
-
-    m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    double zeroPosition = m_encoder.getPosition();
-    m_leadmotor.setSoftLimit(SoftLimitDirection.kForward, (float) zeroPosition);
-    m_leadmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) (zeroPosition + Constants.Arm.kSoftLimitReverse));
-    m_IntakePosition = zeroPosition + Constants.Arm.kIntakePosition;
-
-    m_leadmotor.burnFlash();
-
 
 
     m_setpoint = Constants.Arm.kHomePosition;
