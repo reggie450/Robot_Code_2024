@@ -53,7 +53,7 @@ public class WeaponControllerProfiles {
             .onFalse(new RunCommand(() -> climber.climbStopLeft(), climber));
     }
 
-    public void GetEvansProfile(XboxController weaponController, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher, ClimberSubsystem climber) {
+    public static void GetEvansProfile(XboxController weaponController, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher, ClimberSubsystem climber) {
 // Set to Intake Position
         new Trigger( 
                 () ->
@@ -96,7 +96,7 @@ public class WeaponControllerProfiles {
 
     }
 
-    public void GetAliceProfile(XboxController weaponController, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher, ClimberSubsystem climber) {
+    public static void GetAliceProfile(XboxController weaponController, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher, ClimberSubsystem climber) {
         // Set to Intake Position
         new Trigger( 
                 () ->
