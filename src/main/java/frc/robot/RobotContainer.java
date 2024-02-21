@@ -93,8 +93,9 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureWeaponButtons() {
-        WeaponControllerProfiles.getDefaultProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
-        //WeaponControllerProfiles.GetEvansProfile(m_weaponController, m_arm, m_intake, m_launcher);
+        //WeaponControllerProfiles.getDefaultProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
+        WeaponControllerProfiles.GetEvansProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
+        //WeaponControllerProfiles.GetAliceProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
     }
 
     /**
