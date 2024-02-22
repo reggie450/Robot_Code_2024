@@ -36,7 +36,8 @@ public class WeaponControllerProfiles {
             .onFalse(intake.retract());
         //
         new JoystickButton(weaponController, XboxController.Button.kY.value)
-            .whileTrue(new RunCommand(() -> intake.setPower(-1.0)));
+            .whileTrue(new RunCommand(() -> intake.collectPayload(1.0,true)))
+            .onFalse(new RunCommand(() -> intake.setPower(0)));
         // Run Feed Launcher
         new JoystickButton(weaponController, XboxController.Button.kA.value)
             .onTrue(intake.feedLauncher(launcher));
@@ -54,7 +55,6 @@ public class WeaponControllerProfiles {
     }
 
     public static void GetEvansProfile(XboxController weaponController, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher, ClimberSubsystem climber) {
-// Set to Intake Position
         new Trigger( 
                 () ->
                     weaponController.getLeftTriggerAxis()
@@ -81,6 +81,9 @@ public class WeaponControllerProfiles {
         new JoystickButton(weaponController, XboxController.Button.kA.value)
             .onTrue(intake.feedLauncher(launcher));
 
+        new JoystickButton(weaponController, XboxController.Button.kY.value)
+            .whileTrue(new RunCommand(() -> intake.collectPayload(1.0,true)))
+            .onFalse(new RunCommand(() -> intake.setPower(0)));
 
 
         // Set to Home Positions
@@ -104,7 +107,7 @@ public class WeaponControllerProfiles {
                         > Constants.OIConstants.kTriggerButtonThreshold)
             .whileTrue(new InstantCommand(() -> climber.climbUpLeft()))
             .onFalse(new RunCommand(() -> climber.climbStopLeft(), climber));
-         new Trigger( 
+        new Trigger( 
                 () ->
                     weaponController.getRightTriggerAxis()
                         > Constants.OIConstants.kTriggerButtonThreshold)
@@ -123,6 +126,10 @@ public class WeaponControllerProfiles {
         // Run Feed Launcher
         new JoystickButton(weaponController, XboxController.Button.kX.value)
             .onTrue(intake.feedLauncher(launcher));
+
+        new JoystickButton(weaponController, XboxController.Button.kY.value)
+            .whileTrue(new RunCommand(() -> intake.collectPayload(1.0,true)))
+            .onFalse(new RunCommand(() -> intake.setPower(0)));
 
 
 
