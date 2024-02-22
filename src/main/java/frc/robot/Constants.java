@@ -198,11 +198,12 @@ public final class Constants {
     public static final PIDGains kPositionGains = new PIDGains(1.0, 0.0, 0.0);
     public static final double kPositionTolerance = 0.5;
 
-    public static final double kIntakePower = 0.7;
+    public static final double kIntakePower = 0.2;
 
-    public static final double kRetractDistance = -3.5;
+    public static final double kRetractDistance = -2;
 
-    public static final double kShotFeedTime = 1.0;
+    public static final double kShotFeedEnd = 1.0;
+    public static final double kShotFeedTime = .5;
   }
 
    public static final class Launcher {
