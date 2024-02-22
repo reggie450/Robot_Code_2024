@@ -80,7 +80,7 @@ public class RobotContainer {
                 ));
 
         // set the intake to stop (0 power) when no other command is running
-        m_intake.setDefaultCommand(new RunCommand(() -> m_intake.collectPayload(m_arm.getEncoderPosition()), m_intake));
+        m_intake.setDefaultCommand(new RunCommand(() -> m_intake.collectPayload(m_arm.getEncoderPosition(), false), m_intake));
     
         // configure the launcher to stop when no other command is running
         m_launcher.setDefaultCommand(new RunCommand(() -> m_launcher.stopLauncher(), m_launcher));        
@@ -94,8 +94,8 @@ public class RobotContainer {
      */
     private void configureWeaponButtons() {
         //WeaponControllerProfiles.getDefaultProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
-        WeaponControllerProfiles.GetEvansProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
-        //WeaponControllerProfiles.GetAliceProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
+        //WeaponControllerProfiles.GetEvansProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
+        WeaponControllerProfiles.GetAliceProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
     }
 
     /**
