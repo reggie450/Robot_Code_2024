@@ -49,8 +49,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_leadmotor.setInverted(false);
     m_leadmotor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
     m_leadmotor.setIdleMode(IdleMode.kBrake);
-    m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    m_leadmotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+    m_leadmotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
     m_leadmotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Arm.kSoftLimitForward);
     m_leadmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Arm.kSoftLimitReverse);
     
@@ -140,8 +140,8 @@ public class ArmSubsystem extends SubsystemBase {
   public void runManual(double _power) {
     // reset and zero out a bunch of automatic mode stuff so exiting manual mode happens cleanly and
     // passively
-    m_setpoint = m_encoder.getPosition();
-    updateMotionProfile();
+   // m_setpoint = m_encoder.getPosition();
+   // updateMotionProfile();
     // set the power of the motor
     m_manualValue = _power / 3.0;
     m_leadmotor.set(m_manualValue);
