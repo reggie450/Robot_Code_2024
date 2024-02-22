@@ -51,7 +51,7 @@ public class RobotContainer {
         m_arm = new ArmSubsystem();
         
         autoChooser = new SendableChooser<Command>();
-        //autoChooser.setDefaultOption(name: "Default High Cone", new HighCone(s_Swerve, m_crane, m_extender, m_grabber));
+        //autoChooser.setDefaultOption(name: "Default High Cone", new Launch(s_Swerve, m_arm, m_launcher, m_intake, m_climber));
         //autoChooser.setDefaultOption(name: "High Cone / Back Out of Zone", new HighCone(s_Swerve, m_crane, m_extender, m_grabber));
         //autoChooser.addOption(name: "Lower Cone / Back Out", new LowCone(s_Swerve, m_crane, m_extender, m_grabber)); 
         //autoChooser.addOption(name: "Back Out", new exampleAuto(s_Swerve));
