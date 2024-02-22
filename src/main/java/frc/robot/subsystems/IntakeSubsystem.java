@@ -4,9 +4,6 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.ColorSensorV3.ProximitySensorMeasurementRate;
-
-import javax.sound.sampled.Port;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
@@ -34,6 +31,8 @@ public class IntakeSubsystem extends SubsystemBase {
   private double m_targetPosition;
   private double m_power;
   private boolean collected = false;
+  private boolean firing = false;
+
   /**
    * Creates a new IntakeSubsystem.
    */
@@ -62,12 +61,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * @param _power The power to apply to the motor (from -1.0 to 1.0).
    */
   public void setPower(double _power) {
-    if (_power > .2){
-      _power = .2;
-    }
-    if (_power < -.2){
-      _power = -.2;
-    }
+    _power *= .3;
     m_positionMode = false;
     m_targetPosition = m_encoder.getPosition();
     m_power = _power;
@@ -77,48 +71,22 @@ public class IntakeSubsystem extends SubsystemBase {
    * When the arm is in collection position, run it until payload is collected.
    * todo get retract working
    */
-  public void collectPayload(double armEncode) {
+  public void collectPayload(double armEncode, boolean override_arm) {
     boolean armInPosition = armEncode >= Constants.Arm.kIntakePosition;
-    /**
-     * GetColor() returns a normalized color value from the sensor and can be
-     * useful if outputting the color to an RGB LED or similar. To
-     * read the raw color, use GetRawColor().
-     */
+
     Color detectedColor = m_ColorV3.getColor();
-
-    // The sensor returns a raw IR value of the infrared light detected.
     double IR = m_ColorV3.getIR();
-
-    // Read Sensor
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("IR", IR);
-
-    /**
-     * IR led will emit IR pulses and measure the intensity of the return.
-     * Close object has large value (max 2047 with default settings)
-     * will approach zero when the object is far away.
-     */
     int proximity = m_ColorV3.getProximity();
 
-    SmartDashboard.putNumber("Proximity", proximity);
-
-    boolean ispayloadPresent = detectedColor.red >= .5 && detectedColor.red <= .7 &&
-                               detectedColor.green >= .3 && detectedColor.green <= .4 &&
-                               detectedColor.blue >= .04 && detectedColor.blue <= .1;
-    //boolean ispayloadPresent = proximity > 1000;
-    SmartDashboard.putBoolean("Stop",ispayloadPresent);
-    SmartDashboard.putBoolean("collected", collected);
-    SmartDashboard.putBoolean("Arm in Position", armInPosition);
-    collected = false;
-    if (!collected && !ispayloadPresent && armInPosition)
+    boolean ispayloadPresent = getIsPayloadPresent(detectedColor, IR, proximity);
+    if (!collected && !ispayloadPresent && (armInPosition || override_arm))
       setPower(.5);
-    else {
-      setPower(0.0);
+    else if (!collected && ispayloadPresent) {
+      m_motor.set(0.0);
       collected = true;
       retract();
     }
+    SmartDashboard.putBoolean("Stop",ispayloadPresent);
 }
 
   /**
@@ -133,7 +101,7 @@ public class IntakeSubsystem extends SubsystemBase {
           @Override
           public void initialize() {
             m_positionMode = true;
-            m_targetPosition = m_encoder.getPosition() + Constants.Intake.kRetractDistance;
+            m_targetPosition = m_encoder.getPosition() - Constants.Intake.kRetractDistance;
           }
 
           @Override
@@ -162,23 +130,27 @@ public class IntakeSubsystem extends SubsystemBase {
           public void initialize() {
             m_timer = new Timer();
             m_timer.start();
+            setPower(0.0);
+            firing = true;
           }
 
           @Override
           public void execute() {
-            setPower(.3);
             _launcher.runLauncher();
+            if (m_timer.get() > Constants.Intake.kShotFeedTime)
+              setPower(1.0);
           }
 
           @Override
           public boolean isFinished() {
-            return m_timer.get() > Constants.Intake.kShotFeedTime;
+            return m_timer.get() > Constants.Intake.kShotFeedEnd;
           }
 
           @Override
           public void end(boolean interrupted) {
             setPower(0.0);
             collected = false;
+            firing = false;
           }
         };
 
@@ -187,27 +159,35 @@ public class IntakeSubsystem extends SubsystemBase {
     return newCommand;
   }
 
+  private boolean getIsPayloadPresent(Color detectedColor, double IR, double proximity) {
+    return detectedColor.red >= .45 && detectedColor.red <= .75 &&
+                               detectedColor.green >= .25 && detectedColor.green <= .45 &&
+                               detectedColor.blue <= .15 && proximity > 300;
+  }
+
+  private void printColorValues(Color detectedColor, double IR, double proximity) {
+    SmartDashboard.putNumber("Red", detectedColor.red);
+    SmartDashboard.putNumber("Green", detectedColor.green);
+    SmartDashboard.putNumber("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("IR", IR);
+    SmartDashboard.putNumber("Proximity", proximity);
+    SmartDashboard.putBoolean("collected", collected);
+  }
+
   @Override
   public void periodic() { // This method will be called once per scheduler run
     Color detectedColor = m_ColorV3.getColor();
 
     double IR = m_ColorV3.getIR();
 
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("IR", IR);
     int proximity = m_ColorV3.getProximity();
 
-    SmartDashboard.putNumber("Proximity", proximity);
-
-    boolean ispayloadPresent = detectedColor.red >= .5 && detectedColor.red <= .7 &&
-                               detectedColor.green >= .3 && detectedColor.green <= .4 &&
-                               detectedColor.blue >= .04 && detectedColor.blue <= .1;
-    //boolean ispayloadPresent = proximity > 1000;
-    SmartDashboard.putBoolean("Stop",ispayloadPresent);
-    SmartDashboard.putBoolean("collected", collected);
-
+    boolean ispayloadPresent = getIsPayloadPresent(detectedColor, IR, proximity);
+    if (!collected && !firing && ispayloadPresent) {
+      m_motor.set(0.0);
+      collected = true;
+      retract();      
+    }
 
     // if we've reached the position target, drop out of position mode
     if (m_positionMode && isNearTarget()) {
@@ -218,9 +198,22 @@ public class IntakeSubsystem extends SubsystemBase {
     // update the motor power based on mode and setpoint
     if (m_positionMode) {
       m_controller.setReference(m_targetPosition, ControlType.kPosition);
-    } else {
-      m_motor.set(m_power);
     }
+    else { // Regular motion
+      if (!collected || firing)
+        m_motor.set(m_power);
+      else
+        m_motor.set(0);
+    }
+
+    // Record useful data
+    printColorValues(detectedColor, IR, proximity);
+    SmartDashboard.putBoolean("Stop",ispayloadPresent);
+
+    SmartDashboard.putBoolean("Position Mode", m_positionMode);
+    SmartDashboard.putBoolean("Near Target", isNearTarget());
+    SmartDashboard.putNumber("IntakePower", m_power);
+
   }
 
   /**
@@ -228,7 +221,7 @@ public class IntakeSubsystem extends SubsystemBase {
    * @return Whether the position is within the tolerance.
    */
   public boolean isNearTarget() {
-    return false;// Math.abs(m_encoder.getPosition() - m_targetPosition)
-    //    < Constants.Intake.kPositionTolerance;
+    return Math.abs(m_encoder.getPosition() - m_targetPosition)
+        < Constants.Intake.kPositionTolerance;
   }
 }
