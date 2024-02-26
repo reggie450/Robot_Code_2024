@@ -167,9 +167,9 @@ public final class Constants {
     public static final int kCurrentLimit = 40;
 
     public static final double kSoftLimitReverse = 0.0;
-    public static final double kSoftLimitForward = 0.81;
+    public static final double kSoftLimitForward = 1.77;
 
-    public static final double kArmGearRatio = (1.0 / 100.0) * (28.0 / 50.0) * (16.0 / 64.0);
+    public static final double kArmGearRatio = (1.0 / 80.0)  * (16.0 / 64.0);
     public static final double kPositionFactor =
         kArmGearRatio
             * 2.0
@@ -185,9 +185,10 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kArmMotionConstraint =
         new TrapezoidProfile.Constraints(1.0, 2.0);
 
-    public static final double kHomePosition = 0.36;
-    public static final double kScoringPosition = 0.31;
-    public static final double kIntakePosition = kSoftLimitForward - 0.01;
+   public static final double kHomePosition = 0.0;
+  public static final double kScoringPosition = 1.7;
+    public static final double kIntakePosition = kSoftLimitForward -1.77;
+    public static final double kTravelPostion = 1.0;
   }
 
   public static final class Intake {
@@ -208,15 +209,15 @@ public final class Constants {
 
    public static final class Launcher {
 
-    public static String CANBUS_NAME = "rio";
+    //public static String CANBUS_NAME = "rio";
     
     public static final int kTopCanId = 5;
     public static final int kBottomCanId = 6;
 
     public static final int kCurrentLimit = 80;
 
-    public static final double kTopPower = 0.7;
-    public static final double kBottomPower = 0.8;
+    public static final double kTopPower = 0.4;
+    public static final double kBottomPower = 0.45;
   }
 
   public static final class DriveConstants {
@@ -247,7 +248,7 @@ public final class Constants {
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
-    // SPARK MAX MOTOR CONTROLLER IDs
+    // FALCON MOTOR CONTROLLER IDs
     public static final int kFrontLeftDrivingCanId = 11;
     public static final int kRearLeftDrivingCanId = 13;
     public static final int kFrontRightDrivingCanId = 15;
