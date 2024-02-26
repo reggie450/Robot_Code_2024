@@ -140,10 +140,10 @@ public class ArmSubsystem extends SubsystemBase {
   public void runManual(double _power) {
     // reset and zero out a bunch of automatic mode stuff so exiting manual mode happens cleanly and
     // passively
-   // m_setpoint = m_encoder.getPosition();
-   // updateMotionProfile();
+    // m_setpoint = m_encoder.getPosition();
+    // updateMotionProfile();
     // set the power of the motor
-    m_manualValue = _power / 3.0;
+    m_manualValue = _power / 1.25;
     m_leadmotor.set(m_manualValue);
   }
 

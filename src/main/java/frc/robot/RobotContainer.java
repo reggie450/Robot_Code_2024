@@ -21,7 +21,7 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     // The Weapon subsystems
-    private final ArmSubsystem m_arm;
+    private final ArmSubsystem m_arm =new ArmSubsystem();
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final LauncherSubsystem m_launcher = new LauncherSubsystem();
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
@@ -40,16 +40,14 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton robotCentricSwap = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
-    private boolean robotCentric = false;
+    private boolean robotCentric = true;
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
 
     private static SendableChooser<Command> autoChooser;  
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer() {
-        m_arm = new ArmSubsystem();
-        
+    public RobotContainer() {        
         autoChooser = new SendableChooser<Command>();
         //autoChooser.setDefaultOption(name: "Default High Cone", new Launch(s_Swerve, m_arm, m_launcher, m_intake, m_climber));
         //autoChooser.setDefaultOption(name: "High Cone / Back Out of Zone", new HighCone(s_Swerve, m_crane, m_extender, m_grabber));
@@ -66,8 +64,8 @@ public class RobotContainer {
                 s_Swerve, 
                 () -> -m_driverController.getRawAxis(translationAxis), 
                 () -> -m_driverController.getRawAxis(strafeAxis), 
-                () -> -m_driverController.getRawAxis(rotationAxis), 
-                () -> robotCentricSwap.getAsBoolean() ? robotCentric : !robotCentric
+                () -> -m_driverController.getRawAxis(rotationAxis)/2, 
+                () -> robotCentric
             )
         );
 
@@ -101,12 +99,10 @@ public class RobotContainer {
      */
     private void configureDriverButtons() {
         // completely swap robot centric field centric
-        new JoystickButton(m_driverController, XboxController.Button.kX.value)
-            .onTrue(new Command() {    
-              @Override
-              public void execute() {
-                robotCentric = !robotCentric;
-              }});
+        // new JoystickButton(m_driverController, XboxController.Button.kX.value)
+        //     .onTrue(new InstantCommand(() -> 
+        //         robotCentric = !robotCentric
+        //       ));
 
         JoystickButton zeroGyro = new JoystickButton(m_driverController, XboxController.Button.kY.value);
 

@@ -76,6 +76,16 @@ public class Swerve extends SubsystemBase {
         return states;
     }
 
+     public void driveForward(double speed){
+        SwerveModuleState[] swerveModuleStates = 
+            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+            new ChassisSpeeds(speed , 0, 0)
+            );
+
+        for(SwerveModule mod: mSwerveMods)
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], true);
+    }
+ 
     public SwerveModulePosition[] getModulePositions(){
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for(SwerveModule mod : mSwerveMods){
