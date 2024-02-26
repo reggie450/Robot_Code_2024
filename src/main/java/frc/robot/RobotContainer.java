@@ -61,8 +61,6 @@ public class RobotContainer {
         configureDriverButtons();
         configureWeaponButtons();
 
-    
-
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -78,9 +76,6 @@ public class RobotContainer {
             new RunCommand(
                 () -> m_arm.runManual(m_weaponController.getRawAxis(1)), m_arm
                 ));
-
-        // set the intake to stop (0 power) when no other command is running
-        m_intake.setDefaultCommand(new RunCommand(() -> m_intake.collectPayload(m_arm.getEncoderPosition(), false), m_intake));
     
         // configure the launcher to stop when no other command is running
         m_launcher.setDefaultCommand(new RunCommand(() -> m_launcher.stopLauncher(), m_launcher));        

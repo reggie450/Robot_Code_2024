@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -35,11 +37,36 @@ public class LauncherSubsystem extends SubsystemBase {
     m_launcherRunning = true;
   }
 
+  public void owenWilsonSucks(){
+    m_topMotor.set(.6);
+    m_bottomMotor.set(.6);
+    Timer.delay(.3);
+    IntakeSubsystem.intakeRun(.5);
+  }
+
   /**
    * Turns the launcher off.  Can be run once and the launcher will stay running or run continuously in a {@code RunCommand}.
    */
   public void stopLauncher() {
     m_launcherRunning = false;
+  }
+
+  public void ampShot(){
+    m_topMotor.set(.15);
+    m_bottomMotor.set(.15);
+    IntakeSubsystem.intakeRun(.3);
+  }
+  public void stopShooter(){
+    m_topMotor.stopMotor();
+    m_bottomMotor.stopMotor();
+    IntakeSubsystem.stopIntakeMotor();
+  }
+
+  public void speakerShot(){
+    m_topMotor.set(.4);
+    m_bottomMotor.set(.4);
+    Timer.delay(.2);
+    IntakeSubsystem.intakeRun(.7);
   }
 
   @Override
