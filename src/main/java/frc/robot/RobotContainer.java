@@ -1,16 +1,12 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.Climber;
 import frc.robot.Constants.OIConstants;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -21,10 +17,12 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     // The Weapon subsystems
-    private final ArmSubsystem m_arm =new ArmSubsystem();
+    private final ArmSubsystem m_arm = new ArmSubsystem();
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final LauncherSubsystem m_launcher = new LauncherSubsystem();
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
+
+    private final LimeLightTwo m_limeLightTwo = new LimeLightTwo();
 
     // The Driver subsystem
     // private final DriverSubsystem m_robotDrive = new LauncherSubsystem();
@@ -39,21 +37,30 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton robotCentricSwap = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
-    private boolean robotCentric = true;
+    private final JoystickButton robotCentric = new JoystickButton(m_driverController, XboxController.Button.kA.value);
+    private final JoystickButton zeroHeading = new JoystickButton(m_driverController, XboxController.Button.kY.value);
+    private final JoystickButton limeOn = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+
+    // private final JoystickButton robotCentricSwap = new
+    // JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+    // private boolean robotCentric = true;
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
 
     private static SendableChooser<Command> autoChooser;  
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer() {        
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
         autoChooser = new SendableChooser<Command>();
-        //autoChooser.setDefaultOption(name: "Default High Cone", new Launch(s_Swerve, m_arm, m_launcher, m_intake, m_climber));
-        //autoChooser.setDefaultOption(name: "High Cone / Back Out of Zone", new HighCone(s_Swerve, m_crane, m_extender, m_grabber));
-        //autoChooser.addOption(name: "Lower Cone / Back Out", new LowCone(s_Swerve, m_crane, m_extender, m_grabber)); 
-        //autoChooser.addOption(name: "Back Out", new exampleAuto(s_Swerve));
-        //SmartDashboard.putData(key: "Auto mode", autoChooser); 
+        autoChooser.setDefaultOption("Speaker, Drive Out", new Speaker(s_Swerve, m_launcher, m_intake, m_arm));
+        // autoChooser.setDefaultOption(name: "High Cone / Back Out of Zone", new
+        // HighCone(s_Swerve, m_crane, m_extender, m_grabber));
+        // autoChooser.addOption(name: "Lower Cone / Back Out", new LowCone(s_Swerve,
+        // m_crane, m_extender, m_grabber));
+        // autoChooser.addOption(name: "Back Out", new exampleAuto(s_Swerve));
+        SmartDashboard.putData("Auto Mode", autoChooser);
 
         // Configure the button bindings
         configureDriverButtons();
@@ -61,52 +68,47 @@ public class RobotContainer {
 
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
-                s_Swerve, 
-                () -> -m_driverController.getRawAxis(translationAxis), 
-                () -> -m_driverController.getRawAxis(strafeAxis), 
-                () -> -m_driverController.getRawAxis(rotationAxis)/2, 
-                () -> robotCentric
-            )
-        );
+                s_Swerve,
+                () -> -m_driverController.getRawAxis(translationAxis),
+                () -> -m_driverController.getRawAxis(strafeAxis),
+                () -> -m_driverController.getRawAxis(rotationAxis) / 2,
+                () -> robotCentric.getAsBoolean()));
 
-        // set the arm subsystem to run the "runAutomatic" function continuously when no other command is running
+         m_limeLightTwo.CameraMode();
+        // set the arm subsystem to run the "runAutomatic" function continuously when no
+        // other command is running
         m_arm.setDefaultCommand(
-            new RunCommand(
-                () -> m_arm.runManual(m_weaponController.getRawAxis(1)), m_arm
-                ));
-    
+                new RunCommand(
+                        () -> m_arm.runManual(m_weaponController.getRawAxis(1)), m_arm));
+
         // configure the launcher to stop when no other command is running
-        m_launcher.setDefaultCommand(new RunCommand(() -> m_launcher.stopLauncher(), m_launcher));        
+        m_launcher.setDefaultCommand(new RunCommand(() -> m_launcher.stopLauncher(), m_launcher));
+
     }
 
     /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
-     * {@link JoystickButton}.
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or
+     * one of its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or
+     * {@link XboxController}), and then calling passing it to a {@link JoystickButton}.
      */
     private void configureWeaponButtons() {
-        //WeaponControllerProfiles.getDefaultProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
-        //WeaponControllerProfiles.GetEvansProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
+        // WeaponControllerProfiles.getDefaultProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
+        // WeaponControllerProfiles.GetEvansProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
+        // limeOn.onTrue(new InstantCommand(() -> m_limeLightTwo.CameraMode()));
         WeaponControllerProfiles.GetAliceProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
+        limeOn.onTrue(new InstantCommand(() -> m_limeLightTwo.CameraMode()));
+
     }
 
     /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
-     * {@link JoystickButton}.
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or
+     * one of its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or
+     * {@link XboxController}), and then calling passing it to a {@link JoystickButton}.
      */
     private void configureDriverButtons() {
-        // completely swap robot centric field centric
-        // new JoystickButton(m_driverController, XboxController.Button.kX.value)
-        //     .onTrue(new InstantCommand(() -> 
-        //         robotCentric = !robotCentric
-        //       ));
-
-        JoystickButton zeroGyro = new JoystickButton(m_driverController, XboxController.Button.kY.value);
-
-
+        zeroHeading.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
     }
     
     /**
@@ -116,8 +118,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-
-
         return autoChooser.getSelected();
     }
 }

@@ -15,7 +15,7 @@ public class WeaponControllerProfiles {
     public static void getDefaultProfile(XboxController weaponController, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher, ClimberSubsystem climber) {
         // set up arm preset positions
         // Set to Scoring Position
-        new JoystickButton(weaponController, XboxController.Button.kLeftBumper.value) 
+       /*  new JoystickButton(weaponController, XboxController.Button.kLeftBumper.value) 
             .onTrue(new InstantCommand(() -> arm.setTargetPosition(Constants.Arm.kScoringPosition)));
         // Set to Intake Position
         new Trigger( 
@@ -25,7 +25,7 @@ public class WeaponControllerProfiles {
             .onTrue(new InstantCommand(() -> arm.setTargetPosition(Constants.Arm.kIntakePosition)));
         // Set to Home Positions
         new JoystickButton(weaponController, XboxController.Button.kStart.value)
-            .onTrue(new InstantCommand(() -> arm.setTargetPosition(Constants.Arm.kHomePosition))); 
+            .onTrue(new InstantCommand(() -> arm.setTargetPosition(Constants.Arm.kHomePosition)));  */
 
 
         // intake controls (run while button is held down, run retract command once when the button is released)
@@ -94,8 +94,8 @@ public class WeaponControllerProfiles {
             .whileFalse(new InstantCommand(()->IntakeSubsystem.intakeStop()));
 
         // Set to Home Positions
-        new JoystickButton(weaponController, XboxController.Button.kRightStick.value)
-            .onTrue(new RunCommand(() -> arm.setTargetPosition(Constants.Arm.kHomePosition)));
+     /*    new JoystickButton(weaponController, XboxController.Button.kRightStick.value)
+            .onTrue(new RunCommand(() -> arm.setTargetPosition(Constants.Arm.kHomePosition))); */
 
         new POVButton(weaponController, 270)
             .onTrue(new RunCommand(() -> launcher.ampShot(), launcher));
@@ -153,8 +153,8 @@ public class WeaponControllerProfiles {
             .whileFalse(new InstantCommand(()->IntakeSubsystem.intakeStop()));
 
         // Set to Home Positions
-        new JoystickButton(weaponController, XboxController.Button.kRightStick.value)
-            .onTrue(new RunCommand(() -> arm.setTargetPosition(Constants.Arm.kHomePosition)));
+      /*   new JoystickButton(weaponController, XboxController.Button.kRightStick.value)
+           // .onTrue(new RunCommand(() -> arm.setTargetPosition(Constants.Arm.kHomePosition))); */
 
         new POVButton(weaponController, 270)
             .onTrue(new RunCommand(() -> launcher.ampShot(), launcher));

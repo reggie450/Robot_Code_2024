@@ -10,7 +10,6 @@ public class LauncherSubsystem extends SubsystemBase {
 
   private TalonFX m_topMotor;
   private TalonFX m_bottomMotor;
-
   private boolean m_launcherRunning;
 
   /**
@@ -21,56 +20,66 @@ public class LauncherSubsystem extends SubsystemBase {
     m_topMotor = new TalonFX(Constants.Launcher.kTopCanId);
     m_topMotor.setInverted(false);
 
-
     m_bottomMotor = new TalonFX(Constants.Launcher.kBottomCanId);
     m_bottomMotor.setInverted(false);
-
-    
 
     m_launcherRunning = false;
   }
 
   /**
-   * Turns the launcher on.  Can be run once and the launcher will stay running or run continuously in a {@code RunCommand}.
+   * Turns the launcher on. Can be run once and the launcher will stay running or
+   * run continuously in a {@code RunCommand}.
    */
   public void runLauncher() {
     m_launcherRunning = true;
   }
 
-  public void owenWilsonSucks(){
+  public void owenWilsonSucks() {
     m_topMotor.set(.6);
     m_bottomMotor.set(.6);
-    Timer.delay(.3);
-    IntakeSubsystem.intakeRun(.5);
+   Timer.delay(.5);
+   IntakeSubsystem.intakeRun(.5);
   }
 
   /**
-   * Turns the launcher off.  Can be run once and the launcher will stay running or run continuously in a {@code RunCommand}.
+   * Turns the launcher off. Can be run once and the launcher will stay running or
+   * run continuously in a {@code RunCommand}.
    */
   public void stopLauncher() {
     m_launcherRunning = false;
   }
 
-  public void ampShot(){
+  public void ampShot() {
     m_topMotor.set(.15);
     m_bottomMotor.set(.15);
-    IntakeSubsystem.intakeRun(.3);
-  }
-  public void stopShooter(){
-    m_topMotor.stopMotor();
-    m_bottomMotor.stopMotor();
-    IntakeSubsystem.stopIntakeMotor();
+   IntakeSubsystem.intakeRun(.3);
   }
 
-  public void speakerShot(){
+  public void stopShooter() {
+    m_topMotor.stopMotor();
+    Timer.delay(.1);
+    m_bottomMotor.stopMotor();
+    Timer.delay(.1);
+    IntakeSubsystem.stopIntakeMotor();
+  }
+    
+
+  public void speakerShot() {
     m_topMotor.set(.4);
     m_bottomMotor.set(.4);
-    Timer.delay(.2);
-    IntakeSubsystem.intakeRun(.7);
+   Timer.delay(.2);
+   IntakeSubsystem.intakeRun(.7);
+  }
+
+  public void autoSpeakerShot() {
+    m_topMotor.set(.5);
+    m_bottomMotor.set(.5); 
+   Timer.delay(.6);   
+   IntakeSubsystem.intakeRun(.7);    
   }
 
   @Override
-  public void periodic() {  // this method will be called once per scheduler run
+  public void periodic() { // this method will be called once per scheduler run
     // set the launcher motor powers based on whether the launcher is on or not
     if (m_launcherRunning) {
       m_topMotor.set(Constants.Launcher.kTopPower);
