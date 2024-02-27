@@ -71,7 +71,7 @@ public class RobotContainer {
                 s_Swerve,
                 () -> -m_driverController.getRawAxis(translationAxis),
                 () -> -m_driverController.getRawAxis(strafeAxis),
-                () -> -m_driverController.getRawAxis(rotationAxis) / 2,
+                () -> -m_driverController.getRawAxis(rotationAxis) / 2.5,
                 () -> robotCentric.getAsBoolean()));
 
          m_limeLightTwo.CameraMode();
