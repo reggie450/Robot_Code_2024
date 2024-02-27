@@ -39,7 +39,7 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton robotCentric = new JoystickButton(m_driverController, XboxController.Button.kA.value);
     private final JoystickButton zeroHeading = new JoystickButton(m_driverController, XboxController.Button.kY.value);
-    private final JoystickButton limeOn = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+    private final JoystickButton limeOn = new JoystickButton(m_driverController, XboxController.Button.kX.value);
 
     // private final JoystickButton robotCentricSwap = new
     // JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
