@@ -33,19 +33,19 @@ public class ClimberSubsystem extends SubsystemBase {
     m_timer = new Timer();
     m_timer.start();
 
-    updateMotionProfile();
+    //updateMotionProfile();
   }
 
   /**
    * Sets the target position and updates the motion profile if the target position changed.
    * @param _setpoint The new target position in radians.
   */
-  public void setTargetPosition(double _setpoint) {
+ /*  public void setTargetPosition(double _setpoint) {
     if (_setpoint != m_setpoint) {
       m_setpoint = _setpoint;
       updateMotionProfile();
-    }
-  }
+    } */
+  
 
   /**Update the motion profile variables based on the current setpoint and the pre-configured motion constraints.*/
   private void updateMotionProfile() {

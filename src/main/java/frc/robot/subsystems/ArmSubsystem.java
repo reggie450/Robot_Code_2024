@@ -43,8 +43,15 @@ public class ArmSubsystem extends SubsystemBase {
     // create a new SPARK MAX and configure it
     m_leadmotor = new CANSparkMax(Constants.Arm.kArmCanId, MotorType.kBrushless);
     m_leadmotor.setInverted(false);
+   // m_leadmotor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
     m_leadmotor.setIdleMode(IdleMode.kBrake);
+   // m_leadmotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+    //m_leadmotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+  //  m_leadmotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.Arm.kSoftLimitForward);
+ //   m_leadmotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.Arm.kSoftLimitReverse);
+
     m_followmotor = new CANSparkMax(Constants.Arm.kArmFollowerCanId, MotorType.kBrushless);
+   // m_followmotor.setSmartCurrentLimit(Constants.Arm.kCurrentLimit);
     m_followmotor.setInverted(true);
     m_followmotor.setIdleMode(IdleMode.kBrake);
 
@@ -55,6 +62,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_encoder.setVelocityConversionFactor(Constants.Arm.kVelocityFactor);
     m_encoder.setPosition(0.0);
 
+   // m_controller = m_leadmotor.getPIDController();
+   // PIDGains.setSparkMaxGains(m_controller, Constants.Arm.kArmPositionGains);
     m_followmotor.follow(m_leadmotor, true);
 
     m_leadmotor.burnFlash();

@@ -136,16 +136,16 @@ public class WeaponControllerProfiles {
             .whileTrue(new InstantCommand(() -> climber.climbDownLeft(), climber))
             .onFalse(new InstantCommand(() -> climber.climbStopLeft(), climber));
 
-        new JoystickButton(weaponController, XboxController.Button.kB.value)
+       /*  new JoystickButton(weaponController, XboxController.Button.kB.value)
             .onTrue(new RunCommand(() -> launcher.ampShot(), launcher));
 
         new JoystickButton(weaponController, XboxController.Button.kB.value)
             .whileFalse(new InstantCommand(() -> launcher.stopShooter(), launcher));
-
-        new JoystickButton(weaponController, XboxController.Button.kX.value)
+ */
+        /* new JoystickButton(weaponController, XboxController.Button.kX.value)
             .onTrue(new RunCommand(() -> launcher.speakerShot(), launcher))
             .whileFalse(new InstantCommand(() -> launcher.stopShooter(), launcher));
-
+ */
         new JoystickButton(weaponController, XboxController.Button.kY.value)
             .whileTrue(new RunCommand(()->IntakeSubsystem.intakeRun(.3)));
 

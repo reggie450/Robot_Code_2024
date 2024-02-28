@@ -31,6 +31,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private double m_power;
   private boolean collected = false;
   private boolean firing = false;
+  public static Runnable intakeStop;
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
 
@@ -50,14 +51,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
   }
 
-  public void setPower(double _power) {
+   /* public void setPower(double _power) {
     _power *= .3;
     m_positionMode = false;
     m_targetPosition = m_encoder.getPosition();
     m_power = _power;
-  }
+  }  */
 
-   public Command feedLauncher(LauncherSubsystem _launcher) {
+    /* public Command feedLauncher(LauncherSubsystem _launcher) {
     Command newCommand =
         new Command() {
           private Timer m_timer;
@@ -93,16 +94,13 @@ public class IntakeSubsystem extends SubsystemBase {
     newCommand.addRequirements(this, _launcher);
 
     return newCommand;
-  }
-
-  public static void intakeRun(double speed){
+  }  */
+  public static void intakeRun(double speed){   
     m_motor.set(speed);
   }
 
   public static void intakeStop(){
-    m_motor.set(-.2);
-    Timer.delay(.1);
-
+    m_motor.set(-.4);
     m_motor.stopMotor();
   }
 

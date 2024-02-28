@@ -47,7 +47,7 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
 
-    private static SendableChooser<Command> autoChooser;  
+    private static SendableChooser<Command> autoChooser;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -71,7 +71,7 @@ public class RobotContainer {
                 s_Swerve,
                 () -> -m_driverController.getRawAxis(translationAxis),
                 () -> -m_driverController.getRawAxis(strafeAxis),
-                () -> -m_driverController.getRawAxis(rotationAxis) / 2.5,
+                () -> -m_driverController.getRawAxis(rotationAxis) / 2,
                 () -> robotCentric.getAsBoolean()));
 
          m_limeLightTwo.CameraMode();
@@ -88,9 +88,12 @@ public class RobotContainer {
 
     /**
      * Use this method to define your button->command mappings. Buttons can be
-     * created by instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or
-     * one of its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or
-     * {@link XboxController}), and then calling passing it to a {@link JoystickButton}.
+     * created by
+     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
+     * subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+     * passing it to a
+     * {@link JoystickButton}.
      */
     private void configureWeaponButtons() {
         // WeaponControllerProfiles.getDefaultProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
@@ -103,9 +106,12 @@ public class RobotContainer {
 
     /**
      * Use this method to define your button->command mappings. Buttons can be
-     * created by instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or
-     * one of its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or
-     * {@link XboxController}), and then calling passing it to a {@link JoystickButton}.
+     * created by
+     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
+     * subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+     * passing it to a
+     * {@link JoystickButton}.
      */
     private void configureDriverButtons() {
         zeroHeading.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
