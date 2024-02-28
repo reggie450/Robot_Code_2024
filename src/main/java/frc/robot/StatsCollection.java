@@ -12,20 +12,24 @@ public class StatsCollection {
 
     private double[] method = {0.0,0.0,0.0,0.0,0.0};        
     private int nextmethodIndex = 0;
+    private String m_label = "";
 
-    public StatsCollection() {
+    public StatsCollection(String label) {
         if (CollectionOn){
             periodicTimer = new Timer();   
             periodicTimer.start();
+            m_label = label;
         }
     }
 
-    public void PeriodicStart() {
+    public void Periodic() {
         if (CollectionOn){
             periodic[nextReadingIndex] = periodicTimer.get();
             if (nextReadingIndex + 1 == periodic.length) nextReadingIndex = 0;
             else ++nextReadingIndex;
             periodicTimer.reset();
+            double averageSeconds = (periodic[0] + periodic[1]+ periodic[2] + periodic[3] + periodic[4]) / 5;
+            SmartDashboard.putNumber(m_label, averageSeconds);
         }
     }
 
@@ -37,10 +41,10 @@ public class StatsCollection {
         }
     }
 
-    public void MethodEnd(String label) {
+    public void MethodEnd(String methodName) {
         if (CollectionOn){
             double value = methodTimer.get();
-            SmartDashboard.putNumber(label, value);
+            SmartDashboard.putNumber(m_label + ":"+ methodName, value);
             methodTimer.stop();
         }
     }
