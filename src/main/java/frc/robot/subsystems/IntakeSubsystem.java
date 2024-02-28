@@ -21,17 +21,17 @@ import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-  private static CANSparkMax m_motor;
-  private RelativeEncoder m_encoder;
-  private SparkPIDController m_controller;
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  private ColorSensorV3 m_ColorV3 = new ColorSensorV3(i2cPort);
-  private boolean m_positionMode;
-  private double m_targetPosition;
-  private double m_power;
-  private boolean collected = false;
-  private boolean firing = false;
-  public static Runnable intakeStop;
+  private CANSparkMax m_motor;
+  // private RelativeEncoder m_encoder;
+  // private SparkPIDController m_controller;
+  // private final I2C.Port i2cPort = I2C.Port.kOnboard;
+  // private ColorSensorV3 m_ColorV3 = new ColorSensorV3(i2cPort);
+  // private boolean m_positionMode;
+  // private double m_targetPosition;
+  // private double m_power;
+  // private boolean collected = false;
+  // private boolean firing = false;
+  // public Runnable intakeStop;
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
 
@@ -95,20 +95,47 @@ public class IntakeSubsystem extends SubsystemBase {
 
     return newCommand;
   }  */
-  public static void intakeRun(double speed){   
+  public void intakeRun(double speed){   
     m_motor.set(speed);
   }
 
-  public static void intakeStop(){
-    m_motor.set(-.4);
-    m_motor.stopMotor();
+  public Command intakeStop(){
+    Command newCommand =
+        new Command() {
+          private Timer m_timer;
+
+          @Override
+          public void initialize() {
+            m_timer = new Timer();
+            m_timer.start();            
+          }
+
+          @Override
+          public void execute() {
+              m_motor.set(-.4);
+          }
+
+          @Override
+          public boolean isFinished() {
+            return m_timer.get() > .1;
+          }
+
+          @Override
+          public void end(boolean interrupted) {
+            m_motor.stopMotor();
+          }
+        };
+
+    newCommand.addRequirements(this);
+
+    return newCommand;
   }
 
-  public static void stopIntakeMotor(){
+  public void stopIntakeMotor(){
     m_motor.stopMotor();
   }
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+
   }
 }

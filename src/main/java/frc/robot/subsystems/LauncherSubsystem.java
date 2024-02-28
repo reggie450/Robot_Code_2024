@@ -74,11 +74,11 @@ public class LauncherSubsystem extends SubsystemBase {
   // IntakeSubsystem.intakeRun(.7);
   }
 
-  public void autoSpeakerShot() {
+  public void autoSpeakerShot(IntakeSubsystem intake) {
     m_topMotor.set(.5);
     m_bottomMotor.set(.5); 
    Timer.delay(.6);   
-   IntakeSubsystem.intakeRun(.7);    
+   intake.intakeRun(.7);    
   }
 
   @Override

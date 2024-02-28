@@ -79,19 +79,17 @@ public class WeaponControllerProfiles {
             .onFalse(new InstantCommand(() -> climber.climbStopLeft(), climber));
 
         new JoystickButton(weaponController, XboxController.Button.kB.value)
-            .onTrue(new RunCommand(() -> launcher.ampShot(), launcher));
-
-        new JoystickButton(weaponController, XboxController.Button.kB.value)
-            .whileFalse(new InstantCommand(() -> launcher.stopShooter(), launcher));
+            .onTrue(new RunCommand(() -> launcher.ampShot(), launcher))
+            .onFalse(new InstantCommand(() -> launcher.stopShooter(), launcher));
 
         new JoystickButton(weaponController, XboxController.Button.kX.value)
             .onTrue(new RunCommand(() -> launcher.speakerShot(), launcher))
-            .whileFalse(new InstantCommand(() -> launcher.stopShooter(), launcher));
+            .onFalse(new InstantCommand(() -> launcher.stopShooter(), launcher));
 
 
         new JoystickButton(weaponController, XboxController.Button.kY.value)
-            .whileTrue(new RunCommand(()->IntakeSubsystem.intakeRun(.3)))
-            .whileFalse(new InstantCommand(()->IntakeSubsystem.intakeStop()));
+            .whileTrue(new RunCommand(()->intake.intakeRun(.3)))
+            .onFalse(new InstantCommand(()->intake.intakeStop()));
 
         // Set to Home Positions
      /*    new JoystickButton(weaponController, XboxController.Button.kRightStick.value)
@@ -147,10 +145,8 @@ public class WeaponControllerProfiles {
             .whileFalse(new InstantCommand(() -> launcher.stopShooter(), launcher));
  */
         new JoystickButton(weaponController, XboxController.Button.kY.value)
-            .whileTrue(new RunCommand(()->IntakeSubsystem.intakeRun(.3)));
-
-        new JoystickButton(weaponController, XboxController.Button.kY.value)
-            .whileFalse(new InstantCommand(()->IntakeSubsystem.intakeStop()));
+            .whileTrue(new RunCommand(()->intake.intakeRun(.3)))
+            .onFalse(new InstantCommand(()->intake.intakeStop()));
 
         // Set to Home Positions
       /*   new JoystickButton(weaponController, XboxController.Button.kRightStick.value)

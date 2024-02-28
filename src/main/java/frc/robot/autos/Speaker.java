@@ -5,7 +5,6 @@
 package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Swerve;
@@ -28,10 +27,10 @@ public class Speaker extends SequentialCommandGroup {
         new WaitCommand(1.4).withTimeout(1.4),
         new InstantCommand(() -> m_arm.armStop(), m_arm),
         new WaitCommand(.2), 
-        new InstantCommand(() -> m_launcher.autoSpeakerShot(),m_launcher),
+        new InstantCommand(() -> m_launcher.autoSpeakerShot(m_intake),m_launcher),
         new WaitCommand(.4).withTimeout(.5),
         new InstantCommand(() -> m_launcher.stopShooter(), m_launcher),
-        new InstantCommand(() -> IntakeSubsystem.stopIntakeMotor(), m_intake),
+        new InstantCommand(() -> m_intake.stopIntakeMotor(), m_intake),
         new WaitCommand(.5),
         new InstantCommand(() -> m_arm.armUp(.7),m_arm),
         new WaitCommand(1),
