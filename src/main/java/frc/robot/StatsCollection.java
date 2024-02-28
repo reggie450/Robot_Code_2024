@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.Dictionary;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -10,8 +12,8 @@ public class StatsCollection {
     private double[] periodic = {0.0,0.0,0.0,0.0,0.0};        
     private int nextReadingIndex = 0;
 
-    private double[] method = {0.0,0.0,0.0,0.0,0.0};        
-    private int nextmethodIndex = 0;
+    //private Dictionary<String,List<double>> method = {"MethodName", {0.0,0.0,0.0,0.0,0.0}};        
+    //private int nextmethodIndex = 0;
     private String m_label = "";
 
     public StatsCollection(String label) {
@@ -33,7 +35,7 @@ public class StatsCollection {
         }
     }
 
-    public void MethodStart() {
+    public void MethodStart(String methodName) {
         if (CollectionOn){
             if (methodTimer == null) methodTimer = new Timer();
             else methodTimer.reset();
