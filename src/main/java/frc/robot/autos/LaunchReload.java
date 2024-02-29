@@ -6,8 +6,6 @@ package frc.robot.autos;
 
 import java.util.List;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -16,7 +14,6 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Swerve;
 import frc.robot.Constants;
@@ -30,30 +27,30 @@ import frc.robot.subsystems.LauncherSubsystem;
 public class LaunchReload extends SequentialCommandGroup {
 
   /** Creates a new HighCone. */
-  public LaunchReload(Swerve s_swerve, LauncherSubsystem m_launcher, IntakeSubsystem m_intake, ArmSubsystem m_arm) {
+  public LaunchReload(Swerve swerve, LauncherSubsystem launcher, IntakeSubsystem intake, ArmSubsystem arm) {
 
     // Shots note into Speaker and then drives out of zone
     // todo adjust timings
     addCommands(
-        new InstantCommand(() -> m_launcher.autoSpeakerShot(m_intake),m_launcher), // shoot
+        new InstantCommand(() -> launcher.autoSpeakerShot(intake),launcher), // shoot
         new WaitCommand(.7).withTimeout(.8),
-        new InstantCommand(() -> m_launcher.stopShooter(), m_launcher), 
+        new InstantCommand(() -> launcher.stopShooter(), launcher), 
         new WaitCommand(.5),
-        new InstantCommand(() -> m_arm.armDown(.8), m_arm), // arm down
+        new InstantCommand(() -> arm.armDown(.8), arm), // arm down
         new WaitCommand(1.4).withTimeout(1.4),
-        new InstantCommand(() -> m_arm.armStop(), m_arm),
+        new InstantCommand(() -> arm.armStop(), arm),
         new WaitCommand(.1), 
-        new InstantCommand(() -> m_intake.intakeRun(1),m_intake), // intake on
-        new InstantCommand(() -> s_swerve.driveForward(2), s_swerve), // go forward
+        new InstantCommand(() -> intake.intakeRun(1),intake), // intake on
+        new InstantCommand(() -> swerve.driveForward(2), swerve), // go forward
         new WaitCommand(.1),
-        new InstantCommand(() -> m_intake.intakeStop(),m_intake), // intake off
+        new InstantCommand(() -> intake.intakeStop(),intake), // intake off
         // retract intake
-        new InstantCommand(() -> m_arm.armUp(.7),m_arm), // arm up
+        new InstantCommand(() -> arm.armUp(.7),arm), // arm up
         new WaitCommand(1),
-        new InstantCommand(() -> m_arm.armStop(), m_arm),
-        new InstantCommand(() -> m_launcher.autoSpeakerShot(m_intake),m_launcher), // shoot
+        new InstantCommand(() -> arm.armStop(), arm),
+        new InstantCommand(() -> launcher.autoSpeakerShot(intake),launcher), // shoot
         new WaitCommand(.7).withTimeout(.8),
-        new InstantCommand(() -> m_launcher.stopShooter(), m_launcher), 
+        new InstantCommand(() -> launcher.stopShooter(), launcher), 
         new WaitCommand(.5)
 
         // Drive towards other note
