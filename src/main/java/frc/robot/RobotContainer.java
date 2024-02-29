@@ -23,6 +23,7 @@ public class RobotContainer {
     private final ClimberSubsystem s_climber = new ClimberSubsystem();
 
     private final LimeLightTwo s_limeLightTwo = new LimeLightTwo();
+    private StatsCollection stats = new StatsCollection("RobotContainer");
 
     // The driver's controllers
     XboxController c_driver = new XboxController(OIConstants.kDriverControllerPort);
@@ -117,6 +118,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
+        stats.Periodic();
         // An ExampleCommand will run in autonomous
         return autoChooser.getSelected();
     }

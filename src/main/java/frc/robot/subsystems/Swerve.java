@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
 import frc.robot.Constants;
-
+import frc.robot.StatsCollection;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -22,6 +22,7 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    public StatsCollection stats = new StatsCollection("SwerveSS");
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, "DRIVECAN");
@@ -129,6 +130,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
+        stats.Periodic();
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
         for (SwerveModule mod : mSwerveMods) {
