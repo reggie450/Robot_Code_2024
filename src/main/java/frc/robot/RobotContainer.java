@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.WeaponControllerProfiles.WeaponProfile;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -23,7 +24,6 @@ public class RobotContainer {
     private final ClimberSubsystem s_climber = new ClimberSubsystem();
 
     private final LimeLightTwo s_limeLightTwo = new LimeLightTwo();
-    private StatsCollection stats = new StatsCollection("RobotContainer");
 
     // The driver's controllers
     XboxController c_driver = new XboxController(OIConstants.kDriverControllerPort);
@@ -47,6 +47,8 @@ public class RobotContainer {
 
     private static SendableChooser<Command> autoChooser;
 
+    private WeaponControllerProfiles weaponProfile;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -59,7 +61,8 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureDriverButtons();
-        configureWeaponButtons();
+        weaponProfile = new WeaponControllerProfiles(WeaponProfile.Alice, c_weapon, s_arm, s_intake, s_launcher, s_climber);
+        //weaponProfile = new WeaponControllerProfiles(WeaponProfile.Evan, c_weapon, s_arm, s_intake, s_launcher, s_climber);
 
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
@@ -90,26 +93,9 @@ public class RobotContainer {
      * passing it to a
      * {@link JoystickButton}.
      */
-    private void configureWeaponButtons() {
-        // WeaponControllerProfiles.getDefaultProfile(c_weapon, s_arm, s_intake, s_launcher, s_climber);
-        // WeaponControllerProfiles.GetEvansProfile(c_weapon, s_arm, s_intake, s_launcher, s_climber);
-        // limeOn.onTrue(new InstantCommand(() -> s_limeLightTwo.CameraMode()));
-        WeaponControllerProfiles.GetAliceProfile(c_weapon, s_arm, s_intake, s_launcher, s_climber);
-        limeOn.onTrue(new InstantCommand(() -> s_limeLightTwo.CameraMode()));
-
-    }
-
-    /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by
-     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-     * subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-     * passing it to a
-     * {@link JoystickButton}.
-     */
     private void configureDriverButtons() {
         zeroHeading.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        limeOn.onTrue(new InstantCommand(() -> s_limeLightTwo.CameraMode()));
     }
     
     /**
@@ -118,7 +104,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        stats.Periodic();
         // An ExampleCommand will run in autonomous
         return autoChooser.getSelected();
     }
