@@ -54,7 +54,10 @@ public class RobotContainer {
      */
     public RobotContainer() {
         autoChooser = new SendableChooser<Command>();
-        autoChooser.setDefaultOption("Speaker, Drive Out", new Speaker(s_Swerve, m_launcher, m_intake, m_arm));
+        autoChooser.setDefaultOption("Speaker, Drive Out", new SpeakerCenter(s_Swerve, m_launcher, m_intake, m_arm));
+        autoChooser.addOption("Speaker Right, Drive Out",new SpeakerRight(s_Swerve, m_launcher, m_intake, m_arm));
+        autoChooser.addOption("Speaker Left, Drive Out", new SpeakerLeft(s_Swerve, m_launcher, m_intake, m_arm));
+        autoChooser.addOption("Shoot Only", new ShootOnly(s_Swerve, m_launcher, m_intake, m_arm));
         // autoChooser.setDefaultOption(name: "High Cone / Back Out of Zone", new
         // HighCone(s_Swerve, m_crane, m_extender, m_grabber));
         // autoChooser.addOption(name: "Lower Cone / Back Out", new LowCone(s_Swerve,
