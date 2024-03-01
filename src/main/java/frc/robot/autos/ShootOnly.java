@@ -30,11 +30,11 @@ import frc.robot.subsystems.LauncherSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Speaker extends SequentialCommandGroup {
+public class ShootOnly extends SequentialCommandGroup {
 
 
   /** Creates a new Speakershot. */
-  public Speaker(Swerve s_swerve, LauncherSubsystem m_launcher, IntakeSubsystem m_intake, ArmSubsystem m_arm, Command traverse, Command traverseBack) {
+  public ShootOnly(Swerve s_swerve, LauncherSubsystem m_launcher, IntakeSubsystem m_intake, ArmSubsystem m_arm) {
     // Shots note into Speaker and then drives out of zone
     // todo adjust timings
     addCommands(
@@ -45,30 +45,30 @@ public class Speaker extends SequentialCommandGroup {
         new InstantCommand(() -> m_launcher.autoSpeakerShot(),m_launcher),
         new WaitCommand(.4).withTimeout(.5),
         new InstantCommand(() -> m_launcher.stopShooter(), m_launcher),
-        new InstantCommand(() -> IntakeSubsystem.intakeRun(.5), m_intake),
+        new InstantCommand(() -> IntakeSubsystem.intakeStop()),
+        //new InstantCommand(() -> IntakeSubsystem.intakeRun(.5), m_intake),
         new InstantCommand(() -> m_arm.armDown(.9)),
-        new WaitCommand(.2),
+        new WaitCommand(.2)
         // new InstantCommand(() -> m_arm.armUp(.7),m_arm),
         // new WaitCommand(1),
         // new InstantCommand(() -> m_arm.armStop(), m_arm),
 
         // Drive towards other note
         // todo: adjust distance
-        traverse,
-        new WaitCommand(.2),
-        new InstantCommand(()->IntakeSubsystem.intakeStop()),
-        //new TraverseBack(s_swerve),
-        new InstantCommand(() -> m_arm.armUp(.8)),
-        new WaitCommand(.5),
-        new InstantCommand(() -> m_arm.armStop(), m_arm),
-        new WaitCommand(.05),
-        new InstantCommand(()->IntakeSubsystem.intakebackup()),
-        new WaitCommand(.01).withTimeout(.01),
-        new InstantCommand(()->IntakeSubsystem.intakeStop()),
-        new InstantCommand(() -> m_launcher.autoSpeakerShot(),m_launcher),
-        new WaitCommand(.4).withTimeout(.4),
-        new InstantCommand(() -> m_launcher.stopShooter(), m_launcher),
-        new InstantCommand(()->IntakeSubsystem.intakeStop())
+        // traverse,
+        // new WaitCommand(.2),
+        // new InstantCommand(()->IntakeSubsystem.intakeStop()),
+        // //new TraverseBack(s_swerve),
+        // new InstantCommand(() -> m_arm.armUp(.8)),
+        // new WaitCommand(.3),
+        // new InstantCommand(() -> m_arm.armStop(), m_arm),
+        // new WaitCommand(.05),
+        // new InstantCommand(()->IntakeSubsystem.intakebackup()),
+        // //new WaitCommand(.01).withTimeout(.01),
+        // new InstantCommand(() -> m_launcher.autoSpeakerShot(),m_launcher),
+        // new WaitCommand(.4).withTimeout(.4),
+        // new InstantCommand(() -> m_launcher.stopShooter(), m_launcher),
+        // new InstantCommand(()->IntakeSubsystem.intakeStop())
     );
 
   }
