@@ -75,7 +75,7 @@ public class RobotContainer {
                 () -> -m_driverController.getRawAxis(translationAxis),
                 () -> -m_driverController.getRawAxis(strafeAxis),
                 () -> -m_driverController.getRawAxis(rotationAxis) / 2,
-                () -> robotCentric.getAsBoolean()));
+                () -> !robotCentric.getAsBoolean()));
 
          m_limeLightTwo.CameraMode();
         // set the arm subsystem to run the "runAutomatic" function continuously when no
@@ -99,8 +99,6 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureWeaponButtons() {
-        // WeaponControllerProfiles.getDefaultProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
-        // WeaponControllerProfiles.GetEvansProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
         // limeOn.onTrue(new InstantCommand(() -> m_limeLightTwo.CameraMode()));
         WeaponControllerProfiles.GetAliceProfile(m_weaponController, m_arm, m_intake, m_launcher, m_climber);
         limeOn.onTrue(new InstantCommand(() -> m_limeLightTwo.CameraMode()));
