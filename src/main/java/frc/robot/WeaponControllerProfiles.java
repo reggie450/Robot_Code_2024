@@ -10,6 +10,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
+import frc.robot.subsystems.LauncherSubsystem.ShotType;
 
 
 public class WeaponControllerProfiles {
@@ -47,10 +48,13 @@ public class WeaponControllerProfiles {
         intakebackup = new InstantCommand(()->s_intake.backup(),s_intake);
         intakeStopRetract = s_intake.stopRetract();
 
-        launcherAmpShot = new InstantCommand(() -> s_launcher.ampShot(), s_launcher);
-        launcherSpeakerShot = new InstantCommand(() -> s_launcher.speakerShot(), s_launcher);
-        launcherOwenWilsonSucks = new InstantCommand(() -> s_launcher.owenWilsonSucks(), s_launcher);
+        launcherAmpShot = new InstantCommand(() -> s_launcher.primeShot(ShotType.ampShot), s_launcher);
+        launcherSpeakerShot = new InstantCommand(() -> s_launcher.primeShot(ShotType.speakerShot), s_launcher);
+        launcherOwenWilsonSucks = new InstantCommand(() -> s_launcher.primeShot(ShotType.owenWilsonSucks), s_launcher);
         launcherStop = new InstantCommand(() -> s_launcher.stopShooter(), s_launcher);
+        launcherAmpShotCommand = s_launcher.ShotIntake(s_intake, ShotType.ampShot);
+        launcherSpeakerShotCommand = s_launcher.ShotIntake(s_intake, ShotType.speakerShot);
+        launcherOwenWilsonSucksCommand = s_launcher.ShotIntake(s_intake, ShotType.owenWilsonSucks);
     }
 
     public void GetEvansProfile() {
@@ -126,12 +130,15 @@ public class WeaponControllerProfiles {
         /* Launcher Controls */
         new POVButton(c_weapons, 270)
             .onTrue(launcherAmpShot).onFalse(launcherStop);
+            //.onTrue(launcherAmpShotCommand);
 
         new POVButton(c_weapons, 0)
             .onTrue(launcherSpeakerShot).onFalse(launcherStop);
+            //.onTrue(launcherSpeakerShotCommand);
 
         new POVButton(c_weapons, 90)
             .onTrue(launcherOwenWilsonSucks).onFalse(launcherStop);
+            //.onTrue(launcherOwenWilsonSucksCommand);
     }
 
     public void GetDefaultProfile() {
@@ -201,5 +208,9 @@ public class WeaponControllerProfiles {
     InstantCommand launcherSpeakerShot;
     InstantCommand launcherOwenWilsonSucks;
     InstantCommand launcherStop;
+    Command launcherAmpShotCommand;
+    Command launcherSpeakerShotCommand;
+    Command launcherOwenWilsonSucksCommand;
+
     InstantCommand limeOn;
 }
