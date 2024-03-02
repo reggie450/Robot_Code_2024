@@ -117,7 +117,8 @@ public class WeaponControllerProfiles {
         /* Intake Controls */
         new JoystickButton(c_weapons, XboxController.Button.kY.value)
             .onTrue(intakeRun).onFalse(intakeStop);
-        
+            //.onTrue(intakeRun).onFalse(intakeStopRetract);
+
         new JoystickButton(c_weapons, XboxController.Button.kB.value)
             .onTrue(intakebackup).onFalse(intakeStop);
 
