@@ -1,12 +1,10 @@
 package frc.robot;
 
-import java.util.Dictionary;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class StatsCollection {
-    private static Boolean CollectionOn = true;
+    private static Boolean CollectionOn = false;
     private Timer periodicTimer;
     private Timer methodTimer;
     private double[] periodic = {0.0,0.0,0.0,0.0,0.0};        

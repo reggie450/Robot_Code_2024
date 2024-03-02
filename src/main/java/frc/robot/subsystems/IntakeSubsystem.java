@@ -31,7 +31,6 @@ public class IntakeSubsystem extends SubsystemBase {
   // private double m_power;
   // private boolean collected = false;
   // private boolean firing = false;
-  // public Runnable intakeStop;
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
 
@@ -95,11 +94,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     return newCommand;
   }  */
-  public void intakeRun(double speed){   
+  public void run(double speed){   
     m_motor.set(speed);
   }
 
-  public Command intakeStop(){
+  public Command stopRetract(){
     Command newCommand =
         new Command() {
           private Timer m_timer;
@@ -131,14 +130,14 @@ public class IntakeSubsystem extends SubsystemBase {
     return newCommand;
   }
 
+  public void stop(){
+    m_motor.stopMotor();
+  }
 
-  public void intakebackup(){
+  public void backup(){
     m_motor.set(-.3);
   }
 
-  public void stopIntakeMotor(){
-    m_motor.stopMotor();
-  }
   @Override
   public void periodic() {
 

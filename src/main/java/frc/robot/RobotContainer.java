@@ -87,7 +87,6 @@ public class RobotContainer {
 
         // configure the launcher to stop when no other command is running
         s_launcher.setDefaultCommand(new RunCommand(() -> s_launcher.stopLauncher(), s_launcher));
-
     }
 
     /**

@@ -30,7 +30,7 @@ public class ShootOnly extends SequentialCommandGroup {
         new InstantCommand(() -> launcher.autoSpeakerShot(intake),launcher),
         new WaitCommand(.4).withTimeout(.5),
         new InstantCommand(() -> launcher.stopShooter(), launcher),
-        new InstantCommand(() -> intake.intakeStop()),
+        new InstantCommand(() -> intake.stop()),
         //new InstantCommand(() -> IntakeSubsystem.intakeRun(.5), intake),
         new InstantCommand(() -> arm.armDown(.9)),
         new WaitCommand(.2)

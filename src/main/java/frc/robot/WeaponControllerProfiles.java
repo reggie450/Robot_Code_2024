@@ -42,8 +42,10 @@ public class WeaponControllerProfiles {
         climberRightDown = new InstantCommand(() -> s_climber.RightDown(),s_climber);
         climberLeftStop = new InstantCommand(() -> s_climber.LeftStop(),s_climber);
 
-        intakeRun = new InstantCommand(()->s_intake.intakeRun(.3),s_intake);
-        intakeStop = s_intake.intakeStop();
+        intakeRun = new InstantCommand(()->s_intake.run(.3),s_intake);
+        intakeStop = new InstantCommand(()->s_intake.stop(),s_intake);
+        intakebackup = new InstantCommand(()->s_intake.backup(),s_intake);
+        intakeStopRetract = s_intake.stopRetract();
 
         launcherAmpShot = new InstantCommand(() -> s_launcher.ampShot(), s_launcher);
         launcherSpeakerShot = new InstantCommand(() -> s_launcher.speakerShot(), s_launcher);
@@ -88,8 +90,6 @@ public class WeaponControllerProfiles {
 
         new POVButton(c_weapons, 90)
             .onTrue(launcherOwenWilsonSucks).onFalse(launcherStop);
-
-
     }
 
     public void GetAliceProfile() {
@@ -102,7 +102,7 @@ public class WeaponControllerProfiles {
         new JoystickButton(c_weapons, XboxController.Button.kLeftBumper.value)
             .onTrue(climberLeftDown).onFalse(climberLeftStop);
 
-         new Trigger( 
+        new Trigger( 
                 () -> c_weapons.getRightTriggerAxis()
                         > Constants.OIConstants.kTriggerButtonThreshold)
             .onTrue(climberRightUp).onFalse(climberRightStop);
@@ -113,6 +113,9 @@ public class WeaponControllerProfiles {
         /* Intake Controls */
         new JoystickButton(c_weapons, XboxController.Button.kY.value)
             .onTrue(intakeRun).onFalse(intakeStop);
+        
+        new JoystickButton(c_weapons, XboxController.Button.kB.value)
+            .onTrue(intakebackup).onFalse(intakeStop);
 
         // new JoystickButton(c_weapons, XboxController.Button.kB.value)
         //     .onTrue(launcherAmpShot).onFalse(launcherStop);
@@ -190,7 +193,9 @@ public class WeaponControllerProfiles {
     InstantCommand climberRightStop;
 
     InstantCommand intakeRun;
-    Command intakeStop;
+    InstantCommand intakeStop;
+    InstantCommand intakebackup;
+    Command intakeStopRetract;
 
     InstantCommand launcherAmpShot;
     InstantCommand launcherSpeakerShot;

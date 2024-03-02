@@ -29,7 +29,7 @@ public class SpeakerLeft extends SequentialCommandGroup {
 
   /** Creates a new HighCone. */
   public SpeakerLeft(Swerve swerve, LauncherSubsystem launcher, IntakeSubsystem intake, ArmSubsystem arm) {
-    // Shots note into Speaker and then drives out of zone
+    // Shoots note into Speaker and then drives out of zone
     // todo adjust timings
     addCommands(
         new Speaker(
