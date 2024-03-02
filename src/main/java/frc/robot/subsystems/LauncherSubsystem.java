@@ -78,7 +78,7 @@ public class LauncherSubsystem extends SubsystemBase {
 
       @Override
       public void execute() {
-        Shot(shotType);
+        primeShot(shotType);
         if (m_timer.get() > Constants.Intake.kShotFeedTime)
           intake.run(.8);
       }
