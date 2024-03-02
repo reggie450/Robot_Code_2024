@@ -116,7 +116,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
           @Override
           public boolean isFinished() {
-            return m_timer.get() > .1;
+            return m_timer.get() > .02;
           }
 
           @Override
