@@ -38,6 +38,7 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(c_driver, XboxController.Button.kA.value);
     private final JoystickButton zeroHeading = new JoystickButton(c_driver, XboxController.Button.kY.value);
     private final JoystickButton limeOn = new JoystickButton(c_driver, XboxController.Button.kX.value);
+    private final JoystickButton slow_mode = new JoystickButton(c_driver, XboxController.Button.kLeftBumper.value);
 
     // private final JoystickButton robotCentricSwap = new
     // JoystickButton(c_driver, XboxController.Button.kLeftBumper.value);
@@ -76,7 +77,9 @@ public class RobotContainer {
                 () -> -c_driver.getRawAxis(translationAxis),
                 () -> -c_driver.getRawAxis(strafeAxis),
                 () -> -c_driver.getRawAxis(rotationAxis) / 2,
-                () -> !robotCentric.getAsBoolean()));
+                () -> !robotCentric.getAsBoolean(),
+                () -> slow_mode.getAsBoolean()
+                ));
 
         s_limeLightTwo.CameraMode();
         // set the arm subsystem to run the "runAutomatic" function continuously when no
