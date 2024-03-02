@@ -5,19 +5,17 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
-import com.revrobotics.SparkPIDController;
+// import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkRelativeEncoder;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Timer;
+// import edu.wpi.first.math.trajectory.TrapezoidProfile;
+// import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.PIDGains;
 import frc.robot.Constants;
 import frc.robot.StatsCollection;
 
@@ -25,16 +23,16 @@ public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax m_leadmotor;
   private CANSparkMax m_followmotor;
   private RelativeEncoder m_encoder;
-  private SparkPIDController m_controller;
-  private double m_setpoint;
+  // private SparkPIDController m_controller;
+  // private double m_setpoint;
 
-  private TrapezoidProfile m_profile;
-  private Timer m_timer;
-  private TrapezoidProfile.State m_startState;
-  private TrapezoidProfile.State m_endState;
+  // private TrapezoidProfile m_profile;
+  // private Timer m_timer;
+  // private TrapezoidProfile.State m_startState;
+  // private TrapezoidProfile.State m_endState;
 
-  private TrapezoidProfile.State m_targetState;
-  private double m_feedforward;
+  // private TrapezoidProfile.State m_targetState;
+  // private double m_feedforward;
   private double m_manualValue;
   private SparkLimitSwitch m_forwardLimit;
   private SparkLimitSwitch m_reverseLimit;

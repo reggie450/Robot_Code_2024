@@ -11,7 +11,6 @@ public class LauncherSubsystem extends SubsystemBase {
 
   private TalonFX m_topMotor;
   private TalonFX m_bottomMotor;
-  private boolean m_launcherRunning;
 
   /**
    * Creates a new LauncherSubsystem.
@@ -26,7 +25,6 @@ public class LauncherSubsystem extends SubsystemBase {
     m_bottomMotor.setInverted(false); 
     m_bottomMotor.setNeutralMode(NeutralModeValue.Brake);
 
-    m_launcherRunning = false;
   }
 
   /**
@@ -34,7 +32,6 @@ public class LauncherSubsystem extends SubsystemBase {
    * run continuously in a {@code RunCommand}.
    */
   public void runLauncher() {
-    m_launcherRunning = true;
   }
 
   public void owenWilsonSucks() {
@@ -49,7 +46,6 @@ public class LauncherSubsystem extends SubsystemBase {
    * run continuously in a {@code RunCommand}.
    */
   public void stopLauncher() {
-    m_launcherRunning = false;
   }
 
   public void ampShot() {
@@ -63,33 +59,26 @@ public class LauncherSubsystem extends SubsystemBase {
     //Timer.delay(.1);
     m_bottomMotor.stopMotor();
     //Timer.delay(.1);
-   // IntakeSubsystem.stopIntakeMotor();
+    // IntakeSubsystem.stopIntakeMotor();
   }
     
 
   public void speakerShot() {
     m_topMotor.set(.5);
     m_bottomMotor.set(.4);
-  // Timer.delay(.2);
-  // IntakeSubsystem.intakeRun(.7);
+    // Timer.delay(.2);
+    // IntakeSubsystem.intakeRun(.7);
   }
 
   public void autoSpeakerShot(IntakeSubsystem intake) {
     m_topMotor.set(.5);
     m_bottomMotor.set(.5); 
-   Timer.delay(.6);   
-   intake.intakeRun(.7);    
+    Timer.delay(.6);   
+    intake.intakeRun(.7);    
   }
 
   @Override
   public void periodic() { // this method will be called once per scheduler run
-    // set the launcher motor powers based on whether the launcher is on or not
-   /*  if (m_launcherRunning) {
-      m_topMotor.set(Constants.Launcher.kTopPower);
-      m_bottomMotor.set(Constants.Launcher.kBottomPower);
-    } else {
-      m_topMotor.set(0.0);
-      m_bottomMotor.set(0.0);
-    }
-  } */
-}}
+
+  }
+}

@@ -10,15 +10,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Swerve;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -31,17 +28,17 @@ import frc.robot.subsystems.LauncherSubsystem;
 public class SpeakerLeft extends SequentialCommandGroup {
 
   /** Creates a new HighCone. */
-  public SpeakerLeft(Swerve s_swerve, LauncherSubsystem m_launcher, IntakeSubsystem m_intake, ArmSubsystem m_arm) {
+  public SpeakerLeft(Swerve swerve, LauncherSubsystem launcher, IntakeSubsystem intake, ArmSubsystem arm) {
     // Shots note into Speaker and then drives out of zone
     // todo adjust timings
     addCommands(
         new Speaker(
-        s_swerve,
-        m_launcher,
-        m_intake,
-        m_arm,
-        new Traverse(s_swerve),
-        new TraverseBack(s_swerve)
+        swerve,
+        launcher,
+        intake,
+        arm,
+        new Traverse(swerve),
+        new TraverseBack(swerve)
         )
     );
   }

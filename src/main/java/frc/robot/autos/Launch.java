@@ -1,6 +1,5 @@
 package frc.robot.autos;
 
-import frc.robot.Constants.Arm;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
