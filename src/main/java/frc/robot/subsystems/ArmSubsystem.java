@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.PIDGains;
 import frc.robot.Constants;
+import frc.robot.StatsCollection;
 
 public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax m_leadmotor;
@@ -38,6 +39,8 @@ public class ArmSubsystem extends SubsystemBase {
   private SparkLimitSwitch m_forwardLimit;
   private SparkLimitSwitch m_reverseLimit;
 
+
+  private StatsCollection stats = new StatsCollection("ArmSS");
   /** Creates a new ArmSubsystem and sets default behaviors */
   public ArmSubsystem() {
     // create a new SPARK MAX and configure it
@@ -60,7 +63,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_encoder = m_leadmotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
     m_encoder.setPositionConversionFactor(Constants.Arm.kPositionFactor);
     m_encoder.setVelocityConversionFactor(Constants.Arm.kVelocityFactor);
-    m_encoder.setPosition(0.0);
+    //m_encoder.setPosition(0.0);
 
    // m_controller = m_leadmotor.getPIDController();
    // PIDGains.setSparkMaxGains(m_controller, Constants.Arm.kArmPositionGains);
@@ -164,6 +167,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() { // This method will be called once per scheduler run
+    stats.Periodic();
     SmartDashboard.putBoolean("Forward Limit Switch", m_forwardLimit.isPressed());
     SmartDashboard.putBoolean("Reverse Limit Switch", m_reverseLimit.isPressed());
     SmartDashboard.putNumber("Arm Encoder", m_encoder.getPosition());

@@ -54,23 +54,23 @@ public class ClimberSubsystem extends SubsystemBase {
     m_timer.reset();
   }
 
-  public void climbUpLeft(){
+  public void LeftUp(){
     m_leftmotor.set(Constants.Climber.kClimberSpeed);
   }
-  public void climbUpRight(){
-  m_rightmotor.set(Constants.Climber.kClimberSpeed);
+  public void RightUp(){
+    m_rightmotor.set(Constants.Climber.kClimberSpeed);
   }
-  public void climbDownLeft(){
-  m_leftmotor.set(-Constants.Climber.kClimberSpeed);  
+  public void LeftDown(){
+    m_leftmotor.set(-Constants.Climber.kClimberSpeed);  
   }
-  public void climbDownRight(){
-  m_rightmotor.set(-Constants.Climber.kClimberSpeed);
+  public void RightDown(){
+    m_rightmotor.set(-Constants.Climber.kClimberSpeed);
   }
-  public void climbStopLeft(){
-  m_leftmotor.set(0);
+  public void LeftStop(){
+    m_leftmotor.set(0);
   }
-  public void climbStopRight() {
-  m_rightmotor.set(0);
+  public void RightStop() {
+    m_rightmotor.set(0);
   }
 
 
