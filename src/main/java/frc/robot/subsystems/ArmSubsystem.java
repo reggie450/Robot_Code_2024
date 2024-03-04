@@ -129,11 +129,11 @@ public class ArmSubsystem extends SubsystemBase {
         m_targetState.position, CANSparkMax.ControlType.kPosition, 0, m_feedforward);
 
   }
-
+*/
   public double getEncoderPosition() {
     return m_encoder.getPosition();
   }
- */
+ 
   /**
    * Drives the arm using the provided power value (usually from a joystick).
    * This also adds in the feedforward value which can help counteract gravity.
@@ -147,7 +147,7 @@ public class ArmSubsystem extends SubsystemBase {
     // m_setpoint = m_encoder.getPosition();
     // updateMotionProfile();
     // set the power of the motor
-    m_manualValue = _power / 1.25;
+    m_manualValue = _power;
     m_leadmotor.set(m_manualValue);
   } 
 
