@@ -29,7 +29,8 @@ public class IntakeSubsystem extends SubsystemBase {
   // private boolean m_positionMode;
   // private double m_targetPosition;
   // private double m_power;
-  // private boolean collected = false;
+  public boolean collected = false;
+  public boolean running = true;
   // private boolean firing = false;
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
@@ -116,7 +117,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
           @Override
           public boolean isFinished() {
-            return m_timer.get() > .02;
+            return m_timer.get() > .05;
           }
 
           @Override
@@ -128,6 +129,11 @@ public class IntakeSubsystem extends SubsystemBase {
     newCommand.addRequirements(this);
 
     return newCommand;
+  }
+
+  public boolean getLimitSwitch(){
+    // todo
+    return true;
   }
 
   public void stop(){
