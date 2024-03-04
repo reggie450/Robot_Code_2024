@@ -114,4 +114,11 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
+    
+    public void teleopPeriodic() { // This method will be called once per scheduler run
+        if (!s_intake.collected && !s_intake.running){
+            //IntakeCollect intakeCommand = new IntakeCollect(s_intake,s_arm, false);
+            //intakeCommand.schedule();
+        }
+    }
 }
