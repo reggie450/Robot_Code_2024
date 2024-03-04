@@ -4,6 +4,7 @@
 
 package frc.robot.autos;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -23,6 +24,16 @@ public class Speaker extends SequentialCommandGroup {
   public Speaker(Swerve swerve, LauncherSubsystem launcher, IntakeSubsystem intake, ArmSubsystem arm, Command traverse, Command traverseBack) {
     // Shots note into Speaker and then drives out of zone
     // todo adjust timings
+    double armWaitTime = .6;
+    double powerAdjust = .05;
+    if (!SmartDashboard.containsKey("armWaitTime"))
+      SmartDashboard.putNumber("armWaitTime",armWaitTime);
+    else
+      SmartDashboard.getNumber("armWaitTime", .6);
+    if (!SmartDashboard.containsKey("armWaitTime"))
+      SmartDashboard.putNumber("powerAdjust",powerAdjust);
+    else
+      SmartDashboard.getNumber("powerAdjust", .05);
     addCommands(
         new InstantCommand(() -> arm.armDown(.8), arm),
         new WaitCommand(1).withTimeout(1),
@@ -45,13 +56,13 @@ public class Speaker extends SequentialCommandGroup {
         new InstantCommand(()->intake.stop()),
         //new TraverseBack(s_swerve),
         new InstantCommand(() -> arm.armUp(1)),
-        new WaitCommand(.58),
+        new WaitCommand(armWaitTime), //.58 too high
         new InstantCommand(() -> arm.armStop(), arm),
         new WaitCommand(.05),
         new InstantCommand(()->intake.backup()),
         new WaitCommand(.01).withTimeout(.01),
         new InstantCommand(()->intake.stop()),
-        new InstantCommand(() -> launcher.autoSpeakerShot(intake,.1),launcher),
+        new InstantCommand(() -> launcher.autoSpeakerShot(intake,powerAdjust),launcher),
         new WaitCommand(.4).withTimeout(.4),
         new InstantCommand(() -> launcher.stopShooter(), launcher),
         new InstantCommand(()->intake.stop())
