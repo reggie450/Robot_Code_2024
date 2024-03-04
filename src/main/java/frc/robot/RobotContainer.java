@@ -39,6 +39,7 @@ public class RobotContainer {
     private final JoystickButton zeroHeading = new JoystickButton(c_driver, XboxController.Button.kY.value);
     private final JoystickButton limeOn = new JoystickButton(c_driver, XboxController.Button.kX.value);
     private final JoystickButton slow_mode = new JoystickButton(c_driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton slow_mode2 = new JoystickButton(c_driver, XboxController.Button.kRightBumper.value);
 
     // private final JoystickButton robotCentricSwap = new
     // JoystickButton(c_driver, XboxController.Button.kLeftBumper.value);
@@ -78,7 +79,7 @@ public class RobotContainer {
                 () -> -c_driver.getRawAxis(strafeAxis),
                 () -> -c_driver.getRawAxis(rotationAxis) / 2,
                 () -> !robotCentric.getAsBoolean(),
-                () -> slow_mode.getAsBoolean()
+                () -> slow_mode.getAsBoolean()||slow_mode2.getAsBoolean() || c_driver.getRightTriggerAxis() > .5 || c_driver.getLeftTriggerAxis() > .5
                 ));
 
         s_limeLightTwo.CameraMode();
