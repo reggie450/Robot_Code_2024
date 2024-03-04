@@ -41,7 +41,7 @@ public class WeaponControllerProfiles {
         climberLeftStop = new InstantCommand(() -> s_climber.LeftStop(),s_climber);
         climberRightUp = new InstantCommand(() -> s_climber.RightUp(),s_climber);
         climberRightDown = new InstantCommand(() -> s_climber.RightDown(),s_climber);
-        climberLeftStop = new InstantCommand(() -> s_climber.LeftStop(),s_climber);
+        climberRightStop = new InstantCommand(() -> s_climber.RightStop(),s_climber);
 
         intakeRun = new InstantCommand(()->s_intake.run(.3),s_intake);
         intakeStop = new InstantCommand(()->s_intake.stop(),s_intake);
@@ -116,8 +116,7 @@ public class WeaponControllerProfiles {
 
         /* Intake Controls */
         new JoystickButton(c_weapons, XboxController.Button.kY.value)
-            .onTrue(intakeRun).onFalse(intakeStop);
-            //.onTrue(intakeRun).onFalse(intakeStopRetract);
+            .onTrue(intakeRun).onFalse(intakeStopRetract);
 
         new JoystickButton(c_weapons, XboxController.Button.kB.value)
             .onTrue(intakebackup).onFalse(intakeStop);
@@ -130,16 +129,13 @@ public class WeaponControllerProfiles {
             
         /* Launcher Controls */
         new POVButton(c_weapons, 270)
-            .onTrue(launcherAmpShot).onFalse(launcherStop);
-            //.onTrue(launcherAmpShotCommand);
+            .onTrue(launcherAmpShotCommand);
 
         new POVButton(c_weapons, 0)
-            .onTrue(launcherSpeakerShot).onFalse(launcherStop);
-            //.onTrue(launcherSpeakerShotCommand);
+            .onTrue(launcherSpeakerShotCommand);
 
         new POVButton(c_weapons, 90)
-            .onTrue(launcherOwenWilsonSucks).onFalse(launcherStop);
-            //.onTrue(launcherOwenWilsonSucksCommand);
+            .onTrue(launcherOwenWilsonSucksCommand);
     }
 
     public void GetDefaultProfile() {
