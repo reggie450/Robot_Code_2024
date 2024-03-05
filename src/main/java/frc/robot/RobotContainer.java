@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +28,7 @@ public class RobotContainer {
 
     // The driver's controllers
     XboxController c_driver = new XboxController(OIConstants.kDriverControllerPort);
+    Joystick j_driver = new Joystick(OIConstants.kDriverControllerPort);
     XboxController c_weapon = new XboxController(OIConstants.kWeaponControllerPort);
 
     /* Drive Controls */
@@ -40,6 +42,11 @@ public class RobotContainer {
     private final JoystickButton limeOn = new JoystickButton(c_driver, XboxController.Button.kX.value);
     private final JoystickButton slow_mode = new JoystickButton(c_driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton slow_mode2 = new JoystickButton(c_driver, XboxController.Button.kRightBumper.value);
+
+    private final JoystickButton jrobotCentric = new JoystickButton(j_driver, 3);
+    private final JoystickButton jzeroHeading = new JoystickButton(j_driver, 4);
+    private final JoystickButton jlimeOn = new JoystickButton(j_driver, 11);
+    private final JoystickButton jslow_mode = new JoystickButton(j_driver, 1);
 
     // private final JoystickButton robotCentricSwap = new
     // JoystickButton(c_driver, XboxController.Button.kLeftBumper.value);
@@ -76,11 +83,15 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve,
-                () -> -c_driver.getRawAxis(translationAxis),
-                () -> -c_driver.getRawAxis(strafeAxis),
-                () -> -c_driver.getRawAxis(rotationAxis) / 2,
-                () -> !robotCentric.getAsBoolean(),
-                () -> slow_mode.getAsBoolean()||slow_mode2.getAsBoolean() || c_driver.getRightTriggerAxis() > .5 || c_driver.getLeftTriggerAxis() > .5
+                () -> j_driver.isConnected() ? j_driver.getRawAxis(2) : c_driver.getRawAxis(translationAxis),
+                () -> j_driver.isConnected() ? j_driver.getRawAxis(1) : c_driver.getRawAxis(strafeAxis),
+                () -> (j_driver.isConnected() ? -j_driver.getRawAxis(3) : -c_driver.getRawAxis(rotationAxis)) / 2,
+                () -> !(robotCentric.getAsBoolean() || jrobotCentric.getAsBoolean()),
+                () -> slow_mode.getAsBoolean() ||
+                      slow_mode2.getAsBoolean() ||
+                      jslow_mode.getAsBoolean() ||
+                      c_driver.getRightTriggerAxis() > .5 ||
+                      c_driver.getLeftTriggerAxis() > .5
                 ));
 
         s_limeLightTwo.CameraMode();
@@ -105,7 +116,9 @@ public class RobotContainer {
      */
     private void configureDriverButtons() {
         zeroHeading.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        jzeroHeading.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         limeOn.onTrue(new InstantCommand(() -> s_limeLightTwo.CameraMode()));
+        jlimeOn.onTrue(new InstantCommand(() -> s_limeLightTwo.CameraMode()));
     }
     
     /**
