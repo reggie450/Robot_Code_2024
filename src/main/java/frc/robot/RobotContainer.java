@@ -60,6 +60,7 @@ public class RobotContainer {
         autoChooser.addOption("Speaker Right, Drive Out",new SpeakerRight(s_Swerve, s_launcher, s_intake, s_arm));
         autoChooser.addOption("Speaker Left, Drive Out", new SpeakerLeft(s_Swerve, s_launcher, s_intake, s_arm));
         autoChooser.addOption("Shoot Only", new ShootOnly(s_Swerve, s_launcher, s_intake, s_arm));
+        autoChooser.addOption("Dance", new Dance(s_Swerve, s_launcher, s_intake, s_arm));
         // autoChooser.setDefaultOption(name: "High Cone / Back Out of Zone", new
         // HighCone(s_Swerve, m_crane, m_extender, m_grabber));
         // autoChooser.addOption(name: "Lower Cone / Back Out", new LowCone(s_Swerve,
