@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -22,6 +23,8 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    public SlewRateLimiter translationLimiter = new SlewRateLimiter(0.6);
+    public SlewRateLimiter StrafeLimiter = new SlewRateLimiter(0.6);
     // public StatsCollection stats = new StatsCollection("SwerveSS");
 
     public Swerve() {
@@ -44,8 +47,8 @@ public class Swerve extends SubsystemBase {
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                translation.getX(),
-                                translation.getY(),
+                                translationLimiter.calculate(translation.getX()),
+                                StrafeLimiter.calculate(translation.getY()),
                                 rotation,
                                 getHeading())
                             : new ChassisSpeeds(
