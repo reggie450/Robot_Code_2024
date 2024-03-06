@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 // import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,6 +25,8 @@ public class IntakeSubsystem extends SubsystemBase {
   private CANSparkMax m_motor;
   // private RelativeEncoder m_encoder;
   // private SparkPIDController m_controller;
+  
+  private DigitalInput inLimit = new DigitalInput(0);
   // private final I2C.Port i2cPort = I2C.Port.kOnboard;
   // private ColorSensorV3 m_ColorV3 = new ColorSensorV3(i2cPort);
   // private boolean m_positionMode;
@@ -133,7 +136,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public boolean getLimitSwitch(){
     // todo
-    return true;
+    return inLimit.get();
   }
 
   public void stop(){
