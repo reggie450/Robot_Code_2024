@@ -77,13 +77,16 @@ public class RobotContainer {
         configureDriverButtons();
         weaponProfile = new WeaponControllerProfiles(WeaponProfile.Alice, c_weapon, s_arm, s_intake, s_launcher, s_climber);
         //weaponProfile = new WeaponControllerProfiles(WeaponProfile.Evan, c_weapon, s_arm, s_intake, s_launcher, s_climber);
-
+        j_driver.setXChannel(1);
+        j_driver.setYChannel(0);
+        j_driver.setTwistChannel(2);
+        j_driver.setThrottleChannel(3);
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve,
-                () -> j_driver.getRawAxis(1),
-                () -> 0, //j_driver.getRawAxis(3),
-                () -> -j_driver.getRawAxis(2) / 2,
+                () -> j_driver.getX(),
+                () -> j_driver.getY(), //j_driver.getRawAxis(3),
+                () -> -j_driver.getTwist(),// -j_driver.getRawAxis(2) / 2,
                 () -> !jrobotCentric.getAsBoolean(),
                 () -> jslow_mode.getAsBoolean()
                 ));
