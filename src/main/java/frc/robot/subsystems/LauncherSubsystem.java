@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,7 +20,9 @@ public class LauncherSubsystem extends SubsystemBase {
 
   private TalonFX m_topMotor;
   private TalonFX m_bottomMotor;
-
+  private Orchestra orchestra = new Orchestra();
+  
+  
   /**
    * Creates a new LauncherSubsystem.
    */
@@ -32,7 +36,20 @@ public class LauncherSubsystem extends SubsystemBase {
     m_bottomMotor.setInverted(false); 
     m_bottomMotor.setNeutralMode(NeutralModeValue.Brake);
 
+    orchestra.addInstrument(m_topMotor);
+    orchestra.addInstrument(m_bottomMotor);
+    var status = orchestra.loadMusic("/home/lvuser/test.chrp");
+    if (!status.isOK()) {
+      SmartDashboard.putString("MusicLoadError", "Music Not Worky");
+    }
   }
+
+  public void PlaySong(){
+    var status = orchestra.play();
+    if (!status.isOK()) {
+      SmartDashboard.putString("MusicPlayError", "Music Not Worky");
+    }
+  } 
 
   /**
    * Turns the launcher off. Can be run once and the launcher will stay running or

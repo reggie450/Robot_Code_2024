@@ -114,6 +114,7 @@ public class RobotContainer {
     private void configureDriverButtons() {
         jzeroHeading.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         jlimeOn.onTrue(new InstantCommand(() -> s_limeLightTwo.CameraMode()));
+        new JoystickButton(j_driver, 7).onTrue(new InstantCommand(() -> s_launcher.PlaySong()));
     }
     
     /**
