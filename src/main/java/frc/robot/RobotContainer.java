@@ -86,7 +86,7 @@ public class RobotContainer {
                 s_Swerve,
                 () -> j_driver.getX(),
                 () -> j_driver.getY(), //j_driver.getRawAxis(3),
-                () -> -j_driver.getTwist(),// -j_driver.getRawAxis(2) / 2,
+                () -> -j_driver.getTwist()/2,// -j_driver.getRawAxis(2) / 2,
                 () -> !jrobotCentric.getAsBoolean(),
                 () -> jslow_mode.getAsBoolean()
                 ));
