@@ -2,10 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.IntakeCollect;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -44,6 +46,8 @@ public class WeaponControllerProfiles {
         climberRightStop = new InstantCommand(() -> s_climber.RightStop(),s_climber);
 
         intakeRun = new InstantCommand(()->s_intake.run(.3),s_intake);
+        intakeRunCommand = new IntakeCollect(s_intake,s_arm, false);
+        intakeRunSimpler = new RunCommand(()->s_intake.intakeSimple());
         intakeStop = new InstantCommand(()->s_intake.stop(),s_intake);
         intakebackup = new InstantCommand(()->s_intake.backup(),s_intake);
         intakeStopRetract = s_intake.stopRetract();
@@ -77,23 +81,23 @@ public class WeaponControllerProfiles {
 
         /* Intake Controls */
         new JoystickButton(c_weapons, XboxController.Button.kY.value)
-            .onTrue(intakeRun).onFalse(intakeStop);
+            .onTrue(intakeRunSimpler);//.onFalse(intakeStop);
 
         /* Launcher Controls */
         new JoystickButton(c_weapons, XboxController.Button.kB.value)
             .onTrue(launcherAmpShot).onFalse(launcherStop);
 
         new JoystickButton(c_weapons, XboxController.Button.kX.value)
-            .onTrue(launcherSpeakerShot).onFalse(launcherStop);
+            .onTrue(launcherSpeakerShotCommand);//.onFalse(launcherStop);
 
         new POVButton(c_weapons, 270)
-            .onTrue(launcherAmpShot).onFalse(launcherStop);
+            .onTrue(launcherAmpShotCommand);//.onFalse(launcherStop);
 
         new POVButton(c_weapons, 0)
-            .onTrue(launcherSpeakerShot).onFalse(launcherStop);
+            .onTrue(launcherSpeakerShotCommand);//.onFalse(launcherStop);
 
         new POVButton(c_weapons, 90)
-            .onTrue(launcherOwenWilsonSucks).onFalse(launcherStop);
+            .onTrue(launcherOwenWilsonSucksCommand);//.onFalse(launcherStop);
     }
 
     public void GetAliceProfile() {
@@ -116,10 +120,11 @@ public class WeaponControllerProfiles {
 
         /* Intake Controls */
         new JoystickButton(c_weapons, XboxController.Button.kY.value)
-            .onTrue(intakeRun).onFalse(intakeStopRetract);
+            .whileTrue(intakeRunSimpler).onFalse(intakeStop);    
+        //.onTrue(s_intake.intakeCommand(s_arm));//.onFalse(intakeStopRetract);
 
-        new JoystickButton(c_weapons, XboxController.Button.kB.value)
-            .onTrue(intakebackup).onFalse(intakeStop);
+        // new JoystickButton(c_weapons, XboxController.Button.kB.value)
+        //     .onTrue(intakebackup).onFalse(intakeRunCommand);
 
         // new JoystickButton(c_weapons, XboxController.Button.kB.value)
         //     .onTrue(launcherAmpShot).onFalse(launcherStop);
@@ -197,6 +202,8 @@ public class WeaponControllerProfiles {
     InstantCommand climberRightStop;
 
     InstantCommand intakeRun;
+    Command intakeRunCommand;
+    RunCommand intakeRunSimpler;
     InstantCommand intakeStop;
     InstantCommand intakebackup;
     Command intakeStopRetract;

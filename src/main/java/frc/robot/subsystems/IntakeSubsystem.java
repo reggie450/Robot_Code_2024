@@ -14,10 +14,12 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 // import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+import frc.robot.commands.IntakeCollect;
 
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -26,14 +28,15 @@ public class IntakeSubsystem extends SubsystemBase {
   // private RelativeEncoder m_encoder;
   // private SparkPIDController m_controller;
   
-  private DigitalInput inLimit = new DigitalInput(0);
+  private DigitalInput inLimit = new DigitalInput(1);
+  private int timesRun = 0;
   // private final I2C.Port i2cPort = I2C.Port.kOnboard;
   // private ColorSensorV3 m_ColorV3 = new ColorSensorV3(i2cPort);
   // private boolean m_positionMode;
   // private double m_targetPosition;
   // private double m_power;
   public boolean collected = false;
-  public boolean running = true;
+  public boolean running = false;
   // private boolean firing = false;
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
@@ -102,6 +105,17 @@ public class IntakeSubsystem extends SubsystemBase {
     m_motor.set(speed);
   }
 
+  public void intakeSimple(){
+    SmartDashboard.putNumber("intakeSimpleRuns", timesRun++);
+    if (!getLimitSwitch() && !collected)// && (!m_armBased || s_arm.getEncoderPosition() >= Constants.Arm.kIntakePosition))
+      m_motor.set(.3);
+    else {
+      SmartDashboard.putBoolean("intakeSimpleDidStop", true);
+      m_motor.set(0);
+      collected = true;
+    }
+  }  
+
   public Command stopRetract(){
     Command newCommand =
         new Command() {
@@ -135,7 +149,6 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public boolean getLimitSwitch(){
-    // todo
     return inLimit.get();
   }
 
@@ -149,6 +162,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    SmartDashboard.putBoolean("IntakeLimit", getLimitSwitch());
+    SmartDashboard.putBoolean("IntakeCollected", collected);
+    SmartDashboard.putBoolean("IntakeRunning", running);
   }
 }

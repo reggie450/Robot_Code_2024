@@ -20,7 +20,6 @@ public class LauncherSubsystem extends SubsystemBase {
 
   private TalonFX m_topMotor;
   private TalonFX m_bottomMotor;
-  private Orchestra orchestra = new Orchestra();
   
   
   /**
@@ -36,16 +35,17 @@ public class LauncherSubsystem extends SubsystemBase {
     m_bottomMotor.setInverted(false); 
     m_bottomMotor.setNeutralMode(NeutralModeValue.Brake);
 
+     }
+
+  public void PlaySong(){
+    Orchestra orchestra = new Orchestra();
     orchestra.addInstrument(m_topMotor);
     orchestra.addInstrument(m_bottomMotor);
     var status = orchestra.loadMusic("/home/lvuser/test.chrp");
     if (!status.isOK()) {
       SmartDashboard.putString("MusicLoadError", "Music Not Worky");
     }
-  }
-
-  public void PlaySong(){
-    var status = orchestra.play();
+    status = orchestra.play();
     if (!status.isOK()) {
       SmartDashboard.putString("MusicPlayError", "Music Not Worky");
     }
@@ -91,6 +91,7 @@ public class LauncherSubsystem extends SubsystemBase {
       public void initialize() {
         m_timer = new Timer();
         m_timer.start();            
+        SmartDashboard.putBoolean("LauncherCommandRun", true);
       }
 
       @Override
@@ -109,6 +110,8 @@ public class LauncherSubsystem extends SubsystemBase {
       public void end(boolean interrupted) {
         intake.stop();
         stopShooter();
+        intake.collected = false;
+        SmartDashboard.putBoolean("LauncherCommandRun", false);
       }
     };
 

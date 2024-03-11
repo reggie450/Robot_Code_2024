@@ -23,8 +23,8 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-    public SlewRateLimiter translationLimiter = new SlewRateLimiter(0.9);
-    public SlewRateLimiter StrafeLimiter = new SlewRateLimiter(0.9);
+    public SlewRateLimiter translationLimiter = new SlewRateLimiter(10);
+    public SlewRateLimiter StrafeLimiter = new SlewRateLimiter(10);
     // public StatsCollection stats = new StatsCollection("SwerveSS");
 
     public Swerve() {

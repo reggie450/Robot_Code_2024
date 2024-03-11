@@ -86,7 +86,7 @@ public class RobotContainer {
                 s_Swerve,
                 () -> j_driver.getX(),
                 () -> j_driver.getY(), //j_driver.getRawAxis(3),
-                () -> -j_driver.getTwist()/2,// -j_driver.getRawAxis(2) / 2,
+                () -> -j_driver.getTwist()/1.5,// -j_driver.getRawAxis(2) / 2,
                 () -> !jrobotCentric.getAsBoolean(),
                 () -> jslow_mode.getAsBoolean()
                 ));
@@ -127,10 +127,10 @@ public class RobotContainer {
     }
     
     public void teleopPeriodic() { // This method will be called once per scheduler run
-        if (!s_intake.collected && !s_intake.running){
-            //IntakeCollect intakeCommand = new IntakeCollect(s_intake,s_arm, false);
+        //if (!s_intake.collected && !s_intake.running){
+            //IntakeCollect intakeCommand = new IntakeCollect(s_intake,s_arm, faWlse);
             //intakeCommand.schedule();
-        }
+        //}
         SmartDashboard.putBoolean("driver connected",j_driver.isConnected());
         SmartDashboard.putNumber("driver translate", j_driver.getRawAxis(1));
         SmartDashboard.putNumber("driver strafe", j_driver.getRawAxis(3));
