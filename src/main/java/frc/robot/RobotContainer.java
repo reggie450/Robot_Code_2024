@@ -96,7 +96,7 @@ public class RobotContainer {
         // other command is running
         s_arm.setDefaultCommand(
                 new RunCommand(
-                        () -> s_arm.runManual(c_weapon.getRawAxis(1)), s_arm));
+                        () -> s_arm.runManual(c_weapon.getRawAxis(1), c_weapon.getRawAxis(5)), s_arm));
 
         // configure the launcher to stop when no other command is running
         s_launcher.setDefaultCommand(new RunCommand(() -> s_launcher.stopLauncher(), s_launcher));
@@ -114,7 +114,7 @@ public class RobotContainer {
     private void configureDriverButtons() {
         jzeroHeading.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         jlimeOn.onTrue(new InstantCommand(() -> s_limeLightTwo.CameraMode()));
-        new JoystickButton(j_driver, 7).onTrue(new InstantCommand(() -> s_launcher.PlaySong()));
+        //new JoystickButton(j_driver, 7).onTrue(new InstantCommand(() -> s_launcher.PlaySong()));
     }
     
     /**
@@ -133,10 +133,9 @@ public class RobotContainer {
         //}
         SmartDashboard.putBoolean("driver connected",j_driver.isConnected());
         SmartDashboard.putNumber("driver translate", j_driver.getRawAxis(1));
-        SmartDashboard.putNumber("driver strafe", j_driver.getRawAxis(3));
+        SmartDashboard.putNumber("driver strafe", j_driver.getRawAxis(0));
         SmartDashboard.putNumber("driver_rotate", j_driver.getRawAxis(2));
-        SmartDashboard.putNumber("driver Axis Wing", j_driver.getRawAxis(0));
-        SmartDashboard.putNumber("driver Axis4", j_driver.getRawAxis(0));
-        SmartDashboard.putNumber("driver Axis4", j_driver.getRawAxis(0));
+        SmartDashboard.putNumber("driver Axis Wing", j_driver.getRawAxis(3));
+        
     }
 }

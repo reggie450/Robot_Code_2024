@@ -12,12 +12,17 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkRelativeEncoder;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.PIDGains;
 import frc.robot.Constants;
 //import frc.robot.StatsCollection;
+import frc.robot.subsystems.LauncherSubsystem.ShotType;
 
 public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax m_leadmotor;
@@ -36,7 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_manualValue;
   private SparkLimitSwitch m_forwardLimit;
   private SparkLimitSwitch m_reverseLimit;
-
+  private boolean running = false;
 
   // private StatsCollection stats = new StatsCollection("ArmSS");
   /** Creates a new ArmSubsystem and sets default behaviors */
@@ -63,8 +68,8 @@ public class ArmSubsystem extends SubsystemBase {
     m_encoder.setVelocityConversionFactor(Constants.Arm.kVelocityFactor);
     //m_encoder.setPosition(0.0);
 
-   // m_controller = m_leadmotor.getPIDController();
-   // PIDGains.setSparkMaxGains(m_controller, Constants.Arm.kArmPositionGains);
+    m_controller = m_leadmotor.getPIDController();
+    PIDGains.setSparkMaxGains(m_controller, Constants.Arm.kArmPositionGains);
     m_followmotor.follow(m_leadmotor, true);
 
     m_leadmotor.burnFlash();
@@ -75,9 +80,9 @@ public class ArmSubsystem extends SubsystemBase {
 
    // m_setpoint = Constants.Arm.kHomePosition;
 
-   /*  m_timer = new Timer();
+    m_timer = new Timer();
     m_timer.start();
- */
+ 
    // updateMotionProfile();
   }
 
@@ -128,6 +133,48 @@ public class ArmSubsystem extends SubsystemBase {
         m_targetState.position, CANSparkMax.ControlType.kPosition, 0, m_feedforward);
 
   }
+
+  public Command goToTarget(double _setpoint, LauncherSubsystem launcher, IntakeSubsystem intake) {
+    Command newCommand = null;
+    if (!running){
+      newCommand = new Command() {
+        @Override
+        public void initialize() {
+          setTargetPosition(_setpoint);
+          running = true;
+        }
+
+        @Override
+        public void execute() {
+          double elapsedTime = m_timer.get();
+          if (m_profile.isFinished(elapsedTime)){
+            m_targetState = m_profile.calculate(elapsedTime, m_startState, m_endState);
+            m_feedforward = Constants.Arm.kArmFeedforward.calculate(
+            m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
+            m_controller.setReference(
+            m_targetState.position, CANSparkMax.ControlType.kPosition, 0, m_feedforward);
+          }
+        }
+
+        @Override
+        public boolean isFinished() {
+          double elapsedTime = m_timer.get();
+          return m_profile.isFinished(elapsedTime);
+        }
+
+        @Override
+        public void end(boolean interrupted) {
+          m_leadmotor.stopMotor();
+          launcher.ShotIntake(intake, ShotType.speakerShot).schedule();
+          running = false;
+        }
+      };
+
+      newCommand.addRequirements(this);
+    }
+    return newCommand;
+  }
+
   public double getEncoderPosition() {
     return m_encoder.getPosition();
   }
@@ -138,14 +185,19 @@ public class ArmSubsystem extends SubsystemBase {
    * 
    * @param _power The motor power to apply.
    */
-  public void runManual(double _power) {
+  public void runManual(double _power, double alternate) {
     // reset and zero out a bunch of automatic mode stuff so exiting manual mode
     // happens cleanly and
     // passively
     // m_setpoint = m_encoder.getPosition();
     // updateMotionProfile();
     // set the power of the motor
-    m_manualValue = _power;
+    if (Math.abs(_power) > Math.abs(alternate)) {
+      m_manualValue = MathUtil.applyDeadband(_power, .1);;
+    }
+    else{
+      m_manualValue = MathUtil.applyDeadband(alternate, .1);
+    }
     m_leadmotor.set(m_manualValue);
   } 
 

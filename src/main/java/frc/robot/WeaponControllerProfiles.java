@@ -129,8 +129,8 @@ public class WeaponControllerProfiles {
         // new JoystickButton(c_weapons, XboxController.Button.kB.value)
         //     .onTrue(launcherAmpShot).onFalse(launcherStop);
 
-        // new JoystickButton(c_weapons, XboxController.Button.kX.value)
-        //     .onTrue(launcherSpeakerShot).onFalse(launcherStop);
+        new JoystickButton(c_weapons, XboxController.Button.kX.value)
+            .onTrue(s_arm.goToTarget(-0.254788,s_launcher,s_intake));//.onFalse(launcherSpeakerShotCommand);
             
         /* Launcher Controls */
         new POVButton(c_weapons, 270)
