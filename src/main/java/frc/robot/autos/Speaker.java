@@ -41,8 +41,8 @@ public class Speaker extends SequentialCommandGroup {
         new WaitCommand(.2), 
         new InstantCommand(() -> launcher.autoSpeakerShot(intake),launcher),
         new WaitCommand(.4).withTimeout(.5),
-        new InstantCommand(() -> launcher.stopShooter(), launcher),
-        new InstantCommand(() -> intake.run(.5), intake),
+       // new InstantCommand(() -> launcher.stopShooter(), launcher), Grenier
+        new InstantCommand(() -> intake.run(.5), intake), 
         new InstantCommand(() -> arm.armDown(.9)),
         new WaitCommand(.2),
         // new InstantCommand(() -> arm.armUp(.7),arm),
@@ -53,15 +53,15 @@ public class Speaker extends SequentialCommandGroup {
         // todo: adjust distance
         traverse,
         new WaitCommand(.2),
-        new InstantCommand(()->intake.stop()),
+       // new InstantCommand(()->intake.stop()), Grenier
         //new TraverseBack(s_swerve),
         new InstantCommand(() -> arm.armUp(1)),
         new WaitCommand(armWaitTime), //.58 too high
         new InstantCommand(() -> arm.armStop(), arm),
         new WaitCommand(.05),
-        new InstantCommand(()->intake.backup()),
+      //  new InstantCommand(()->intake.backup()), Grenier
         new WaitCommand(.01).withTimeout(.01),
-        new InstantCommand(()->intake.stop()),
+        //new InstantCommand(()->intake.stop()), Grenier
         new InstantCommand(() -> launcher.autoSpeakerShot(intake,powerAdjust),launcher),
         new WaitCommand(.4).withTimeout(.4),
         new InstantCommand(() -> launcher.stopShooter(), launcher),
