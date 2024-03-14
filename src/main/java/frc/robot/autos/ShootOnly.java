@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Swerve;
+import frc.robot.commands.Launch;
+import frc.robot.commands.Launch.ShotType;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
@@ -23,16 +25,12 @@ public class ShootOnly extends SequentialCommandGroup {
     // Shots note into Speaker and then drives out of zone
     // todo adjust timings
     addCommands(
-        new InstantCommand(() -> arm.armDown(.8), arm),
+        new InstantCommand(() -> arm.down(.8), arm),
         new WaitCommand(1).withTimeout(1),
-        new InstantCommand(() -> arm.armStop(), arm),
+        new InstantCommand(() -> arm.stop(), arm),
         new WaitCommand(.2), 
-        new InstantCommand(() -> launcher.autoSpeakerShot(intake),launcher),
-        new WaitCommand(.4).withTimeout(.5),
-        new InstantCommand(() -> launcher.stop(), launcher),
-        new InstantCommand(() -> intake.stop()),
-        //new InstantCommand(() -> IntakeSubsystem.intakeRun(.5), intake),
-        new InstantCommand(() -> arm.armDown(.9)),
+        new Launch(launcher, intake, ShotType.autoSpeakerShot, false),
+        new InstantCommand(() -> arm.down(.9)),
         new WaitCommand(.2)
     );
 

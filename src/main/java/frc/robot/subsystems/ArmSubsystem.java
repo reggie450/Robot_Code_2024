@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.PIDGains;
 import frc.robot.Constants;
 //import frc.robot.StatsCollection;
-import frc.robot.subsystems.LauncherSubsystem.ShotType;
+import frc.robot.commands.Launch.ShotType;
 
 public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax m_leadmotor;
@@ -41,7 +41,8 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_manualValue;
   private SparkLimitSwitch m_forwardLimit;
   private SparkLimitSwitch m_reverseLimit;
-  private boolean running = false;
+  public boolean running = false;
+  double elapsedTime = 0.0;
 
   // private StatsCollection stats = new StatsCollection("ArmSS");
   /** Creates a new ArmSubsystem and sets default behaviors */
@@ -120,8 +121,8 @@ public class ArmSubsystem extends SubsystemBase {
    * The target position is the last set position with {@code setTargetPosition}.
    */
   public void runAutomatic() {
-    double elapsedTime = m_timer.get();
-    if (m_profile.isFinished(elapsedTime)) {
+    elapsedTime = m_timer.get();
+    if (autoIsFinished()) {
       m_targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
     } else {
       m_targetState = m_profile.calculate(elapsedTime, m_startState, m_endState);
@@ -134,46 +135,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   }
 
-  public Command goToTarget(double _setpoint, LauncherSubsystem launcher, IntakeSubsystem intake) {
-    Command newCommand = null;
-    if (!running){
-      newCommand = new Command() {
-        @Override
-        public void initialize() {
-          setTargetPosition(_setpoint);
-          running = true;
-        }
-
-        @Override
-        public void execute() {
-          double elapsedTime = m_timer.get();
-          if (m_profile.isFinished(elapsedTime)){
-            m_targetState = m_profile.calculate(elapsedTime, m_startState, m_endState);
-            m_feedforward = Constants.Arm.kArmFeedforward.calculate(
-            m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
-            m_controller.setReference(
-            m_targetState.position, CANSparkMax.ControlType.kPosition, 0, m_feedforward);
-          }
-        }
-
-        @Override
-        public boolean isFinished() {
-          double elapsedTime = m_timer.get();
-          return m_profile.isFinished(elapsedTime);
-        }
-
-        @Override
-        public void end(boolean interrupted) {
-          m_leadmotor.stopMotor();
-          launcher.ShotIntake(intake, ShotType.speakerShot).schedule();
-          running = false;
-        }
-      };
-
-      newCommand.addRequirements(this);
-    }
-    return newCommand;
+  public boolean autoIsFinished() {
+    return m_profile.isFinished(elapsedTime);
   }
+
 
   public double getEncoderPosition() {
     return m_encoder.getPosition();
@@ -186,11 +151,6 @@ public class ArmSubsystem extends SubsystemBase {
    * @param _power The motor power to apply.
    */
   public void runManual(double _power, double alternate) {
-    // reset and zero out a bunch of automatic mode stuff so exiting manual mode
-    // happens cleanly and
-    // passively
-    // m_setpoint = m_encoder.getPosition();
-    // updateMotionProfile();
     // set the power of the motor
     if (Math.abs(_power) > Math.abs(alternate)) {
       m_manualValue = MathUtil.applyDeadband(_power, .1);;
@@ -201,15 +161,15 @@ public class ArmSubsystem extends SubsystemBase {
     m_leadmotor.set(m_manualValue);
   } 
 
-  public void armDown(double speed) {
+  public void down(double speed) {
     m_leadmotor.set(speed);
   }
 
-  public void armStop() {
+  public void stop() {
     m_leadmotor.stopMotor();
   }
 
-  public void armUp(double speed) {
+  public void up(double speed) {
     m_leadmotor.set(-speed);
   }
 
