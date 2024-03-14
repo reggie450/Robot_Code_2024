@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,16 +30,11 @@ public class RobotContainer {
     Joystick j_driver = new Joystick(OIConstants.kDriverControllerPort);
     XboxController c_weapon = new XboxController(OIConstants.kWeaponControllerPort);
 
-    /* Drive Controls */
-    private final int translationAxis = XboxController.Axis.kLeftY.value;
-    private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    private final int rotationAxis = XboxController.Axis.kRightX.value;
-
     /* Driver Buttons */
-    private final JoystickButton jrobotCentric = new JoystickButton(j_driver, 3);
-    private final JoystickButton jzeroHeading = new JoystickButton(j_driver, 4);
-    private final JoystickButton jlimeOn = new JoystickButton(j_driver, 11);
-    private final JoystickButton jslow_mode = new JoystickButton(j_driver, 1);
+    private final JoystickButton robotCentric = new JoystickButton(j_driver, 3);
+    private final JoystickButton zeroHeading = new JoystickButton(j_driver, 4);
+    private final JoystickButton limeOn = new JoystickButton(j_driver, 11);
+    private final JoystickButton slow_mode = new JoystickButton(j_driver, 1);
 
     // private final JoystickButton robotCentricSwap = new
     // JoystickButton(c_driver, XboxController.Button.kLeftBumper.value);
@@ -86,8 +80,8 @@ public class RobotContainer {
                 () -> j_driver.getX(),
                 () -> j_driver.getY(), //j_driver.getRawAxis(3),
                 () -> -j_driver.getTwist()/1.5,// -j_driver.getRawAxis(2) / 2,
-                () -> !jrobotCentric.getAsBoolean(),
-                () -> jslow_mode.getAsBoolean()
+                () -> !robotCentric.getAsBoolean(),
+                () -> slow_mode.getAsBoolean()
                 ));
 
         s_limeLightTwo.CameraMode();
@@ -111,8 +105,8 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureDriverButtons() {
-        jzeroHeading.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        jlimeOn.onTrue(new InstantCommand(() -> s_limeLightTwo.CameraMode()));
+        zeroHeading.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        limeOn.onTrue(new InstantCommand(() -> s_limeLightTwo.CameraMode()));
         //new JoystickButton(j_driver, 7).onTrue(new InstantCommand(() -> s_launcher.PlaySong()));
     }
     
