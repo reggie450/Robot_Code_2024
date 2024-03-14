@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Swerve;
+import frc.robot.commands.AutoCollect;
+import frc.robot.commands.Launch;
+import frc.robot.commands.Launch.ShotType;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
@@ -35,37 +38,27 @@ public class Speaker extends SequentialCommandGroup {
     else
       SmartDashboard.getNumber("powerAdjust", .05);
     addCommands(
-        new InstantCommand(() -> arm.armDown(.8), arm),
+        // Go to Shot Location
+        new InstantCommand(() -> arm.armDown(.8), arm), 
         new WaitCommand(1).withTimeout(1),
         new InstantCommand(() -> arm.armStop(), arm),
-        new WaitCommand(.2), 
-        new InstantCommand(() -> launcher.autoSpeakerShot(intake),launcher),
-        new WaitCommand(.4).withTimeout(.5),
-       // new InstantCommand(() -> launcher.stopShooter(), launcher), Grenier
-        new InstantCommand(() -> intake.run(.5), intake), 
+
+        // Launch
+        new Launch(launcher, intake, ShotType.autoSpeakerShot, true),
+
+        // Collect
         new InstantCommand(() -> arm.armDown(.9)),
         new WaitCommand(.2),
-        // new InstantCommand(() -> arm.armUp(.7),arm),
-        // new WaitCommand(1),
-        // new InstantCommand(() -> arm.armStop(), arm),
+        new AutoCollect(traverse, intake), 
+        // new TraverseBack(s_swerve),
 
-        // Drive towards other note
-        // todo: adjust distance
-        traverse,
-        new WaitCommand(.2),
-       // new InstantCommand(()->intake.stop()), Grenier
-        //new TraverseBack(s_swerve),
+        // Go to Launch Position
         new InstantCommand(() -> arm.armUp(1)),
         new WaitCommand(armWaitTime), //.58 too high
         new InstantCommand(() -> arm.armStop(), arm),
-        new WaitCommand(.05),
-      //  new InstantCommand(()->intake.backup()), Grenier
-        new WaitCommand(.01).withTimeout(.01),
-        //new InstantCommand(()->intake.stop()), Grenier
-        new InstantCommand(() -> launcher.autoSpeakerShot(intake,powerAdjust),launcher),
-        new WaitCommand(.4).withTimeout(.4),
-        new InstantCommand(() -> launcher.stop(), launcher),
-        new InstantCommand(()->intake.stop())
+
+        // Launch
+        new Launch(launcher, intake, ShotType.autoSpeakerShot, false, powerAdjust)
     );
 
   }
