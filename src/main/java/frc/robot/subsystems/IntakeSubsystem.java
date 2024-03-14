@@ -13,13 +13,10 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 // import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
-import frc.robot.commands.IntakeCollect;
 
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -105,6 +102,9 @@ public class IntakeSubsystem extends SubsystemBase {
     m_motor.set(speed);
   }
 
+  /*
+   * This is the simple command for intake use with RunCommand
+   */
   public void intakeSimple(){
     SmartDashboard.putNumber("intakeSimpleRuns", timesRun++);
     if (!getLimitSwitch() && !collected)// && (!m_armBased || s_arm.getEncoderPosition() >= Constants.Arm.kIntakePosition))
@@ -116,38 +116,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
   }  
 
-  public Command stopRetract(){
-    Command newCommand =
-        new Command() {
-          private Timer m_timer;
-
-          @Override
-          public void initialize() {
-            m_timer = new Timer();
-            m_timer.start();            
-          }
-
-          @Override
-          public void execute() {
-              m_motor.set(-.4);
-          }
-
-          @Override
-          public boolean isFinished() {
-            return m_timer.get() > .05;
-          }
-
-          @Override
-          public void end(boolean interrupted) {
-            m_motor.stopMotor();
-          }
-        };
-
-    newCommand.addRequirements(this);
-
-    return newCommand;
-  }
-
   public boolean getLimitSwitch(){
     return inLimit.get();
   }
@@ -156,9 +124,6 @@ public class IntakeSubsystem extends SubsystemBase {
     m_motor.stopMotor();
   }
 
-  public void backup(){
-    m_motor.set(-.3);
-  }
 
   @Override
   public void periodic() {
