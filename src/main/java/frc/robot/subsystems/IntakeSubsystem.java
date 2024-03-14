@@ -35,9 +35,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
   }
 
-  public void run(double speed){   
-    m_motor.set(speed);
-  }
 
   /*
    * This is the simple command for intake use with RunCommand
@@ -53,14 +50,26 @@ public class IntakeSubsystem extends SubsystemBase {
     }
   }  
 
+  /*
+   * Gets the value of the Limit Switch True means active
+   */
   public boolean getLimitSwitch(){
     return inLimit.get();
   }
 
+  /*
+   * Stops the motor
+   */
   public void stop(){
     m_motor.stopMotor();
   }
 
+  /*
+   * Runs the motor at the specified speed
+   */
+  public void run(double speed){   
+    m_motor.set(speed);
+  }
 
   @Override
   public void periodic() {
