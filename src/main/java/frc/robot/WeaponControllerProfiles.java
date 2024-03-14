@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.IntakeCollect;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -46,11 +45,8 @@ public class WeaponControllerProfiles {
         climberRightStop = new InstantCommand(() -> s_climber.RightStop(),s_climber);
 
         intakeRun = new InstantCommand(()->s_intake.run(.3),s_intake);
-        intakeRunCommand = new IntakeCollect(s_intake,s_arm, false);
         intakeRunSimpler = new RunCommand(()->s_intake.intakeSimple());
         intakeStop = new InstantCommand(()->s_intake.stop(),s_intake);
-        intakebackup = new InstantCommand(()->s_intake.backup(),s_intake);
-        intakeStopRetract = s_intake.stopRetract();
 
         launcherAmpShot = new InstantCommand(() -> s_launcher.primeShot(ShotType.ampShot), s_launcher);
         launcherSpeakerShot = new InstantCommand(() -> s_launcher.primeShot(ShotType.speakerShot), s_launcher);
@@ -121,7 +117,6 @@ public class WeaponControllerProfiles {
         /* Intake Controls */
         new JoystickButton(c_weapons, XboxController.Button.kY.value)
             .whileTrue(intakeRunSimpler).onFalse(intakeStop);    
-        //.onTrue(s_intake.intakeCommand(s_arm));//.onFalse(intakeStopRetract);
 
         // new JoystickButton(c_weapons, XboxController.Button.kB.value)
         //     .onTrue(intakebackup).onFalse(intakeRunCommand);
@@ -202,11 +197,8 @@ public class WeaponControllerProfiles {
     InstantCommand climberRightStop;
 
     InstantCommand intakeRun;
-    Command intakeRunCommand;
     RunCommand intakeRunSimpler;
     InstantCommand intakeStop;
-    InstantCommand intakebackup;
-    Command intakeStopRetract;
 
     InstantCommand launcherAmpShot;
     InstantCommand launcherSpeakerShot;
