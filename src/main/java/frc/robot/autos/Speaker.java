@@ -39,23 +39,23 @@ public class Speaker extends SequentialCommandGroup {
       SmartDashboard.getNumber("powerAdjust", .05);
     addCommands(
         // Go to Shot Location
-        new InstantCommand(() -> arm.armDown(.8), arm), 
+        new InstantCommand(() -> arm.down(.8), arm), 
         new WaitCommand(1).withTimeout(1),
-        new InstantCommand(() -> arm.armStop(), arm),
+        new InstantCommand(() -> arm.stop(), arm),
 
         // Launch
         new Launch(launcher, intake, ShotType.autoSpeakerShot, true),
 
         // Collect
-        new InstantCommand(() -> arm.armDown(.9)),
+        new InstantCommand(() -> arm.down(.9)),
         new WaitCommand(.2),
         new AutoCollect(traverse, intake), 
         // new TraverseBack(s_swerve),
 
         // Go to Launch Position
-        new InstantCommand(() -> arm.armUp(1)),
+        new InstantCommand(() -> arm.up(1)),
         new WaitCommand(armWaitTime), //.58 too high
-        new InstantCommand(() -> arm.armStop(), arm),
+        new InstantCommand(() -> arm.stop(), arm),
 
         // Launch
         new Launch(launcher, intake, ShotType.autoSpeakerShot, false, powerAdjust)

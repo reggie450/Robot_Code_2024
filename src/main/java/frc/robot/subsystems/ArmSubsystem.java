@@ -15,14 +15,11 @@ import com.revrobotics.SparkRelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.PIDGains;
 import frc.robot.Constants;
 //import frc.robot.StatsCollection;
-import frc.robot.commands.Launch.ShotType;
 
 public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax m_leadmotor;
@@ -32,7 +29,6 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_setpoint;
 
   private TrapezoidProfile m_profile;
-  private Timer m_timer;
   private TrapezoidProfile.State m_startState;
   private TrapezoidProfile.State m_endState;
 
@@ -42,7 +38,6 @@ public class ArmSubsystem extends SubsystemBase {
   private SparkLimitSwitch m_forwardLimit;
   private SparkLimitSwitch m_reverseLimit;
   public boolean running = false;
-  double elapsedTime = 0.0;
 
   // private StatsCollection stats = new StatsCollection("ArmSS");
   /** Creates a new ArmSubsystem and sets default behaviors */
@@ -79,12 +74,6 @@ public class ArmSubsystem extends SubsystemBase {
     m_forwardLimit = m_leadmotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
     m_reverseLimit = m_leadmotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
-   // m_setpoint = Constants.Arm.kHomePosition;
-
-    m_timer = new Timer();
-    m_timer.start();
- 
-   // updateMotionProfile();
   }
 
   /**
@@ -108,7 +97,6 @@ public class ArmSubsystem extends SubsystemBase {
     m_startState = new TrapezoidProfile.State(m_encoder.getPosition(), m_encoder.getVelocity());
     m_endState = new TrapezoidProfile.State(m_setpoint, 0.0);
     m_profile = new TrapezoidProfile(Constants.Arm.kArmMotionConstraint);
-    m_timer.reset();
   } 
 
 /**
@@ -120,9 +108,8 @@ public class ArmSubsystem extends SubsystemBase {
    * the trapezoidal motion profile.
    * The target position is the last set position with {@code setTargetPosition}.
    */
-  public void runAutomatic() {
-    elapsedTime = m_timer.get();
-    if (autoIsFinished()) {
+  public void runAutomatic(double elapsedTime) {
+    if (autoIsFinished(elapsedTime)) {
       m_targetState = new TrapezoidProfile.State(m_setpoint, 0.0);
     } else {
       m_targetState = m_profile.calculate(elapsedTime, m_startState, m_endState);
@@ -135,7 +122,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   }
 
-  public boolean autoIsFinished() {
+  public boolean autoIsFinished(double elapsedTime) {
     return m_profile.isFinished(elapsedTime);
   }
 

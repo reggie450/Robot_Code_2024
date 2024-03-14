@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AimNFire;
 import frc.robot.commands.Launch;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -120,7 +121,7 @@ public class WeaponControllerProfiles {
         //     .onTrue(launcherAmpShotCommand);
 
         new JoystickButton(c_weapons, XboxController.Button.kX.value)
-            .onTrue(s_arm.goToTarget(-0.254788,s_launcher,s_intake));//.onFalse(launcherSpeakerShotCommand);
+            .onTrue(new AimNFire(s_arm,s_launcher,s_intake,-0.254788));
             
         /* Launcher Controls */
         new POVButton(c_weapons, 270)
