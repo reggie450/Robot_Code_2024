@@ -36,10 +36,52 @@ public class SpeakerCenter extends SequentialCommandGroup {
       launcher,
       intake,
       arm,
-      new exampleAuto(swerve),
+      new Traverse(swerve),
       new TraverseBack(swerve))
     );
   }
+
+  public class Traverse extends SequentialCommandGroup {
+
+    public Traverse(Swerve s_Swerve) {
+
+        TrajectoryConfig config = new TrajectoryConfig(
+                Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                .setKinematics(Constants.Swerve.swerveKinematics);
+
+        // An example trajectory to follow. All units in meters.
+        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+                // Start at the origin facing the +X direction
+                new Pose2d(0, 0, new Rotation2d(0)),
+                // Pass through these two interior waypoints, making an 's' curve path
+                List.of(
+                        new Translation2d(1, 0)),
+                // End 5 meters straight behind of where we started, facing forward
+                new Pose2d(1.5, 0, new Rotation2d(0)),
+                config);
+
+        var thetaController = new ProfiledPIDController(
+                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+                exampleTrajectory,
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                thetaController,
+                s_Swerve::setModuleStates,
+                s_Swerve);
+
+        addCommands(
+                new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
+                swerveControllerCommand);
+
+    }
+}
+
 
   public class TraverseBack extends SequentialCommandGroup {
 
@@ -83,5 +125,5 @@ public class SpeakerCenter extends SequentialCommandGroup {
         new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
         swerveControllerCommand);
     }
-}
+  }
 }
