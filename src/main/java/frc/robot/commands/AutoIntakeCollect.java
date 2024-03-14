@@ -12,6 +12,7 @@ public class AutoIntakeCollect extends Command {
         addRequirements(s_intake);
         SmartDashboard.putBoolean("AutoIntakeCollect Running - Debug", true);
     }
+    
     @Override
     public void initialize() {
         s_intake.running = true;

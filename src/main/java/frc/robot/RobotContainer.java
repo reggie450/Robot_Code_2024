@@ -99,7 +99,7 @@ public class RobotContainer {
                         () -> s_arm.runManual(c_weapon.getRawAxis(1), c_weapon.getRawAxis(5)), s_arm));
 
         // configure the launcher to stop when no other command is running
-        s_launcher.setDefaultCommand(new RunCommand(() -> s_launcher.stopLauncher(), s_launcher));
+        s_launcher.setDefaultCommand(new RunCommand(() -> s_launcher.stop(), s_launcher));
     }
 
     /**

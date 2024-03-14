@@ -7,11 +7,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Launch;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
-import frc.robot.subsystems.LauncherSubsystem.ShotType;
+import frc.robot.commands.Launch.ShotType;
 
 
 public class WeaponControllerProfiles {
@@ -48,13 +49,10 @@ public class WeaponControllerProfiles {
         intakeRunSimpler = new RunCommand(()->s_intake.intakeSimple());
         intakeStop = new InstantCommand(()->s_intake.stop(),s_intake);
 
-        launcherAmpShot = new InstantCommand(() -> s_launcher.primeShot(ShotType.ampShot), s_launcher);
-        launcherSpeakerShot = new InstantCommand(() -> s_launcher.primeShot(ShotType.speakerShot), s_launcher);
-        launcherOwenWilsonSucks = new InstantCommand(() -> s_launcher.primeShot(ShotType.owenWilsonSucks), s_launcher);
-        launcherStop = new InstantCommand(() -> s_launcher.stopShooter(), s_launcher);
-        launcherAmpShotCommand = s_launcher.ShotIntake(s_intake, ShotType.ampShot);
-        launcherSpeakerShotCommand = s_launcher.ShotIntake(s_intake, ShotType.speakerShot);
-        launcherOwenWilsonSucksCommand = s_launcher.ShotIntake(s_intake, ShotType.owenWilsonSucks);
+        launcherStop = new InstantCommand(() -> s_launcher.stop(), s_launcher);
+        launcherAmpShotCommand = new Launch(s_launcher,s_intake, ShotType.ampShot,false);
+        launcherSpeakerShotCommand = new Launch(s_launcher, s_intake, ShotType.speakerShot, false);
+        launcherOwenWilsonSucksCommand = new Launch(s_launcher, s_intake, ShotType.owenWilsonSucks, false);
     }
 
     public void GetEvansProfile() {
@@ -81,7 +79,7 @@ public class WeaponControllerProfiles {
 
         /* Launcher Controls */
         new JoystickButton(c_weapons, XboxController.Button.kB.value)
-            .onTrue(launcherAmpShot).onFalse(launcherStop);
+            .onTrue(launcherAmpShotCommand);
 
         new JoystickButton(c_weapons, XboxController.Button.kX.value)
             .onTrue(launcherSpeakerShotCommand);//.onFalse(launcherStop);
@@ -119,10 +117,7 @@ public class WeaponControllerProfiles {
             .whileTrue(intakeRunSimpler).onFalse(intakeStop);    
 
         // new JoystickButton(c_weapons, XboxController.Button.kB.value)
-        //     .onTrue(intakebackup).onFalse(intakeRunCommand);
-
-        // new JoystickButton(c_weapons, XboxController.Button.kB.value)
-        //     .onTrue(launcherAmpShot).onFalse(launcherStop);
+        //     .onTrue(launcherAmpShotCommand);
 
         new JoystickButton(c_weapons, XboxController.Button.kX.value)
             .onTrue(s_arm.goToTarget(-0.254788,s_launcher,s_intake));//.onFalse(launcherSpeakerShotCommand);
@@ -162,19 +157,19 @@ public class WeaponControllerProfiles {
 
         /* Launcher Controls */
         new JoystickButton(c_weapons, XboxController.Button.kB.value)
-            .onTrue(launcherAmpShot).onFalse(launcherStop);
+            .onTrue(launcherAmpShotCommand);
 
         new JoystickButton(c_weapons, XboxController.Button.kX.value)
-            .onTrue(launcherSpeakerShot).onFalse(launcherStop);
+            .onTrue(launcherSpeakerShotCommand);
 
         new POVButton(c_weapons, 270)
-            .onTrue(launcherAmpShot).onFalse(launcherStop);
+            .onTrue(launcherAmpShotCommand);
 
         new POVButton(c_weapons, 0)
-            .onTrue(launcherSpeakerShot).onFalse(launcherStop);
+            .onTrue(launcherSpeakerShotCommand);
 
         new POVButton(c_weapons, 90)
-            .onTrue(launcherOwenWilsonSucks).onFalse(launcherStop);
+            .onTrue(launcherOwenWilsonSucksCommand);
     }
 
     public static enum WeaponProfile {
@@ -200,9 +195,6 @@ public class WeaponControllerProfiles {
     RunCommand intakeRunSimpler;
     InstantCommand intakeStop;
 
-    InstantCommand launcherAmpShot;
-    InstantCommand launcherSpeakerShot;
-    InstantCommand launcherOwenWilsonSucks;
     InstantCommand launcherStop;
     Command launcherAmpShotCommand;
     Command launcherSpeakerShotCommand;

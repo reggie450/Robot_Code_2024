@@ -64,7 +64,7 @@ public class Speaker extends SequentialCommandGroup {
         //new InstantCommand(()->intake.stop()), Grenier
         new InstantCommand(() -> launcher.autoSpeakerShot(intake,powerAdjust),launcher),
         new WaitCommand(.4).withTimeout(.4),
-        new InstantCommand(() -> launcher.stopShooter(), launcher),
+        new InstantCommand(() -> launcher.stop(), launcher),
         new InstantCommand(()->intake.stop())
     );
 
