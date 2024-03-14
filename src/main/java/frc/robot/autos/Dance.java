@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -46,24 +47,13 @@ public class Dance extends SequentialCommandGroup {
 
         // An example trajectory to follow. All units in meters.
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                // Pass through these two interior waypoints, making an 's' curve path
+                new Pose2d(0,0,new Rotation2d(0)),
                 List.of(
-                        new Pose2d(0,0, new Rotation2d(0)),
-                        new Pose2d(1,-1, new Rotation2d(0)),
-                        new Pose2d(1,-1, new Rotation2d(-45)),
-                        new Pose2d(1.5, -1.5, new Rotation2d(-45))
+                        new Translation2d(1,-1 ),
+                        new Translation2d(1.5, -1.5)
                         ),
+                new Pose2d(1.5,-1.5, new Rotation2d(0)),
                 config);
-        // An example trajectory to follow. All units in meters.
-        // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(,
-        //         // Pass through these two interior waypoints, making an 's' curve path
-        //         List.of(
-        //                 new Pose2d(0,0, new Rotation2d(0)),
-        //                 new Pose2d(-1,-1, new Rotation2d(0)),
-        //                 new Pose2d(-1,-1, new Rotation2d(-45)),
-        //                 new Pose2d(-1.5, -1.5, new Rotation2d(-45))
-        //                 ),
-        //         config);
 
         var thetaController = new ProfiledPIDController(
                 Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -76,6 +66,7 @@ public class Dance extends SequentialCommandGroup {
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
                 new PIDController(Constants.AutoConstants.kPYController, 0, 0),
                 thetaController,
+                ()-> new Rotation2d(45),
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
