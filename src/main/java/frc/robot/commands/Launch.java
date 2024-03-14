@@ -19,17 +19,24 @@ public class Launch extends Command {
   private IntakeSubsystem s_intake;
   private ShotType m_shotType;
   private boolean m_keepOn;
-
+  private double m_adjustment;
   private Timer m_timer;
 
   public Launch(LauncherSubsystem launcher, IntakeSubsystem intake, ShotType shotType, Boolean keepOn) {
+    this(launcher, intake, shotType, keepOn, 0.0);
+  }
+
+  public Launch(LauncherSubsystem launcher, IntakeSubsystem intake, ShotType shotType, Boolean keepOn, double adjustment) {
+    m_adjustment = adjustment;
+    if (adjustment > .2 ) m_adjustment = .2;
+    if (adjustment < -.2 ) m_adjustment = -.2;
+
     s_launcher = launcher;
     s_intake = intake;
     m_shotType = shotType;
     m_keepOn = keepOn;
     addRequirements(s_launcher, s_intake);
   }
-
 
   @Override
   public void initialize() {
@@ -40,7 +47,7 @@ public class Launch extends Command {
 
   @Override
   public void execute() {
-    primeShot(m_shotType,0.0);
+    primeShot(m_shotType);
     if (m_timer.get() > Constants.Intake.kShotFeedTime)
       s_intake.run(.8);
   }
@@ -61,10 +68,7 @@ public class Launch extends Command {
 
   }
 
-  private void primeShot(ShotType shotType, double adjustment) {
-    if (adjustment > .2 ) adjustment = .2;
-    if (adjustment < -.2 ) adjustment = -.2;
-
+  private void primeShot(ShotType shotType) {
     double topSpeed = .5;
     double bottomSpeed = .5;
     if (shotType == ShotType.ampShot){
@@ -84,7 +88,7 @@ public class Launch extends Command {
       bottomSpeed = .5;
     }
 
-    s_launcher.run(topSpeed+adjustment,bottomSpeed+adjustment);
+    s_launcher.run(topSpeed+m_adjustment,bottomSpeed+m_adjustment);
   }
   
 
