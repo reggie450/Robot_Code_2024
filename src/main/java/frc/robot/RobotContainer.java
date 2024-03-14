@@ -58,11 +58,6 @@ public class RobotContainer {
         autoChooser.addOption("Dance Test", new Dance(s_Swerve, s_launcher, s_intake, s_arm));
         autoChooser.addOption("Dance Test1", new Dance1(s_Swerve, s_launcher, s_intake, s_arm));
         autoChooser.addOption("Dance Test2", new Dance2(s_Swerve, s_launcher, s_intake, s_arm));
-        // autoChooser.setDefaultOption(name: "High Cone / Back Out of Zone", new
-        // HighCone(s_Swerve, m_crane, m_extender, m_grabber));
-        // autoChooser.addOption(name: "Lower Cone / Back Out", new LowCone(s_Swerve,
-        // m_crane, m_extender, m_grabber));
-        // autoChooser.addOption(name: "Back Out", new exampleAuto(s_Swerve));
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         // Configure the button bindings
