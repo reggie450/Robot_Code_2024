@@ -49,10 +49,9 @@ public class Dance1 extends SequentialCommandGroup {
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0,0,new Rotation2d(0)),
                 List.of(
-                        new Translation2d(1,1 ),
-                        new Translation2d(1.5, 1.5)
-                        ),
-                new Pose2d(1.5,1.5, new Rotation2d(0)),
+                        new Translation2d(.5, .5)),
+                // End 5 meters straight behind of where we started, facing forward
+                new Pose2d(1, 1, new Rotation2d(0)),
                 config);
 
         var thetaController = new ProfiledPIDController(

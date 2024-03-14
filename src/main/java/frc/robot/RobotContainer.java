@@ -31,8 +31,8 @@ public class RobotContainer {
     XboxController c_weapon = new XboxController(OIConstants.kWeaponControllerPort);
 
     /* Driver Buttons */
-    private final JoystickButton robotCentric = new JoystickButton(j_driver, 3);
-    private final JoystickButton zeroHeading = new JoystickButton(j_driver, 4);
+    private final JoystickButton robotCentric = new JoystickButton(j_driver, 4);
+    private final JoystickButton zeroHeading = new JoystickButton(j_driver, 3);
     private final JoystickButton limeOn = new JoystickButton(j_driver, 11);
     private final JoystickButton slow_mode = new JoystickButton(j_driver, 1);
 
