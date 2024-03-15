@@ -121,7 +121,7 @@ public class WeaponControllerProfiles {
         //     .onTrue(launcherAmpShotCommand);
 
         new JoystickButton(c_weapons, XboxController.Button.kX.value)
-            .onTrue(new AimNFire(s_arm,s_launcher,s_intake,-0.254788));
+            .onTrue(new AimNFire(s_arm,s_launcher,s_intake,-0.2445));
             
         /* Launcher Controls */
         new POVButton(c_weapons, 270)

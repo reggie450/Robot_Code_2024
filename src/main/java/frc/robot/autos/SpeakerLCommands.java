@@ -20,11 +20,12 @@ import frc.robot.subsystems.LauncherSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Speaker extends SequentialCommandGroup {
-
+public class SpeakerLCommands extends SequentialCommandGroup {
+    
+     
 
   /** Creates a new Speakershot. */
-  public Speaker(Swerve swerve, LauncherSubsystem launcher, IntakeSubsystem intake, ArmSubsystem arm, Command traverse, Command traverseBack) {
+  public SpeakerLCommands(Swerve swerve, LauncherSubsystem launcher, IntakeSubsystem intake, ArmSubsystem arm, Command traverse, Command traverseBack) {
     // Shots note into Speaker and then drives out of zone
     // todo adjust timings
     double armWaitTime = .60;
@@ -57,3 +58,11 @@ public class Speaker extends SequentialCommandGroup {
 
   }
 }
+
+
+
+
+
+
+  
+      

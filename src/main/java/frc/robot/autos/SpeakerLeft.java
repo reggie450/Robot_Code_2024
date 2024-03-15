@@ -32,13 +32,13 @@ public class SpeakerLeft extends SequentialCommandGroup {
     // Shoots note into Speaker and then drives out of zone
     // todo adjust timings
     addCommands(
-        new Speaker(
+        new SpeakerLCommands(
         swerve,
         launcher,
         intake,
         arm,
         new Traverse(swerve),
-        new TraverseBack(swerve)
+       new TraverseBack(swerve)
         )
     );
   }
@@ -56,9 +56,10 @@ public class SpeakerLeft extends SequentialCommandGroup {
                 // Pass through these two interior waypoints, making an 's' curve path
                 List.of(
                         new Pose2d(0,0, new Rotation2d(0)),
-                        new Pose2d(1,-1, new Rotation2d(0)),
-                        new Pose2d(1,-1, new Rotation2d(-45)),
-                        new Pose2d(1.5, -1.5, new Rotation2d(-45))
+                        new Pose2d(1.5,0, new Rotation2d(0)),
+                        new Pose2d(2.25,1.75, new Rotation2d(45)),
+                        new Pose2d(2.25,1.75, new Rotation2d(180))
+                       
                         ),
                 config);
 
@@ -78,11 +79,13 @@ public class SpeakerLeft extends SequentialCommandGroup {
 
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
-                swerveControllerCommand);
+                swerveControllerCommand,
+              
+                new InstantCommand(()-> s_Swerve.stopAllMotors()));
 
     }
   }
-  public class TraverseBack extends SequentialCommandGroup {
+   public class TraverseBack extends SequentialCommandGroup {
 
     public TraverseBack(Swerve s_Swerve) {
 
@@ -95,8 +98,8 @@ public class SpeakerLeft extends SequentialCommandGroup {
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                 // Pass through these two interior waypoints, making an 's' curve path
                 List.of(
-                        new Pose2d(-1,-1, new Rotation2d(45)),
-                        new Pose2d(0, 0, new Rotation2d(0))
+                        new Pose2d(1,2, new Rotation2d(0)),
+                        new Pose2d(1, 1, new Rotation2d(0))
                         ),
                 config);
 
@@ -117,7 +120,8 @@ public class SpeakerLeft extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
                 swerveControllerCommand);
+                new InstantCommand(()-> s_Swerve.stopAllMotors());
 
     }
-  }
-}
+  } }
+//}

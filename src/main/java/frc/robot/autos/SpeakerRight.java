@@ -56,9 +56,9 @@ public class SpeakerRight extends SequentialCommandGroup {
                 // Pass through these two interior waypoints, making an 's' curve path
                 List.of(
                         new Pose2d(0,0, new Rotation2d(0)),
-                        new Pose2d(1,1, new Rotation2d(0)),
-                        new Pose2d(1,1, new Rotation2d(45)),
-                        new Pose2d(1.5, 1.5, new Rotation2d(45))
+                        new Pose2d(1.5,0, new Rotation2d(0)),
+                        new Pose2d(2.25,-1.75, new Rotation2d(-45))
+                
                         ),
                 config);
 
@@ -78,7 +78,10 @@ public class SpeakerRight extends SequentialCommandGroup {
 
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
-                swerveControllerCommand);
+                swerveControllerCommand,
+
+                new InstantCommand(()-> s_Swerve.stopAllMotors()));
+
 
     }
   }

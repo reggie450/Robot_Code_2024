@@ -132,6 +132,13 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public void stopAllMotors() {
+        for (SwerveModule mod : mSwerveMods) {
+            SwerveModuleState state = new SwerveModuleState(0,new Rotation2d(0));
+            mod.setDesiredState(state, false);;
+        }
+    }
+    
     @Override
     public void periodic() {
         // stats.Periodic();

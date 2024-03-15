@@ -56,9 +56,9 @@ public class SpeakerCenter extends SequentialCommandGroup {
                 new Pose2d(0, 0, new Rotation2d(0)),
                 // Pass through these two interior waypoints, making an 's' curve path
                 List.of(
-                        new Translation2d(1, 0)),
+                        new Translation2d(1.2, 0)),
                 // End 5 meters straight behind of where we started, facing forward
-                new Pose2d(1.5, 0, new Rotation2d(0)),
+                new Pose2d(1.3, 0, new Rotation2d(0)),
                 config);
 
         var thetaController = new ProfiledPIDController(
@@ -77,7 +77,8 @@ public class SpeakerCenter extends SequentialCommandGroup {
 
         addCommands(
                 new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
-                swerveControllerCommand);
+                swerveControllerCommand,
+                new InstantCommand(()-> s_Swerve.stopAllMotors()));
 
     }
 }

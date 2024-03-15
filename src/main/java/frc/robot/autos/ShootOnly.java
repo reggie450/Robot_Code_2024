@@ -21,18 +21,21 @@ public class ShootOnly extends SequentialCommandGroup {
 
 
   /** Creates a new Speakershot. */
-  public ShootOnly(Swerve swerve, LauncherSubsystem launcher, IntakeSubsystem intake, ArmSubsystem arm) {
+  public ShootOnly(LauncherSubsystem launcher, IntakeSubsystem intake, ArmSubsystem arm, boolean keepRunning) {
     // Shots note into Speaker and then drives out of zone
     // todo adjust timings
     addCommands(
-        new InstantCommand(() -> arm.down(.8), arm),
-        new WaitCommand(1).withTimeout(1),
+        // Go to Shot Location
+        new InstantCommand(() -> arm.down(.8), arm), 
+        new WaitCommand(.95).withTimeout(.95),
         new InstantCommand(() -> arm.stop(), arm),
-        new WaitCommand(.2), 
-        new Launch(launcher, intake, ShotType.autoSpeakerShot, false),
-        new InstantCommand(() -> arm.down(.9)),
-        new WaitCommand(.2)
+  
+        // Launch
+        new Launch(launcher, intake, ShotType.autoSpeakerShot, keepRunning)      
     );
+  }
 
+  public ShootOnly(LauncherSubsystem launcher, IntakeSubsystem intake, ArmSubsystem arm) {
+    this(launcher, intake, arm, false);
   }
 }
