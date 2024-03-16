@@ -9,7 +9,7 @@ public class AutoCollect extends ParallelCommandGroup {
     public AutoCollect(Command traverse, IntakeSubsystem intake){
         super();
         s_intake = intake;
-        addCommands(new AutoIntakeCollect(intake), traverse);
+        addCommands(new AutoIntakeCollect(intake, true), traverse);
     }
 }
 
