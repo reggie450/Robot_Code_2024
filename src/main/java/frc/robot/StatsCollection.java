@@ -29,7 +29,7 @@ public class StatsCollection {
             else ++nextReadingIndex;
             periodicTimer.reset();
             double averageSeconds = (periodic[0] + periodic[1]+ periodic[2] + periodic[3] + periodic[4]) / 5;
-            SmartDashboard.putNumber(m_label, averageSeconds);
+            SmartDashboard.putNumber("Debug - "+m_label, averageSeconds);
         }
     }
 
@@ -44,7 +44,7 @@ public class StatsCollection {
     public void MethodEnd(String methodName) {
         if (CollectionOn){
             double value = methodTimer.get();
-            SmartDashboard.putNumber(m_label + ":"+ methodName, value);
+            SmartDashboard.putNumber("DEBUG - "+m_label + ":"+ methodName, value);
             methodTimer.stop();
         }
     }

@@ -40,11 +40,11 @@ public class IntakeSubsystem extends SubsystemBase {
    * This is the simple command for intake use with RunCommand
    */
   public void intakeSimple(){
-    SmartDashboard.putNumber("intakeSimpleRuns", timesRun++);
+    //SmartDashboard.putNumber("intakeSimpleRuns", timesRun++);
     if (!getLimitSwitch() && !collected)// && (!m_armBased || s_arm.getEncoderPosition() >= Constants.Arm.kIntakePosition))
       m_motor.set(.3);
     else {
-      SmartDashboard.putBoolean("intakeSimpleDidStop", true);
+      //SmartDashboard.putBoolean("intakeSimpleDidStop", true);
       m_motor.set(0);
       collected = true;
     }

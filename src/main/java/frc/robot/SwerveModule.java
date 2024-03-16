@@ -10,7 +10,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.Conversions;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -70,7 +70,7 @@ public class SwerveModule {
 
     public Rotation2d getCANcoder(){
         Rotation2d rot = Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValue());
-        SmartDashboard.putNumber("swerve" + moduleNumber, rot.getDegrees());
+        // SmartDashboard.putNumber("swerve" + moduleNumber, rot.getDegrees());
         return rot;
     }
 

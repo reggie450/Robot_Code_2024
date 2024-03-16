@@ -118,11 +118,6 @@ public class RobotContainer {
             //IntakeCollect intakeCommand = new IntakeCollect(s_intake,s_arm, faWlse);
             //intakeCommand.schedule();
         //}
-        SmartDashboard.putBoolean("driver connected",j_driver.isConnected());
-        SmartDashboard.putNumber("driver translate", j_driver.getRawAxis(1));
-        SmartDashboard.putNumber("driver strafe", j_driver.getRawAxis(0));
-        SmartDashboard.putNumber("driver_rotate", j_driver.getRawAxis(2));
-        SmartDashboard.putNumber("driver Axis Wing", j_driver.getRawAxis(3));
         
     }
 }

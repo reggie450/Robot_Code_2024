@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -42,7 +42,7 @@ public class Launch extends Command {
   public void initialize() {
     m_timer = new Timer();
     m_timer.start();            
-    SmartDashboard.putBoolean("LauncherCommandRun - Debug", true);
+    //SmartDashboard.putBoolean("LauncherCommandRun - Debug", true);
   }
 
   @Override
@@ -64,7 +64,7 @@ public class Launch extends Command {
       s_launcher.stop();
     }
     s_intake.collected = false;
-    SmartDashboard.putBoolean("LauncherCommandRun - Debug", false);
+    //SmartDashboard.putBoolean("LauncherCommandRun - Debug", false);
 
   }
 

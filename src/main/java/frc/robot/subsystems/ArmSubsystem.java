@@ -163,8 +163,8 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() { // This method will be called once per scheduler run
     //stats.Periodic();
-    SmartDashboard.putBoolean("Forward Limit Switch", m_forwardLimit.isPressed());
-    SmartDashboard.putBoolean("Reverse Limit Switch", m_reverseLimit.isPressed());
+    // SmartDashboard.putBoolean("Forward Limit Switch", m_forwardLimit.isPressed());
+    // SmartDashboard.putBoolean("Reverse Limit Switch", m_reverseLimit.isPressed());
     SmartDashboard.putNumber("Arm Encoder", m_encoder.getPosition());
   }
 }

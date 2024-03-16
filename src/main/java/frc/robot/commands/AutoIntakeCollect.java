@@ -10,7 +10,7 @@ public class AutoIntakeCollect extends Command {
         super();
         s_intake = intake;
         addRequirements(s_intake);
-        SmartDashboard.putBoolean("AutoIntakeCollect Running - Debug", true);
+        //SmartDashboard.putBoolean("AutoIntakeCollect Running - Debug", true);
     }
     
     @Override
@@ -33,7 +33,7 @@ public class AutoIntakeCollect extends Command {
         s_intake.collected = true;
         s_intake.stop();
         s_intake.running = false;
-        SmartDashboard.putBoolean("AutoIntakeCollect Running - Debug", false);
+        //SmartDashboard.putBoolean("AutoIntakeCollect Running - Debug", false);
     }
 }
 
