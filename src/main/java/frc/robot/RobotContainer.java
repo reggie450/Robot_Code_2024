@@ -57,7 +57,7 @@ public class RobotContainer {
         autoChooser.addOption("Shoot Only", new ShootOnly(s_launcher, s_intake, s_arm));
         //autoChooser.addOption("Dance Test", new Dance(s_Swerve, s_launcher, s_intake, s_arm));
        // autoChooser.addOption("Dance Test1", new Dance1(s_Swerve, s_launcher, s_intake, s_arm));
-       // autoChooser.addOption("Dance Test2", new Dance2(s_Swerve, s_launcher, s_intake, s_arm));
+        autoChooser.addOption("Aim Test", new DanceOnly(s_launcher, s_intake, s_arm));
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         // Configure the button bindings
@@ -73,7 +73,7 @@ public class RobotContainer {
                 s_Swerve,
                 () -> j_driver.getX(),
                 () -> j_driver.getY(), //j_driver.getRawAxis(3),
-                () -> -j_driver.getTwist()/2.5,// -j_driver.getRawAxis(2) / 2,
+                () -> -j_driver.getTwist()/1.5,// -j_driver.getRawAxis(2) / 2,
                 () -> !robotCentric.getAsBoolean(),
                 () -> slow_mode.getAsBoolean()
                 ));
