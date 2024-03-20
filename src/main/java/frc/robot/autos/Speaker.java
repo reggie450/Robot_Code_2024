@@ -27,7 +27,7 @@ public class Speaker extends SequentialCommandGroup {
   public Speaker(Swerve swerve, LauncherSubsystem launcher, IntakeSubsystem intake, ArmSubsystem arm, Command traverse, Command traverseBack) {
     // Shots note into Speaker and then drives out of zone
     // todo adjust timings
-    double armWaitTime = .60;
+    double armWaitTime = .55;
     double powerAdjust = .05;
     // if (!SmartDashboard.containsKey("armWaitTime"))
     //   SmartDashboard.putNumber("armWaitTime",armWaitTime);
