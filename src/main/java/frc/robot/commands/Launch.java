@@ -72,8 +72,8 @@ public class Launch extends Command {
     double topSpeed = .5;
     double bottomSpeed = .5;
     if (shotType == ShotType.ampShot){
-      topSpeed = .15;
-      bottomSpeed = topSpeed - .05;
+      topSpeed = .4;
+      bottomSpeed = topSpeed - 0;
     }
     else if (shotType == ShotType.speakerShot){
       topSpeed = .5;
