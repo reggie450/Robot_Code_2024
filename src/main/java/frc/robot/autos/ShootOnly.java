@@ -4,10 +4,8 @@
 
 package frc.robot.autos;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.Swerve;
+import frc.robot.commands.ArmGoToTarget;
 import frc.robot.commands.Launch;
 import frc.robot.commands.Launch.ShotType;
 import frc.robot.subsystems.ArmSubsystem;
@@ -26,9 +24,7 @@ public class ShootOnly extends SequentialCommandGroup {
     // todo adjust timings
     addCommands(
         // Go to Shot Location
-        new InstantCommand(() -> arm.down(.8), arm), 
-        new WaitCommand(.95).withTimeout(.95),
-        new InstantCommand(() -> arm.stop(), arm),
+        new ArmGoToTarget(arm, 1.4),
   
         // Launch
         new Launch(launcher, intake, ShotType.autoSpeakerShot, keepRunning)      

@@ -196,6 +196,10 @@ public class ArmSubsystem extends SubsystemBase {
     m_leadmotor.set(m_manualValue);
   } 
 
+  public boolean isDown() {
+    return getEncoderPosition() > 1.73;
+  }
+
   public void down(double speed) {
     m_leadmotor.set(speed);
   }

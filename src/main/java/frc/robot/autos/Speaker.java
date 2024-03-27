@@ -6,10 +6,10 @@ package frc.robot.autos;
 
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Swerve;
+import frc.robot.commands.ArmGoDown;
+import frc.robot.commands.ArmGoToTarget;
 import frc.robot.commands.AutoCollect;
 import frc.robot.commands.Launch;
 import frc.robot.commands.Launch.ShotType;
@@ -41,16 +41,13 @@ public class Speaker extends SequentialCommandGroup {
         new ShootOnly(launcher, intake, arm, true),
         
         // Collect
-        new InstantCommand(() -> arm.down(.9)),
-        new WaitCommand(.2),
+        new ArmGoDown(arm),
+        //new WaitCommand(.4)
         new AutoCollect(traverse, intake), 
         // new TraverseBack(s_swerve),
 
         // Go to Launch Position
-        new InstantCommand(() -> arm.up(1)),
-        new WaitCommand(armWaitTime), //.58 too high
-        new InstantCommand(() -> arm.stop(), arm),
-
+        new ArmGoToTarget(arm, 1),
         // Launch
         new Launch(launcher, intake, ShotType.autoSpeakerShot, false, powerAdjust)
     );

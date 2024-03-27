@@ -31,7 +31,7 @@ public class AutoIntakeCollect extends Command {
 
     @Override
     public void execute() {
-        s_intake.run(.3);
+        s_intake.run(.35);
     }
 
     @Override

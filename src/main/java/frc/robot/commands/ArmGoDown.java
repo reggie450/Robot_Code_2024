@@ -1,18 +1,15 @@
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmGoToTarget extends Command{
+public class ArmGoDown extends Command{
     private ArmSubsystem s_arm;
-    private double _setpoint;
     private Timer m_timer;
 
-    public ArmGoToTarget(ArmSubsystem arm, double setpoint){
+    public ArmGoDown(ArmSubsystem arm){
       s_arm = arm;
-      _setpoint = setpoint;
       //double rotations = SmartDashboard.getNumber("Set Rotations", 0);
       //_setpoint = rotations;
       addRequirements(arm);
@@ -28,7 +25,7 @@ public class ArmGoToTarget extends Command{
 
     @Override
     public void execute() {
-      s_arm.SetReference(_setpoint);
+      s_arm.down(1.0);
     }
 
     @Override
@@ -36,7 +33,7 @@ public class ArmGoToTarget extends Command{
       //where we are: s_arm.getEncoderPosition()
       // where we want to be: _setpoint
       // How close is close enough: Error
-      return m_timer.get() > 1; //Math.abs(_setpoint - s_arm.getEncoderPosition()) < .01;
+      return s_arm.isDown() || m_timer.get() > 1; //Math.abs(_setpoint - s_arm.getEncoderPosition()) < .01;
     }
 
     @Override
