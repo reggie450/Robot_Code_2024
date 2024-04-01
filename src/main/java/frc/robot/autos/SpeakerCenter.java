@@ -94,18 +94,15 @@ public class SpeakerCenter extends SequentialCommandGroup {
         .setKinematics(Constants.Swerve.swerveKinematics);
 
       // An example trajectory to follow. All units in meters.
-      Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(2, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(
-          new Translation2d(1, 0),
-          new Translation2d(1, 0)
-        ),
-        // End 5 meters straight behind of where we started, facing forward
-        new Pose2d(0, 0, new Rotation2d(0)),
-        config
-      );
+        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+          // Start at the origin facing the +X direction
+          new Pose2d(1.30, 0, new Rotation2d(0)),
+          // Pass through these two interior waypoints, making an 's' curve path
+          List.of(
+                  new Translation2d(1, 0)),
+          // End 5 meters straight behind of where we started, facing forward
+          new Pose2d(0, 0, new Rotation2d(0)),
+          config);
 
       var thetaController = new ProfiledPIDController(
         Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -123,8 +120,8 @@ public class SpeakerCenter extends SequentialCommandGroup {
       );
 
       addCommands(
-        new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
-        swerveControllerCommand);
+        swerveControllerCommand,
+        new InstantCommand(()-> s_Swerve.stopAllMotors()));
     }
   }
 }

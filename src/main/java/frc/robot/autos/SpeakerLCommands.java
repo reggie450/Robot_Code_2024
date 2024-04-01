@@ -42,9 +42,7 @@ public class SpeakerLCommands extends SequentialCommandGroup {
         new ShootOnly(launcher, intake, arm, true),
         
         // Collect
-        new InstantCommand(() -> arm.down(.9)),
-        new WaitCommand(.2),
-        new AutoCollect(traverse, intake), 
+        new AutoCollect(traverse, intake, arm), 
         // new TraverseBack(s_swerve),
 
         // Go to Launch Position
