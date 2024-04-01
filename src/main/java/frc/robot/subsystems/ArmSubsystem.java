@@ -188,6 +188,11 @@ public class ArmSubsystem extends SubsystemBase {
     m_leadmotor.set(-speed);
   }
 
+
+  public void resetEncoder() {
+    m_encoder.setPosition(0.0);
+  }
+
   // public void setTarget(double _setpoint) {
   //   m_setpoint = _setpoint;
   // }

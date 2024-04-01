@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.WeaponControllerProfiles.WeaponProfile;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -62,7 +61,7 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureDriverButtons();
-        weaponProfile = new WeaponControllerProfiles(WeaponProfile.Alice, c_weapon, s_arm, s_intake, s_launcher, s_climber);
+        weaponProfile = new WeaponControllerProfiles(c_weapon, s_arm, s_intake, s_launcher, s_climber);
         //weaponProfile = new WeaponControllerProfiles(WeaponProfile.Evan, c_weapon, s_arm, s_intake, s_launcher, s_climber);
         j_driver.setXChannel(1);
         j_driver.setYChannel(0);

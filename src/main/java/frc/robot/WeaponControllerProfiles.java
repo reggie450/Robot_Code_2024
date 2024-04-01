@@ -17,7 +17,7 @@ import frc.robot.commands.Launch.ShotType;
 
 
 public class WeaponControllerProfiles {
-    public WeaponControllerProfiles(WeaponProfile profile, XboxController weapons, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher, ClimberSubsystem climber) {
+    public WeaponControllerProfiles(XboxController weapons, ArmSubsystem arm, IntakeSubsystem intake, LauncherSubsystem launcher, ClimberSubsystem climber) {
         s_arm = arm;
         s_intake = intake;
         s_launcher = launcher;
@@ -26,15 +26,7 @@ public class WeaponControllerProfiles {
 
         DefineCommands();
 
-        if (profile == WeaponProfile.Alice) {
-            GetAliceProfile();
-        }
-        else if (profile == WeaponProfile.Evan) {
-            GetEvansProfile();
-        }
-        else {
-            GetDefaultProfile();
-        }
+        GetProfile();
     }
 
     public void DefineCommands(){
@@ -54,48 +46,10 @@ public class WeaponControllerProfiles {
         launcherAmpShotCommand = new Launch(s_launcher,s_intake, ShotType.ampShot,false);
         launcherSpeakerShotCommand = new Launch(s_launcher, s_intake, ShotType.speakerShot, false);
         launcherOwenWilsonSucksCommand = new Launch(s_launcher, s_intake, ShotType.owenWilsonSucks, false);
+        armResetEncoder = new InstantCommand(() -> s_arm.resetEncoder());
     }
 
-    public void GetEvansProfile() {
-        /* Climber Controls */
-        new Trigger( 
-                () -> c_weapons.getLeftTriggerAxis()
-                        > Constants.OIConstants.kTriggerButtonThreshold)
-            .onTrue(climberLeftUp).onFalse(climberLeftStop);
-
-        new JoystickButton(c_weapons, XboxController.Button.kLeftBumper.value)
-            .onTrue(climberLeftDown).onFalse(climberLeftStop);
-
-         new Trigger( 
-                () -> c_weapons.getRightTriggerAxis()
-                        > Constants.OIConstants.kTriggerButtonThreshold)
-            .onTrue(climberRightUp).onFalse(climberRightStop);
-
-        new JoystickButton(c_weapons, XboxController.Button.kRightBumper.value)
-            .onTrue(climberRightDown).onFalse(climberRightStop);
-
-        /* Intake Controls */
-        new JoystickButton(c_weapons, XboxController.Button.kY.value)
-            .onTrue(intakeRunSimpler);//.onFalse(intakeStop);
-
-        /* Launcher Controls */
-        new JoystickButton(c_weapons, XboxController.Button.kB.value)
-            .onTrue(launcherAmpShotCommand);
-
-        new JoystickButton(c_weapons, XboxController.Button.kX.value)
-            .onTrue(launcherSpeakerShotCommand);//.onFalse(launcherStop);
-
-        new POVButton(c_weapons, 270)
-            .onTrue(launcherAmpShotCommand);//.onFalse(launcherStop);
-
-        new POVButton(c_weapons, 0)
-            .onTrue(launcherSpeakerShotCommand);//.onFalse(launcherStop);
-
-        new POVButton(c_weapons, 90)
-            .onTrue(launcherOwenWilsonSucksCommand);//.onFalse(launcherStop);
-    }
-
-    public void GetAliceProfile() {
+    public void GetProfile() {
         /* Climber Controls */
         new Trigger( 
                 () -> c_weapons.getLeftTriggerAxis()
@@ -132,52 +86,11 @@ public class WeaponControllerProfiles {
 
         new POVButton(c_weapons, 90)
             .onTrue(launcherOwenWilsonSucksCommand);
+
+        new JoystickButton(c_weapons, XboxController.Button.kStart.value)
+            .onTrue(armResetEncoder);
     }
 
-    public void GetDefaultProfile() {
-        /* Climber Controls */
-        new Trigger( 
-                () -> c_weapons.getLeftTriggerAxis()
-                        > Constants.OIConstants.kTriggerButtonThreshold)
-            .onTrue(climberLeftUp).onFalse(climberLeftStop);
-
-        new JoystickButton(c_weapons, XboxController.Button.kLeftBumper.value)
-            .onTrue(climberLeftDown).onFalse(climberLeftStop);
-
-         new Trigger( 
-                () -> c_weapons.getRightTriggerAxis()
-                        > Constants.OIConstants.kTriggerButtonThreshold)
-            .onTrue(climberRightUp).onFalse(climberRightStop);
-
-        new JoystickButton(c_weapons, XboxController.Button.kRightBumper.value)
-            .onTrue(climberRightDown).onFalse(climberRightStop);
-
-        /* Intake Controls */
-        new JoystickButton(c_weapons, XboxController.Button.kY.value)
-            .onTrue(intakeRun).onFalse(intakeStop);
-
-        /* Launcher Controls */
-        new JoystickButton(c_weapons, XboxController.Button.kB.value)
-            .onTrue(launcherAmpShotCommand);
-
-        new JoystickButton(c_weapons, XboxController.Button.kX.value)
-            .onTrue(launcherSpeakerShotCommand);
-
-        new POVButton(c_weapons, 270)
-            .onTrue(launcherAmpShotCommand);
-
-        new POVButton(c_weapons, 0)
-            .onTrue(launcherSpeakerShotCommand);
-
-        new POVButton(c_weapons, 90)
-            .onTrue(launcherOwenWilsonSucksCommand);
-    }
-
-    public static enum WeaponProfile {
-        Alice,
-        Evan,
-        Default; 
-    }
 
     ArmSubsystem s_arm;
     IntakeSubsystem s_intake;
@@ -200,6 +113,6 @@ public class WeaponControllerProfiles {
     Command launcherAmpShotCommand;
     Command launcherSpeakerShotCommand;
     Command launcherOwenWilsonSucksCommand;
-
+    InstantCommand armResetEncoder;
     InstantCommand limeOn;
 }
