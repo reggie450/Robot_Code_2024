@@ -42,7 +42,6 @@ public class ArmSubsystem extends SubsystemBase {
 
 
 
-  private static final int deviceID = 0;
   private SparkPIDController m_pidController;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
@@ -124,29 +123,6 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Set Rotations", 0);
   }
 
-  /**
-   * Sets the target position and updates the motion profile if the target
-   * position changed.
-   * 
-   * @param _setpoint The new target position in radians.
-   */
-  public void setTargetPosition(double _setpoint) {
-    if (_setpoint != m_setpoint) {
-      m_setpoint = _setpoint;
-      updateMotionProfile();
-    }
-  }
-
-  /**
-   * Update the motion profile variables based on the current setpoint and the
-   * pre-configured motion constraints.
-   */
-   private void updateMotionProfile() {
-    m_startState = new TrapezoidProfile.State(m_encoder.getPosition(), m_encoder.getVelocity());
-    m_endState = new TrapezoidProfile.State(m_setpoint, 0.0);
-    m_profile = new TrapezoidProfile(Constants.Arm.kArmMotionConstraint);
-  } 
-
 /**
    * Drives the arm to a position using a trapezoidal motion profile.
    * This function is usually wrapped in a {@code RunCommand} which runs it
@@ -212,9 +188,59 @@ public class ArmSubsystem extends SubsystemBase {
     m_leadmotor.set(-speed);
   }
 
+  // public void setTarget(double _setpoint) {
+  //   m_setpoint = _setpoint;
+  // }
+
   public void SetReference (double rotations){
       m_pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
   }
+
+  // public void autonomousPeriodic() {
+  //   //stats.Periodic();
+  //   // SmartDashboard.putBoolean("Forward Limit Switch", m_forwardLimit.isPressed());
+  //   // SmartDashboard.putBoolean("Reverse Limit Switch", m_reverseLimit.isPressed());
+  //   SmartDashboard.putNumber("Arm Encoder", m_encoder.getPosition());
+  //   // read PID coefficients from SmartDashboard
+  //   double p = SmartDashboard.getNumber("P Gain", 0);
+  //   double i = SmartDashboard.getNumber("I Gain", 0);
+  //   double d = SmartDashboard.getNumber("D Gain", 0);
+  //   double iz = SmartDashboard.getNumber("I Zone", 0);
+  //   double ff = SmartDashboard.getNumber("Feed Forward", 0);
+  //   double max = SmartDashboard.getNumber("Max Output", 0);
+  //   double min = SmartDashboard.getNumber("Min Output", 0);
+  //   double rotations = SmartDashboard.getNumber("Set Rotations", 0);
+
+  //   // if PID coefficients on SmartDashboard have changed, write new values to controller
+  //   if((p != kP)) { m_pidController.setP(p); kP = p; }
+  //   if((i != kI)) { m_pidController.setI(i); kI = i; }
+  //   if((d != kD)) { m_pidController.setD(d); kD = d; }
+  //   if((iz != kIz)) { m_pidController.setIZone(iz); kIz = iz; }
+  //   if((ff != kFF)) { m_pidController.setFF(ff); kFF = ff; }
+  //   if((max != kMaxOutput) || (min != kMinOutput)) { 
+  //     m_pidController.setOutputRange(min, max); 
+  //     kMinOutput = min; kMaxOutput = max; 
+  //   }
+  //   /**
+  //    * PIDController objects are commanded to a set point using the 
+  //    * SetReference() method.
+  //    * 
+  //    * The first parameter is the value of the set point, whose units vary
+  //    * depending on the control type set in the second parameter.
+  //    * 
+  //    * The second parameter is the control type can be set to one of four 
+  //    * parameters:
+  //    *  com.revrobotics.CANSparkMax.ControlType.kDutyCycle
+  //    *  com.revrobotics.CANSparkMax.ControlType.kPosition
+  //    *  com.revrobotics.CANSparkMax.ControlType.kVelocity
+  //    *  com.revrobotics.CANSparkMax.ControlType.kVoltage
+  //    */
+  
+  //   SmartDashboard.putNumber("SetPoint", rotations);
+  //   SmartDashboard.putNumber("ProcessVariable", m_encoder.getPosition());
+
+  //   SetReference(m_setpoint);
+  // }
 
   @Override
   public void periodic() { // This method will be called once per scheduler run

@@ -24,10 +24,10 @@ public class ShootOnly extends SequentialCommandGroup {
     // todo adjust timings
     addCommands(
         // Go to Shot Location
-        new ArmGoToTarget(arm, 1.4),
+        new ArmGoToTarget(arm, 1.45), // First Shot Adjustment
   
         // Launch
-        new Launch(launcher, intake, ShotType.autoSpeakerShot, keepRunning)      
+        new Launch(launcher, intake, ShotType.autoSpeakerShot, keepRunning,.1)      
     );
   }
 

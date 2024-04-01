@@ -72,7 +72,7 @@ public class Launch extends Command {
     double topSpeed = .5;
     double bottomSpeed = .5;
     if (shotType == ShotType.ampShot){
-      topSpeed = .4;
+      topSpeed = .2;
       bottomSpeed = topSpeed - 0;
     }
     else if (shotType == ShotType.speakerShot){
@@ -80,7 +80,7 @@ public class Launch extends Command {
       bottomSpeed = topSpeed - .05;
     }
     else if (shotType == ShotType.owenWilsonSucks) {
-      topSpeed = .7;
+      topSpeed = 1;
       bottomSpeed = topSpeed - .05;
     }
     else if (shotType == ShotType.autoSpeakerShot){

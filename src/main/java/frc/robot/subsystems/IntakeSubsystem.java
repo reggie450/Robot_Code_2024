@@ -42,7 +42,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public void intakeSimple(){
     //SmartDashboard.putNumber("intakeSimpleRuns", timesRun++);
     if (!getLimitSwitch() && !collected)// && (!m_armBased || s_arm.getEncoderPosition() >= Constants.Arm.kIntakePosition))
-      m_motor.set(.3);
+      m_motor.set(.5);
     else {
       //SmartDashboard.putBoolean("intakeSimpleDidStop", true);
       m_motor.set(0);
